@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Mon Jun  8 14:58:54 PDT 2026
+Mon Jun  8 15:20:01 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -12,37 +12,37 @@ pltpu: importable
 
 --- Helion ---
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780955942.231363 2973958 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780955942.257091 2973958 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780955942.257140 2973958 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780955942.827789 2973958 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780957208.788716 2978053 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780957208.813137 2978053 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780957208.813170 2978053 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780957209.375569 2978053 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 helion: (unversioned)
-Git HEAD: 1233adb6
+Git HEAD: 4e2a8710
 
 ================================================
 jagged_sum: examples/jagged_sum.py main()
 ================================================
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780955945.715414 2974091 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780955945.743737 2974091 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780955945.743775 2974091 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780955946.306279 2974091 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780957212.254849 2978183 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780957212.282178 2978183 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780957212.282212 2978183 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780957212.836697 2978183 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1780955947.332408 2974091 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
-I0000 00:00:1780955949.612424 2974091 pjrt_c_api_client.cc:197] PjRtCApiClient created.
-W0000 00:00:1780955949.612471 2974091 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1780955949.646536 2974874 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1780955949.646561 2974874 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1780957213.856414 2978183 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1780957216.248391 2978183 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1780957216.248426 2978183 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1780957216.279016 2978968 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1780957216.279038 2978968 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 Testing helion correctness...
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
 Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/yn/cynlyzxbroiotpz25ayvl5552kconp6zufnaohthr553agj6svqp.py
+# Output code written to: /tmp/torchinductor_ymu_google_com/7y/c7yms5rvs3mrzoji47rs3dl4wmhyqy77vehvq5boh7lnstlxsbkl.py
 from __future__ import annotations
 
 import torch
@@ -64,11 +64,11 @@ def _helion_jagged_sum_kernel(x_offsets, out, x_flat, out_buf, out_sem, scratch_
         offset_0 = pid_0
         indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
         # src[jagged_sum.py:57]: starts = x_offsets[tile_b]
-        starts = x_offsets[pl.ds(offset_0, _BLOCK_SIZE_0)]
+        starts = jnp.array([x_offsets[offset_0]])
         # src[jagged_sum.py:58]: ends = x_offsets[tile_b.index + 1]
         v_0 = jnp.array(1, dtype=jnp.int32)
         v_1 = indices_0 + v_0
-        ends = x_offsets[pl.ds(offset_0 + 1, _BLOCK_SIZE_0)]
+        ends = jnp.array([x_offsets[offset_0 + 1]])
         # src[jagged_sum.py:59]: nnz = ends - starts
         v_2 = ends - starts
 
@@ -178,154 +178,27 @@ def call():
     # src[jagged_sum.py:33]:     x_data: torch.Tensor,
     # src[jagged_sum.py:34]:     x_offsets: torch.Tensor,
     # src[jagged_sum.py:32-74]: ...
-    x_data = rand_strided(size=(300, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
+    x_data = rand_strided(size=(131, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
     x_offsets = rand_strided(size=(9,), stride=(1,), dtype=torch.int32, device='tpu:0')
     jagged_sum_kernel(x_data, x_offsets)
 if __name__ == '__main__':
     call()
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
-Traceback (most recent call last):
-  File "/tmp/torchinductor_ymu_google_com/yn/cynlyzxbroiotpz25ayvl5552kconp6zufnaohthr553agj6svqp.py", line 22, in _kernel_body
-    starts = x_offsets[pl.ds(offset_0, _BLOCK_SIZE_0)]
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py", line 1404, in op
-    return getattr(self.aval, f"_{name}")(self, *args)
-jax._src.source_info_util.JaxStackTraceBeforeTransformation: ValueError: Can only load scalars from SMEM
+Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 667/667 143.3 configs/s
 
-The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+=================================================================
+Benchmark Results
+=================================================================
+Implementation       Time (ms)    Speedup        
+-----------------------------------------------------------------
+helion               0.2312       27.86x         
+torch                6.4421       1.00x (ref)    
+=================================================================
 
---------------------
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/ymu_google_com/helion/examples/jagged_sum.py", line 202, in <module>
-    main()
-  File "/home/ymu_google_com/helion/examples/jagged_sum.py", line 194, in main
-    run_example(
-  File "/home/ymu_google_com/helion/helion/_testing.py", line 1116, in wrapper
-    return fn(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/_testing.py", line 1184, in run_example
-    result = _as_tensors(func(*cloned_args))
-                         ^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/examples/jagged_sum.py", line 195, in <lambda>
-    lambda x, o: jagged_sum_kernel(x, o),
-                 ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 415, in __call__
-    return self.bind(args)(*args)
-           ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1081, in __call__
-    return self._run(*args)
-           ^^^^^^^^^^^^^^^^
-  File "/tmp/torchinductor_ymu_google_com/yn/cynlyzxbroiotpz25ayvl5552kconp6zufnaohthr553agj6svqp.py", line 126, in jagged_sum_kernel
-    _launcher(_helion_jagged_sum_kernel, (1,), x_offsets, out, x_flat, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(1, 1, 128, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 128), 'jnp.float32', 'vmem'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(2, 128)])
-  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 1920, in default_pallas_fori_launcher
-    return _pallas_invoke_cached_launcher(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 1756, in _pallas_invoke_cached_launcher
-    return _pallas_invoke_and_return_fast(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 969, in _pallas_invoke_and_return_fast
-    results = jax_callable(*input_tensors)  # type: ignore[operator]
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 693, in __call__
-    result = super().__call__(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/pallas/pallas.py", line 514, in __call__
-    lowered = self.exported(*jax_args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/export/_export.py", line 646, in do_export
-    lowered = traced.lower(
-              ^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/stages.py", line 484, in lower
-    lowering = _resolve_and_lower(
-               ^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pjit.py", line 1076, in _resolve_and_lower
-    return _pjit_lower(
-           ^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pjit.py", line 1256, in _pjit_lower
-    return pxla.lower_sharding_computation(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/profiler.py", line 384, in wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 2395, in lower_sharding_computation
-    nreps, tuple_args, shape_poly_state) = _cached_lowering_to_hlo(
-                                           ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1990, in _cached_lowering_to_hlo
-    lowering_result = mlir.lower_jaxpr_to_module(
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 1310, in lower_jaxpr_to_module
-    lower_jaxpr_to_fun(
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 1894, in lower_jaxpr_to_fun
-    out_vals, tokens_out = jaxpr_subcomp(
-                           ^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 2082, in jaxpr_subcomp
-    out_nodes, tokens_out = _cached_lowering(
-                            ^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 2157, in _cached_lowering
-    cache_entry = _emit_lowering_rule_as_fun(
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 2240, in _emit_lowering_rule_as_fun
-    outs, inline = lowering_rule(sub_ctx, *unflattened_args, **params)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 2294, in _uncached_lowering
-    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 2419, in lower_per_platform
-    Sequence[IrValues], kept_rules[0](ctx, *rule_args, **rule_kwargs)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 1191, in _pallas_call_lowering
-    return mlir.lower_per_platform(
-           ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py", line 2419, in lower_per_platform
-    Sequence[IrValues], kept_rules[0](ctx, *rule_args, **rule_kwargs)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 1150, in tpu_lowering
-    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 396, in pallas_call_tpu_lowering_rule
-    mosaic_module = lower_jaxpr_to_module(
-                    ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 782, in lower_jaxpr_to_module
-    lower_jaxpr_into_module(
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 853, in lower_jaxpr_into_module
-    func_op = lower_jaxpr_to_func(
-              ^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1204, in lower_jaxpr_to_func
-    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py", line 197, in decorator
-    return_values = f(*func_args, **func_kwargs)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1200, in body_func
-    return jaxpr_subcomp(
-           ^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1332, in jaxpr_subcomp
-    ans = lowering_rules[ctx.kernel_type][eqn.primitive](
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 3424, in _scan_lowering_rule
-    out = _lower_jaxpr_to_for_loop(
-          ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 3382, in _lower_jaxpr_to_for_loop
-    inner_out = _run_body(iv, inner_args)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 3356, in _run_body
-    args = jaxpr_subcomp(lowering_context, jaxpr, *consts, i, *args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1332, in jaxpr_subcomp
-    ans = lowering_rules[ctx.kernel_type][eqn.primitive](
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1405, in _get_lowering_rule
-    return _load_lowering_rule(ctx, *args_flat, args_tree=args_tree)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1760, in _load_lowering_rule
-    raise ValueError("Can only load scalars from SMEM")
-ValueError: Can only load scalars from SMEM
-I0000 00:00:1780955952.125429 2974091 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1780955952.125454 2974091 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=39
-num_cache_hits=10 {25.6%}
+I0000 00:00:1780957223.531739 2978183 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1780957223.531766 2978183 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=20105
+num_cache_hits=20061 {99.7%}
 peak_compilation_memory_bytes=unknown
 
 
