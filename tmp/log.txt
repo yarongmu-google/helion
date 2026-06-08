@@ -1,0 +1,228 @@
+================================================
+Environment
+================================================
+Mon Jun  8 14:53:42 PDT 2026
+Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+Python 3.12.12
+
+--- JAX / Pallas ---
+jax: 0.9.2
+devices: [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0), TpuDevice(id=1, process_index=0, coords=(0,0,0), core_on_chip=1), TpuDevice(id=2, process_index=0, coords=(1,0,0), core_on_chip=0), TpuDevice(id=3, process_index=0, coords=(1,0,0), core_on_chip=1), TpuDevice(id=4, process_index=0, coords=(0,1,0), core_on_chip=0), TpuDevice(id=5, process_index=0, coords=(0,1,0), core_on_chip=1), TpuDevice(id=6, process_index=0, coords=(1,1,0), core_on_chip=0), TpuDevice(id=7, process_index=0, coords=(1,1,0), core_on_chip=1)]
+pltpu: importable
+
+--- Helion ---
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780955629.759690 2970379 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780955629.783835 2970379 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780955629.783867 2970379 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780955630.345641 2970379 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+helion: (unversioned)
+Git HEAD: 00ee4be1
+
+================================================
+jagged_sum: examples/jagged_sum.py main()
+================================================
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780955633.677010 2970510 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780955633.704172 2970510 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780955633.704204 2970510 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780955634.328936 2970510 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+I0000 00:00:1780955635.446083 2970510 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1780955637.747483 2970510 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1780955637.747536 2970510 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1780955637.778483 2971295 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1780955637.778504 2971295 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+Testing helion correctness...
+/home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+  warn_once(
+Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+# Output code written to: /tmp/torchinductor_ymu_google_com/sx/csxuiqpnsu5hoxy7v4yfbs4kz5rvvghqxdftlxckvyl2z7skwfid.py
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(128)
+_BLOCK_SIZE_2 = int(16)
+
+def _helion_jagged_sum_kernel(x_offsets, out, x_flat, out_buf, out_sem, scratch_2, x_flat_buf, x_flat_sem):
+
+    def _kernel_body(pid_0, _):
+        # src[jagged_sum.py:56]: for tile_b in hl.tile(num_rows):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[jagged_sum.py:57]: starts = x_offsets[tile_b]
+        starts = x_offsets[pl.ds(offset_0, _BLOCK_SIZE_0)]
+        # src[jagged_sum.py:58]: ends = x_offsets[tile_b.index + 1]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        ends = x_offsets[pl.ds(offset_0 + 1, _BLOCK_SIZE_0)]
+        # src[jagged_sum.py:59]: nnz = ends - starts
+        v_2 = ends - starts
+
+        def _fori_body_1(_j, _):
+            nonlocal out_buf, scratch_2, x_flat_buf
+            # src[jagged_sum.py:61]: for tile_m in hl.tile(M):
+            # src[jagged_sum.py:62]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[jagged_sum.py:61-72]: ...
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            v_2_copy = v_2
+            starts_copy = starts
+            v_2_copy_0 = v_2_copy
+            starts_copy_0 = starts_copy
+            # src[jagged_sum.py:62]: row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            row_sums = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
+            # src[jagged_sum.py:64]: for tile_k in hl.jagged_tile(nnz):
+            # src[jagged_sum.py:65]:     base_indices = starts[:, None] + tile_k.index[None, :]
+            # src[jagged_sum.py:66]:     flat_indices = (
+            # src[jagged_sum.py:64-70]: ...
+            view = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int64)
+            scratch_2[...] = row_sums[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal out_buf, scratch_2, x_flat_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_5 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_5[None, :] < v_2_copy_0[:, None]
+                _copy = pltpu.make_async_copy(x_flat.at[pl.ds(starts_copy_0[0] + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), pl.ds(offset_1, _BLOCK_SIZE_1)], x_flat_buf, x_flat_sem)
+                _copy.start()
+                _copy.wait()
+                starts_copy_0_copy = starts_copy_0
+                v_3 = scratch_2[...]
+                starts_copy_0_copy_0 = starts_copy_0_copy
+                v_3_0 = v_3
+                # src[jagged_sum.py:65]: base_indices = starts[:, None] + tile_k.index[None, :]
+                subscript = starts_copy_0_copy_0[:, None]
+                subscript_1 = indices_2[None, :]
+                v_4 = lax.convert_element_type(subscript_1, jnp.int64)
+                v_5 = subscript + v_4
+                # src[jagged_sum.py:67]: base_indices[:, :, None] * M + tile_m.index[None, None, :]
+                subscript_2 = v_5[:, :, None]
+                v_6 = jnp.array(128, dtype=jnp.int64)
+                v_7 = subscript_2 * v_6
+                subscript_3 = indices_1[None, None, :]
+                v_8 = lax.convert_element_type(subscript_3, jnp.int64)
+                v_9 = v_7 + v_8
+                # src[jagged_sum.py:69]: x_slice = hl.load(x_flat, [flat_indices])
+                x_slice = jnp.expand_dims(x_flat_buf[:], axis=0)
+                # src[jagged_sum.py:70]: row_sums = row_sums + x_slice.sum(dim=1)
+                _mask_to = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), x_slice, jnp.full([], 0, jnp.float32))
+                sum_1 = lax.convert_element_type(jnp.sum(_mask_to, axis=1), jnp.float32)
+                v_10 = v_3_0 + sum_1
+                # src[jagged_sum.py:64]: for tile_k in hl.jagged_tile(nnz):
+                # src[jagged_sum.py:65]:     base_indices = starts[:, None] + tile_k.index[None, :]
+                # src[jagged_sum.py:66]:     flat_indices = (
+                # src[jagged_sum.py:64-70]: ...
+                scratch_2[...] = v_10[...]
+            jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            row_sums = scratch_2[...]
+            # src[jagged_sum.py:72]: out[tile_b, tile_m] = row_sums
+            out_buf[:, :] = row_sums
+            # src[jagged_sum.py:61]: for tile_m in hl.tile(M):
+            # src[jagged_sum.py:62]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[jagged_sum.py:61-72]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j * _BLOCK_SIZE_1, _BLOCK_SIZE_1)], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (128 - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[jagged_sum.py:56]: for tile_b in hl.tile(num_rows):
+    # src[jagged_sum.py:57]:     starts = x_offsets[tile_b]
+    # src[jagged_sum.py:58]:     ends = x_offsets[tile_b.index + 1]
+    # src[jagged_sum.py:56-72]: ...
+    jax.lax.fori_loop(0, 8, _kernel_body, None)
+
+def jagged_sum_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    """
+    Compute the mean of each row in a jagged tensor with variable features per row.
+
+    Args:
+        x_data: 2-D tensor of shape (total_elements, M) holding all elements
+        x_offsets: (num_rows + 1) tensor. Row i is the slice
+                   x_data[x_offsets[i] : x_offsets[i+1], :]
+
+    Returns:
+        2-D tensor of shape (num_rows, M) containing the sum of jagged dimension.
+    """
+    # src[jagged_sum.py:47]: M = x_data.shape[1]
+    M = x_data.shape[1]
+    # src[jagged_sum.py:48]: num_rows = x_offsets.size(0) - 1
+    num_rows = x_offsets.size(0) - 1
+    # src[jagged_sum.py:50]: out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    # src[jagged_sum.py:53]: x_flat = x_data.view(-1)
+    x_flat = x_data.view(-1)
+    # src[jagged_sum.py:56]: for tile_b in hl.tile(num_rows):
+    # src[jagged_sum.py:57]:     starts = x_offsets[tile_b]
+    # src[jagged_sum.py:58]:     ends = x_offsets[tile_b.index + 1]
+    # src[jagged_sum.py:56-72]: ...
+    _launcher(_helion_jagged_sum_kernel, (1,), x_offsets, out, x_flat, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(1, 1, 128, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 128), 'jnp.float32', 'vmem'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(2, 128)])
+    # src[jagged_sum.py:74]: return out
+    return out
+
+def call():
+    from torch._dynamo.testing import rand_strided
+    # src[jagged_sum.py:32]: def jagged_sum_kernel(
+    # src[jagged_sum.py:33]:     x_data: torch.Tensor,
+    # src[jagged_sum.py:34]:     x_offsets: torch.Tensor,
+    # src[jagged_sum.py:32-74]: ...
+    x_data = rand_strided(size=(258, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
+    x_offsets = rand_strided(size=(9,), stride=(1,), dtype=torch.int64, device='tpu:0')
+    jagged_sum_kernel(x_data, x_offsets)
+if __name__ == '__main__':
+    call()
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/examples/jagged_sum.py", line 199, in <module>
+    main()
+  File "/home/ymu_google_com/helion/examples/jagged_sum.py", line 191, in main
+    run_example(
+  File "/home/ymu_google_com/helion/helion/_testing.py", line 1116, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_testing.py", line 1184, in run_example
+    result = _as_tensors(func(*cloned_args))
+                         ^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/examples/jagged_sum.py", line 192, in <lambda>
+    lambda x, o: jagged_sum_kernel(x, o),
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 415, in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1081, in __call__
+    return self._run(*args)
+           ^^^^^^^^^^^^^^^^
+  File "/tmp/torchinductor_ymu_google_com/sx/csxuiqpnsu5hoxy7v4yfbs4kz5rvvghqxdftlxckvyl2z7skwfid.py", line 128, in jagged_sum_kernel
+    _launcher(_helion_jagged_sum_kernel, (1,), x_offsets, out, x_flat, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(1, 1, 128, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 128), 'jnp.float32', 'vmem'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(2, 128)])
+  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 1901, in default_pallas_fori_launcher
+    cache = _pallas_install_launcher_cache(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 1671, in _pallas_install_launcher_cache
+    _pallas_check_dtypes(spec_args)
+  File "/home/ymu_google_com/helion/helion/runtime/__init__.py", line 586, in _pallas_check_dtypes
+    raise TypeError(
+TypeError: Pallas/TPU does not support torch.int64 tensors. Cast to a 32-bit type before calling the kernel.
+I0000 00:00:1780955640.327367 2970510 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1780955640.327408 2970510 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=38
+num_cache_hits=10 {26.3%}
+peak_compilation_memory_bytes=unknown
+
+
+================================================
+Done.  Exit code: 0
+================================================
