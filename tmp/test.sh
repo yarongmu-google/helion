@@ -49,6 +49,11 @@ mkdir -p tmp
   echo "================================================"
   echo "jagged_sum: examples/jagged_sum.py main()"
   echo "================================================"
+  HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1  \
+  HELION_AUTOTUNE_LOG_LEVEL=DEBUG \
+  TORCH_COMPILE_DEBUG=1 \
+  PYTHONPATH=. \
+  HELION_SKIP_CACHE=1 \
   HELION_BACKEND=pallas \
   HELION_AUTOTUNE_EFFORT=none \
   HELION_PRINT_OUTPUT_CODE=1 \
