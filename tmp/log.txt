@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Mon Jun  8 19:28:17 PDT 2026
+Mon Jun  8 19:32:55 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -12,36 +12,36 @@ pltpu: importable
 
 --- Helion ---
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780972105.640900 3068346 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780972105.666760 3068346 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780972105.666791 3068346 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780972106.237977 3068346 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780972383.092584 3076542 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780972383.119726 3076542 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780972383.119763 3076542 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780972383.693651 3076542 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 helion: (unversioned)
-Git HEAD: b382cea3
+Git HEAD: a0e51c32
 
 ================================================
 jagged_softmax: examples/jagged_softmax.py main()
 ================================================
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780972109.502163 3068479 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780972109.530158 3068479 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780972109.530193 3068479 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780972110.090910 3068479 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780972386.646041 3076672 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780972386.671941 3076672 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780972386.671972 3076672 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780972387.229730 3076672 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1780972111.134941 3068479 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
-I0000 00:00:1780972113.465912 3068479 pjrt_c_api_client.cc:197] PjRtCApiClient created.
-W0000 00:00:1780972113.465958 3068479 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1780972113.499964 3069263 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1780972113.499985 3069263 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1780972388.267918 3076672 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1780972390.607961 3076672 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1780972390.608003 3076672 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1780972390.640961 3077455 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1780972390.640983 3077455 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
-Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 16, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py
+Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+# Output code written to: /tmp/torchinductor_ymu_google_com/3f/c3ffws6togzwzaogeimcwxv4spos5b4aymaheagdp67rukrg4was.py
 from __future__ import annotations
 
 import torch
@@ -53,7 +53,7 @@ from jax.experimental.pallas import tpu as pltpu
 from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
 
 _BLOCK_SIZE_0 = int(1)
-_BLOCK_SIZE_1 = int(16)
+_BLOCK_SIZE_1 = int(128)
 _BLOCK_SIZE_2 = int(16)
 _BLOCK_SIZE_3 = int(16)
 
@@ -241,7 +241,7 @@ def jagged_softmax_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, *, _lau
     # src[jagged_softmax.py:82]:     starts = x_offsets[tile_b]
     # src[jagged_softmax.py:83]:     ends = x_offsets[tile_b.index + 1]
     # src[jagged_softmax.py:81-112]: ...
-    _launcher(_helion_jagged_softmax_kernel, (1,), x_offsets, x_flat, out, _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None,), (None,)), ((None,), (None,))], _ds_pad_dims=[(1, 0, 16, 15), (1, 1, 16, 0), (2, 0, 16, 15), (2, 1, 16, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 16), 'jnp.float32', 'vmem'), ((1, 16), 'jnp.float32', 'vmem'), ((1, 16), 'jnp.float32', 'vmem'), ((16, 16), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 16), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 16), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(1, 128), (2, 128)])
+    _launcher(_helion_jagged_softmax_kernel, (1,), x_offsets, x_flat, out, _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None,), (None,)), ((None,), (None,))], _ds_pad_dims=[(1, 0, 16, 15), (1, 1, 128, 0), (2, 0, 16, 15), (2, 1, 128, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((1, 128), 'jnp.float32', 'vmem'), ((1, 128), 'jnp.float32', 'vmem'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(1, 128), (2, 128)])
     # src[jagged_softmax.py:114]: return out.reshape(N, M)
     return out.reshape(N, M)
 
@@ -251,166 +251,28 @@ def call():
     # src[jagged_softmax.py:60]:     x_data: torch.Tensor,
     # src[jagged_softmax.py:61]:     x_offsets: torch.Tensor,
     # src[jagged_softmax.py:59-114]: ...
-    x_data = rand_strided(size=(16921, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
+    x_data = rand_strided(size=(17381, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
     x_offsets = rand_strided(size=(513,), stride=(1,), dtype=torch.int32, device='tpu:0')
     jagged_softmax_kernel(x_data, x_offsets)
 if __name__ == '__main__':
     call()
-E0000 00:00:1780972137.976760 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018397 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018419 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018423 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018426 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018429 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018432 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.018437 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.023940 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.023951 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.063404 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.063427 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.063431 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.063438 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780972138.063450 3069264 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
-
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
+Testing helion correctness...
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
-Traceback (most recent call last):
-  File "/home/ymu_google_com/helion/examples/jagged_softmax.py", line 182, in <module>
-    main()
-  File "/home/ymu_google_com/helion/examples/jagged_softmax.py", line 172, in main
-    assert torch.allclose(out_eager, out_hl)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-RuntimeError: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
+Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 25/25   2.7 configs/s
 
-at location: loc("dma_start:"("dma_start"("_helion_jagged_softmax_kernel.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/hk/chkd37eebmiuvsxozxo6g7omfvlqz6x2kj5qcyfk7u5bwyogto7d.py":66:16 to :29))))
+=================================================================
+Benchmark Results
+=================================================================
+Implementation       Time (ms)    Speedup        
+-----------------------------------------------------------------
+helion               4.0861       88.69x         
+torch                362.3803     1.00x (ref)    
+=================================================================
 
-The MLIR operation involved:
-  %98 = "tpu.memref_slice"(%14, %97, %41) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<16943x128xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
- - TpuMemcpyDtoHDirect: DeviceBufferRef has nonzero size, but does not have a PjRtBuffer to copy from.
-I0000 00:00:1780972139.242642 3068479 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1780972139.242670 3068479 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=1571
-num_cache_hits=519 {33.0%}
+I0000 00:00:1780972426.827927 3076672 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1780972426.827976 3076672 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=43276
+num_cache_hits=42220 {97.5%}
 peak_compilation_memory_bytes=unknown
 
 
