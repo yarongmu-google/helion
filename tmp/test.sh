@@ -26,10 +26,10 @@ mkdir -p tmp
   echo "Git HEAD: $(git rev-parse --short HEAD 2>/dev/null || echo 'n/a')"
   echo
 
-  XDIST=""
-  if python3 -c "import xdist" 2>/dev/null; then
-    XDIST="-n4"
-  fi
+  # NOTE: do NOT use pytest-xdist on TPU.  libtpu uses a multi-process
+  # lockfile and only one process can hold the device; xdist workers
+  # 2..N fail with "Internal error when accessing libtpu multi-process
+  # lockfile" -- spurious, not a code issue.
 
   echo "================================================"
   echo "Full test/ suite under HELION_BACKEND=pallas"
@@ -40,7 +40,6 @@ mkdir -p tmp
   HELION_BACKEND=pallas \
   HELION_AUTOTUNE_EFFORT=none \
   python3 -m pytest test/ \
-    $XDIST \
     -ra --tb=short \
     --durations=20
 
