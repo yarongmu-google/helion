@@ -356,6 +356,7 @@ class ConfigSpec:
         self.epilogue_subtile_k_hint: int = 0
         self.has_pallas_inner_loops: bool = False
         self.has_symbolic_or_data_dependent_bounds: bool = False
+        self.has_jagged_tile: bool = False
         self._cute_tcgen05_config = CuteTcgen05Config(self)
         self.compiler_default_config: helion.Config | None = None
         self.compiler_seed_configs: list[helion.Config] = []
@@ -1501,9 +1502,7 @@ class ConfigSpec:
             # (block_shape) window per grid step; it cannot express
             # ``pl.ds(starts[i] + k*BK, BK)`` on HBM, so the codegen produces
             # broadcast-shape mismatches at trace time. Restrict to fori_loop.
-            from .._compiler.compile_environment import CompileEnvironment
-
-            if CompileEnvironment.current().jagged_tile_parent_ids:
+            if self.has_jagged_tile:
                 choices = ("fori_loop",)
             fields["pallas_loop_type"] = EnumFragment(choices=choices)
             if self.supports_config_key("pallas_pre_broadcast"):
