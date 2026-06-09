@@ -1496,6 +1496,15 @@ class ConfigSpec:
                 # TODO(thcmbs): Also exclude "emit_pipeline" when has_pallas_dma_unaligned
                 # is set, to avoid wasted autotuning effort. See PR #1969 review discussion.
                 choices = ("fori_loop", "emit_pipeline")
+            # Jagged kernels (hl.jagged_tile) use per-program data-dependent
+            # starts. emit_pipeline's BlockSpec model copies a regular
+            # (block_shape) window per grid step; it cannot express
+            # ``pl.ds(starts[i] + k*BK, BK)`` on HBM, so the codegen produces
+            # broadcast-shape mismatches at trace time. Restrict to fori_loop.
+            from .._compiler.compile_environment import CompileEnvironment
+
+            if CompileEnvironment.current().jagged_tile_parent_ids:
+                choices = ("fori_loop",)
             fields["pallas_loop_type"] = EnumFragment(choices=choices)
             if self.supports_config_key("pallas_pre_broadcast"):
                 fields["pallas_pre_broadcast"] = BooleanFragment()
