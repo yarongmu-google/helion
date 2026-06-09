@@ -249,9 +249,9 @@ def body(start_ref, x_ref, out_ref, x_buf, x_sem):
     )
     copy.start()
     copy.wait()
-    # VMEM-side dynamic slice: tile annotation on x_buf is (1, 128) (VMEM, lane=128 exact),
-    # so any sublane offset is unconstrained.
-    out_ref[...] = jax.lax.dynamic_slice(x_buf[...], (lead, 0), (BK, 128))
+    # VMEM-side dynamic slice via ref.at[pl.ds(...)]: VMEM tile annotation is
+    # (1, 128) for lane=128 fp32, so any sublane offset is unconstrained.
+    out_ref[...] = x_buf.at[pl.ds(lead, BK), pl.ds(0, 128)][...]
 
 call = pl.pallas_call(
     body,
