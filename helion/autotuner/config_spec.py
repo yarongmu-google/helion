@@ -1697,12 +1697,14 @@ class BlockSizeSpec(_PowerOfTwoBlockIdItem):
         if isinstance(result, int):
             if result < self.min_size:
                 result = self.min_size
-            if result > self.max_size:
-                # Backend-imposed ceilings (e.g. Pallas jagged-tile parents
-                # pinned to block_size=1) must override user-supplied configs,
-                # otherwise downstream codegen produces shapes the kernel
-                # path doesn't support (e.g. (BB, BK, BM) instead of
-                # (1, BK, BM) for jagged-flat stores).
+            # Only clamp DOWN for a HARD pin (min_size == max_size), i.e. a
+            # backend-imposed equality constraint such as the Pallas
+            # jagged-tile parent rule that forces block_size=1.  The soft
+            # default ceiling (max_size = next_power_of_2(size_hint)) is
+            # intentionally not clamped: tests / users pass block_size larger
+            # than the tensor dim to exercise the codegen slicing path
+            # (e.g. ``out[:dim]`` when block > dim).
+            if result > self.max_size and self.min_size == self.max_size:
                 result = self.max_size
         return result
 
