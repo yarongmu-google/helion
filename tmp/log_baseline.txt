@@ -1,0 +1,2126 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0
+rootdir: /home/ymu_google_com/helion
+configfile: pyproject.toml
+plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
+collected 2443 items / 12 skipped
+
+test/test_amd_cdna.py ssss                                               [  0%]
+test/test_aot_autotuning.py ........................                     [  1%]
+test/test_associative_scan.py sssssssssssssssssssssssssss                [  2%]
+test/test_atomic_ops.py .xss.x.x.s.ssx.....s.ss...xsx.                   [  3%]
+test/test_autodiff.py ssssssssssssssssssssssssssssssssssssssssssssssssss [  5%]
+ssssssss                                                                 [  5%]
+test/test_autotuner.py sssssssssssssssssssssssssssssssssssssssssssssssss [  7%]
+ssssssssssssssssssssssssssssssssssssss......sssssssssssssssssssss        [ 10%]
+test/test_autotuner_heuristics.py ....s..ssssssssssssssssss              [ 11%]
+test/test_backend_registry.py .....                                      [ 11%]
+test/test_barrier.py ssssssss                                            [ 12%]
+test/test_benchmark_worker.py ..........ss                               [ 12%]
+test/test_benchmarking.py .....                                          [ 12%]
+test/test_best_available.py .............FFFF.F.FF...................... [ 14%]
+.                                                                        [ 14%]
+test/test_broadcasting.py .......x...                                    [ 15%]
+test/test_cache.py ssssssssssssssssssssssssssss                          [ 16%]
+test/test_closures.py ssssss                                             [ 16%]
+test/test_codegen_comments.py ..                                         [ 16%]
+test/test_codegen_dict.py ............                                   [ 17%]
+test/test_compile_time.py .                                              [ 17%]
+test/test_config_api.py ssssssssssssssssssssssssssssssssssss.....        [ 18%]
+test/test_constexpr.py ssssssss                                          [ 19%]
+test/test_control_flow.py ....sss...s..s                                 [ 19%]
+test/test_custom_op.py sss..ss                                           [ 19%]
+test/test_cute_device_state.py sssssssssssssssssssssssssssssss           [ 21%]
+test/test_cute_layout.py sssssssssssssssssss                             [ 21%]
+test/test_cute_lowerings.py ssssssssssssssssssssssssssssssssssssssssssss [ 23%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 26%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 29%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 32%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 35%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 38%]
+sssssssssssssssssssssss                                                  [ 39%]
+test/test_debug_utils.py ssss                                            [ 39%]
+test/test_distributed.py sssssssssssssssssssssssssssssssssssssssssssssss [ 41%]
+                                                                         [ 41%]
+test/test_dot.py sssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 43%]
+sssssssssssssssssssssssssssssssssssssssssss                              [ 45%]
+test/test_dot_requirements.py ssssssssssssssssssssssssssssssssssssssssss [ 47%]
+sssssss.                                                                 [ 47%]
+test/test_dot_scaled.py ssssssss                                         [ 47%]
+test/test_epilogue_subtiling.py ssssssssssssss                           [ 48%]
+test/test_errors.py sssssssssssssssssssssssssssssssssss                  [ 49%]
+test/test_eviction_policy.py sssssssssssss                               [ 50%]
+test/test_examples.py .........x....x...FF..s.s..s.x..xxx.xsxx.xxxx...x. [ 52%]
+........xx..x..x.s.x.ss......x......xxxxx..........                      [ 54%]
+test/test_examples_dist.py ssssss                                        [ 54%]
+test/test_external_autotune.py sssssss                                   [ 55%]
+test/test_generate_ast.py ssssssssssssssssssssssss                       [ 56%]
+test/test_graph_module.py sssss                                          [ 56%]
+test/test_grid.py ssx.xx.x..x.x                                          [ 56%]
+test/test_indexing.py ssssssssssssssssssssssssssssssssssssssssssssssssss [ 58%]
+sssssssssssssssssssssssssssssss                                          [ 60%]
+test/test_inline_asm_elementwise.py ssssssssss                           [ 60%]
+test/test_inline_triton.py ssssssss                                      [ 60%]
+test/test_int64_indexing.py ssssssssssss                                 [ 61%]
+test/test_jagged_tile.py sssssssssss                                     [ 61%]
+test/test_llm_autotuner.py s........s....                                [ 62%]
+test/test_logging.py sss                                                 [ 62%]
+test/test_loop_dependencies.py sss                                       [ 62%]
+test/test_loops.py ..x..x.xxxx.sss..x...xxx..sssF.sss.x.ss.sss...ssss..x [ 64%]
+.                                                                        [ 64%]
+test/test_masking.py sssssssss                                           [ 65%]
+test/test_matmul.py ssssssssssssssss                                     [ 65%]
+test/test_metal.py sssssssssssssssssssssssssssssssssssssssssssssssssssss [ 68%]
+ssssssssss                                                               [ 68%]
+test/test_metal_mpp_graph_transform.py ........                          [ 68%]
+test/test_misc.py ssssssssssssssssssssssssssssssssssssssss               [ 70%]
+test/test_pallas.py ...............x.................................... [ 72%]
+x.......x.....x..........................................xx............. [ 75%]
+..................                                                       [ 76%]
+test/test_persistent_kernels.py ssssssssssssssssssssssssssssssss         [ 77%]
+test/test_pretuned_kernels.py sssssssssssss                              [ 78%]
+test/test_print.py sssssssssssss                                         [ 78%]
+test/test_print_ref_eager_mode.py ss                                     [ 78%]
+test/test_ptxas_config.py ssssssss                                       [ 79%]
+test/test_quantized_ops.py ss                                            [ 79%]
+test/test_random.py F......F....F.....ssssssssssssssssss                 [ 80%]
+test/test_reduce.py sssssssssssssss                                      [ 81%]
+test/test_reductions.py .ssssssssx..ssss...s..s.                         [ 82%]
+test/test_ref_eager.py sssssssss                                         [ 82%]
+test/test_register_tunable.py sssss                                      [ 82%]
+test/test_rng.py x..sxxxxxxxxxxxx.ssssssssss.sss                         [ 84%]
+test/test_specialize.py sssssssssssssssssss                              [ 84%]
+test/test_stack_tensor.py sssssss                                        [ 85%]
+test/test_tensor_descriptor.py sssssssssssssssssssssssss                 [ 86%]
+test/test_tensor_numel_constraints.py ...................                [ 86%]
+test/test_tileir.py ss                                                   [ 86%]
+test/test_torch_compile.py sssssssssssssssssssssssssssssssssssssssssssss [ 88%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 91%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 94%]
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss        [ 97%]
+test/test_type_propagation.py ssssssssssss                               [ 97%]
+test/test_unroll_tuples.py sssssssssssssssssssssssssssss                 [ 99%]
+test/test_views.py ss.sx.x....xsxxxs.xx                                  [ 99%]
+test/test_zero_size.py sss                                               [100%]
+
+=================================== FAILURES ===================================
+E   AssertionError: 0 != 1
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
+E   AssertionError: 0 != 2
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 2
+E   AssertionError: 0 != 2
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 2
+E   AssertionError: 0 != 1
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
+E   AssertionError: Lists differ: [] != [([16, 32], 4), ([64, 128], 8)]
+    
+    Second list contains 2 additional elements.
+    First extra element 0:
+    ([16, 32], 4)
+    
+    - []
+    + [([16, 32], 4), ([64, 128], 8)]
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:715: AssertionError: Lists differ: [] != [([16, 32], 4), ([64, 128], 8)]
+E   AssertionError: 0 != 1
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
+E   AssertionError: 0 != 1
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
+E   jax._src.source_info_util.JaxStackTraceBeforeTransformation: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
+    
+    The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+    
+    --------------------
+
+The above exception was the direct cause of the following exception:
+E   TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
+----------------------------- Captured stderr call -----------------------------
+Failed to run kernel:
+from __future__ import annotations
+
+import torch
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_pipeline_launcher as _default_pallas_pipeline_launcher
+
+_BLOCK_SIZE_0 = int(64)
+_BLOCK_SIZE_1 = int(256)
+_BLOCK_SIZE_2 = int(128)
+
+def _helion_matmul_bias_gelu_aux(x, w, bias, aux, out, scratch_0):
+    # src[epilogue_subtiling.py:79]: acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+    acc = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
+    # src[epilogue_subtiling.py:80]: for tile_k in hl.tile(k):
+    # src[epilogue_subtiling.py:81]:     acc = torch.addmm(acc, x[tile_m, tile_k], w[tile_k, tile_n])
+    _outer_pid_0 = pl.program_id(0)
+    _outer_pid_1 = pl.program_id(1)
+    scratch_0[...] = acc[...]
+
+    def _pipeline_body(_pipeline_indices, x_vmem, w_vmem):
+        nonlocal scratch_0
+        v_0 = scratch_0[...]
+        v_0_0 = v_0
+        # src[epilogue_subtiling.py:81]: acc = torch.addmm(acc, x[tile_m, tile_k], w[tile_k, tile_n])
+        load = x_vmem[:, :]
+        load_1 = w_vmem[:, :]
+        acc_1 = v_0_0 + lax.dot_general(load, load_1, dimension_numbers=(((1,), (0,)), ((), ())), preferred_element_type=jnp.float32)
+        # src[epilogue_subtiling.py:80]: for tile_k in hl.tile(k):
+        # src[epilogue_subtiling.py:81]:     acc = torch.addmm(acc, x[tile_m, tile_k], w[tile_k, tile_n])
+        scratch_0[...] = acc_1[...]
+    pltpu.emit_pipeline(_pipeline_body, grid=((8192 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2,), in_specs=[pl.BlockSpec((_BLOCK_SIZE_0, _BLOCK_SIZE_2), lambda _j: (_outer_pid_0, _j), pipeline_mode=pl.Buffered(buffer_count=2)), pl.BlockSpec((_BLOCK_SIZE_2, _BLOCK_SIZE_1), lambda _j: (_j, _outer_pid_1), pipeline_mode=pl.Buffered(buffer_count=2))], _explicit_indices=True)(x, w)
+    acc = scratch_0[...]
+    # src[epilogue_subtiling.py:83]: pre = acc * 1.25
+    v_1 = jnp.array(1.25, dtype=jnp.float32)
+    v_2 = acc * v_1
+    # src[epilogue_subtiling.py:84]: pre = pre + bias[tile_n]
+    load_2 = bias[:]
+    v_3 = load_2[None, :]
+    v_4 = lax.convert_element_type(v_3, jnp.float32)
+    v_5 = v_2 + v_4
+    # src[epilogue_subtiling.py:85]: aux[tile_m, tile_n] = pre.to(x.dtype)
+    v_6 = lax.convert_element_type(v_5, jnp.bfloat16)
+    aux[:, :] = v_6
+    # src[epilogue_subtiling.py:86]: out[tile_m, tile_n] = torch.nn.functional.gelu(pre).to(x.dtype)
+    _gelu_erf = 0.5 * v_5 * (1.0 + lax.erf(v_5 * 0.7071067811865476))
+    v_7 = lax.convert_element_type(_gelu_erf, jnp.bfloat16)
+    out[:, :] = v_7
+
+def matmul_bias_gelu_aux(x: torch.Tensor, w: torch.Tensor, bias: torch.Tensor, *, _launcher=_default_pallas_pipeline_launcher):
+    # src[epilogue_subtiling.py:73]: m, k = x.size()
+    m, k = x.size()
+    # src[epilogue_subtiling.py:74]: _, n = w.size()
+    _, n = w.size()
+    # src[epilogue_subtiling.py:75]: out = torch.empty([m, n], dtype=x.dtype, device=x.device)
+    out = torch.empty([m, n], dtype=x.dtype, device='meta')
+    # src[epilogue_subtiling.py:76]: aux = torch.empty([m, n], dtype=x.dtype, device=x.device)
+    aux = torch.empty([m, n], dtype=x.dtype, device='meta')
+    # src[epilogue_subtiling.py:78]: for tile_m, tile_n in hl.tile([m, n]):
+    _BLOCK_SIZE_0 = 64
+    _BLOCK_SIZE_1 = 256
+    # src[epilogue_subtiling.py:78]: for tile_m, tile_n in hl.tile([m, n]):
+    # src[epilogue_subtiling.py:79]:     acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+    # src[epilogue_subtiling.py:80]:     for tile_k in hl.tile(k):
+    # src[epilogue_subtiling.py:78-86]: ...
+    aux, out = _launcher(_helion_matmul_bias_gelu_aux, ((8192 + _BLOCK_SIZE_0 - 1) // _BLOCK_SIZE_0, (8192 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1), x, w, bias, aux, out, _output_indices=[3, 4], _inplace_indices=[], _block_spec_info=[((64, None), (0, None)), ((None, 256), (None, 1)), ((256,), (1,)), ((64, 256), (0, 1)), ((64, 256), (0, 1))], _ds_pad_dims=[(0, 1, 128, 0), (1, 0, 128, 0)], _scratch_shapes=[((64, 256), 'jnp.float32', 'vmem')], _pipeline_arg_indices=[0, 1])
+    # src[epilogue_subtiling.py:88]: return out, aux
+    return (out, aux)
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
+E   jax._src.source_info_util.JaxStackTraceBeforeTransformation: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
+    
+    The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+    
+    --------------------
+
+The above exception was the direct cause of the following exception:
+E   TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
+----------------------------- Captured stderr call -----------------------------
+Failed to run kernel:
+from __future__ import annotations
+
+import torch
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_pipeline_launcher as _default_pallas_pipeline_launcher
+
+_BLOCK_SIZE_0 = int(64)
+_BLOCK_SIZE_1 = int(256)
+_BLOCK_SIZE_2 = int(128)
+
+def _helion_matmul_bias_residual_gelu_cast(x, w, residual, bias, out, scratch_0):
+    # src[epilogue_subtiling.py:46]: acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+    acc = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
+    # src[epilogue_subtiling.py:47]: for tile_k in hl.tile(k):
+    # src[epilogue_subtiling.py:48]:     acc = torch.addmm(acc, x[tile_m, tile_k], w[tile_k, tile_n])
+    _outer_pid_0 = pl.program_id(0)
+    _outer_pid_1 = pl.program_id(1)
+    scratch_0[...] = acc[...]
+
+    def _pipeline_body(_pipeline_indices, x_vmem, w_vmem):
+        nonlocal scratch_0
+        v_0 = scratch_0[...]
+        v_0_0 = v_0
+        # src[epilogue_subtiling.py:48]: acc = torch.addmm(acc, x[tile_m, tile_k], w[tile_k, tile_n])
+        load = x_vmem[:, :]
+        load_1 = w_vmem[:, :]
+        acc_1 = v_0_0 + lax.dot_general(load, load_1, dimension_numbers=(((1,), (0,)), ((), ())), preferred_element_type=jnp.float32)
+        # src[epilogue_subtiling.py:47]: for tile_k in hl.tile(k):
+        # src[epilogue_subtiling.py:48]:     acc = torch.addmm(acc, x[tile_m, tile_k], w[tile_k, tile_n])
+        scratch_0[...] = acc_1[...]
+    pltpu.emit_pipeline(_pipeline_body, grid=((8192 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2,), in_specs=[pl.BlockSpec((_BLOCK_SIZE_0, _BLOCK_SIZE_2), lambda _j: (_outer_pid_0, _j), pipeline_mode=pl.Buffered(buffer_count=2)), pl.BlockSpec((_BLOCK_SIZE_2, _BLOCK_SIZE_1), lambda _j: (_j, _outer_pid_1), pipeline_mode=pl.Buffered(buffer_count=2))], _explicit_indices=True)(x, w)
+    acc = scratch_0[...]
+    # src[epilogue_subtiling.py:50]: val = acc * 1.25
+    v_1 = jnp.array(1.25, dtype=jnp.float32)
+    v_2 = acc * v_1
+    # src[epilogue_subtiling.py:51]: val = val + residual[tile_m, tile_n].to(torch.float32) * 0.5
+    load_2 = residual[:, :]
+    v_3 = lax.convert_element_type(load_2, jnp.float32)
+    v_4 = jnp.array(0.5, dtype=jnp.float32)
+    v_5 = v_3 * v_4
+    v_6 = v_2 + v_5
+    # src[epilogue_subtiling.py:52]: val = val + bias[tile_n]
+    load_3 = bias[:]
+    v_7 = load_3[None, :]
+    v_8 = lax.convert_element_type(v_7, jnp.float32)
+    v_9 = v_6 + v_8
+    # src[epilogue_subtiling.py:53]: val = torch.nn.functional.gelu(val)
+    val_3 = 0.5 * v_9 * (1.0 + lax.erf(v_9 * 0.7071067811865476))
+    # src[epilogue_subtiling.py:54]: out[tile_m, tile_n] = val.to(x.dtype)
+    v_10 = lax.convert_element_type(val_3, jnp.bfloat16)
+    out[:, :] = v_10
+
+def matmul_bias_residual_gelu_cast(x: torch.Tensor, w: torch.Tensor, bias: torch.Tensor, residual: torch.Tensor, *, _launcher=_default_pallas_pipeline_launcher):
+    # src[epilogue_subtiling.py:41]: m, k = x.size()
+    m, k = x.size()
+    # src[epilogue_subtiling.py:42]: _, n = w.size()
+    _, n = w.size()
+    # src[epilogue_subtiling.py:43]: out = torch.empty([m, n], dtype=x.dtype, device=x.device)
+    out = torch.empty([m, n], dtype=x.dtype, device='meta')
+    # src[epilogue_subtiling.py:45]: for tile_m, tile_n in hl.tile([m, n]):
+    _BLOCK_SIZE_0 = 64
+    _BLOCK_SIZE_1 = 256
+    # src[epilogue_subtiling.py:45]: for tile_m, tile_n in hl.tile([m, n]):
+    # src[epilogue_subtiling.py:46]:     acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+    # src[epilogue_subtiling.py:47]:     for tile_k in hl.tile(k):
+    # src[epilogue_subtiling.py:45-54]: ...
+    out = _launcher(_helion_matmul_bias_residual_gelu_cast, ((8192 + _BLOCK_SIZE_0 - 1) // _BLOCK_SIZE_0, (8192 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1), x, w, residual, bias, out, _output_indices=[4], _inplace_indices=[], _block_spec_info=[((64, None), (0, None)), ((None, 256), (None, 1)), ((64, 256), (0, 1)), ((256,), (1,)), ((64, 256), (0, 1))], _ds_pad_dims=[(0, 1, 128, 0), (1, 0, 128, 0)], _scratch_shapes=[((64, 256), 'jnp.float32', 'vmem')], _pipeline_arg_indices=[0, 1])
+    # src[epilogue_subtiling.py:56]: return out
+    return out
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
+Unexpected success
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/_pytest/unittest.py:347: Failed: Unexpected success
+E   RuntimeError: 0 active drivers ([]). There should only be one.
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
+E   RuntimeError: 0 active drivers ([]). There should only be one.
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
+E   RuntimeError: 0 active drivers ([]). There should only be one.
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
+=============================== warnings summary ===============================
+../pytorch/torch/jit/_script.py:365: 14 warnings
+  /home/ymu_google_com/pytorch/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+test/test_pretuned_kernels.py:446
+  /home/ymu_google_com/helion/test/test_pretuned_kernels.py:446: PytestUnknownMarkWarning: Unknown pytest.mark.timeout - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.timeout(120)
+
+test/test_pretuned_kernels.py:450
+  /home/ymu_google_com/helion/test/test_pretuned_kernels.py:450: PytestUnknownMarkWarning: Unknown pytest.mark.timeout - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.timeout(120)
+
+test/test_pretuned_kernels.py:460
+  /home/ymu_google_com/helion/test/test_pretuned_kernels.py:460: PytestUnknownMarkWarning: Unknown pytest.mark.timeout - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.timeout(120)
+
+test/test_atomic_ops.py::TestAtomicOperations::test_2d_atomic_add
+  /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:238: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+    warn_once(
+
+test/test_atomic_ops.py: 16 warnings
+test/test_broadcasting.py: 10 warnings
+test/test_control_flow.py: 9 warnings
+test/test_examples.py: 84 warnings
+test/test_grid.py: 10 warnings
+test/test_loops.py: 23 warnings
+test/test_pallas.py: 135 warnings
+test/test_random.py: 21 warnings
+test/test_reductions.py: 10 warnings
+test/test_views.py: 8 warnings
+  /home/ymu_google_com/helion/helion/runtime/__init__.py:694: DeprecationWarning: input_output_aliases is deprecated and will be removed soon. Please use donate_argnums instead.
+    jax_callable = JaxCallable(
+
+test/test_examples.py::TestExamples::test_grpo_loss_bwd
+  /home/ymu_google_com/helion/examples/grpo_loss.py:41: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:499.)
+    return sel.to(torch.float32) / temperature
+
+test/test_examples.py::TestExamples::test_grpo_loss_bwd
+  /home/ymu_google_com/helion/helion/runtime/__init__.py:784: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:499.)
+    cast("torch.Tensor", args[i]).contiguous() for i in tensor_arg_indices
+
+test/test_examples.py::TestExamples::test_jagged_dense_bmm
+  /home/ymu_google_com/helion/examples/jagged_dense_bmm.py:119: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:499.)
+    ref_output[seq_start:seq_end] = result
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] test/test_breakpoint.py:16: unittest.case.SkipTest: triton not available
+SKIPPED [1] test/test_cute_backend.py:29: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_fuse_two_pass_loads.py:31: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_hoist_loop_invariant_recip.py:48: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_hoist_warp_reduce.py:31: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_merge_sibling_v_loops.py:35: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_online_to_3pass.py:37: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_pipeline_inner_loads.py:45: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_softmax_perf.py:46: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_tile_loop_vec_hoist.py:33: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_cute_warp_per_row_layout.py:50: could not import 'cutlass': No module named 'cutlass'
+SKIPPED [1] test/test_triton_kernel.py:10: unittest.case.SkipTest: triton not available
+SKIPPED [1] test/test_amd_cdna.py:19: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_amd_cdna.py:49: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_amd_cdna.py:84: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_amd_cdna.py:117: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:990: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:106: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:466: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:639: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:292: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:325: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:384: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:711: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:495: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:407: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:139: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:201: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:233: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:171: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:360: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:579: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:431: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:524: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:936: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:269: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:824: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:873: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:851: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:745: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:903: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:794: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_associative_scan.py:772: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_atomic_ops.py:340: CuTe-specific direct iota scatter regression
+SKIPPED [1] test/test_atomic_ops.py:358: CuTe-specific stepped iota scatter regression
+SKIPPED [1] test/test_atomic_ops.py:689: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_atomic_ops.py:324: Pallas/TPU does not support integer tensor indexing
+SKIPPED [1] test/test_atomic_ops.py:523: CuTe regression coverage
+SKIPPED [1] test/test_atomic_ops.py:728: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_atomic_ops.py:634: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_atomic_ops.py:832: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_atomic_ops.py:805: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autodiff.py:781: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:78: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:519: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:734: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:894: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:532: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:747: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:937: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:289: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:581: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:323: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:164: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:816: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:502: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:224: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:455: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:266: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:111: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:619: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:310: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:184: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:760: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:412: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:708: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:721: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:89: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:357: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:869: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:174: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:600: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:640: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:204: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:154: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:214: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:244: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:472: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:277: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:545: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:850: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:561: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:256: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:798: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:489: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:100: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:442: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:132: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:386: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:907: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:920: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:695: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:399: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:344: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:194: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:143: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:833: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:425: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:122: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:234: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autotuner.py:432: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:716: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:314: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:283: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:140: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:395: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:209: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:233: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:262: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:174: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:476: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:503: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:533: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:580: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:620: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:646: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:191: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:157: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:133: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:363: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:336: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1552: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1475: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2449: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2552: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1638: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1678: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1746: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1777: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2231: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2285: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1932: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1975: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1817: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1853: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1880: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2141: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2216: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2390: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:754: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:769: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:812: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:857: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:789: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1053: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1012: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1026: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:998: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1228: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1947: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2052: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:893: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:951: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2162: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1456: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1281: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1253: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1325: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1904: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2098: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2325: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1080: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1152: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1094: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1109: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1188: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:985: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:921: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:872: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:841: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1426: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2617: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2686: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2588: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2744: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2768: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2799: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2822: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2809: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2888: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2870: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2877: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2904: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2973: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3009: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2992: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2939: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3562: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3514: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3463: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3348: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3327: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3338: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3319: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3366: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3274: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3251: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3227: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3579: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3404: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3381: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3310: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3589: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3416: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3222: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3297: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3306: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3375: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:278: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:492: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2084: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2242: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2166: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2203: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2125: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2037: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2283: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:1969: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:1684: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2318: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:1074: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:699: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:1126: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:1886: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:758: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2470: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner_heuristics.py:2387: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:151: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:138: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:90: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:102: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:114: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:127: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:213: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_barrier.py:291: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_benchmark_worker.py:347: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_benchmark_worker.py:327: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:282: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:386: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:377: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:417: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:435: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:403: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:455: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:520: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:567: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:631: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:313: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:607: disabled for HELION_BACKEND=pallas
+SKIPPED [5] test/test_cache.py:199: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:237: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:350: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:553: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:538: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:506: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:483: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:737: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:718: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:748: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:770: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cache.py:698: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_closures.py:42: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_closures.py:64: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_closures.py:51: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_closures.py:59: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_closures.py:73: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_closures.py:86: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:159: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:132: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:138: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:278: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:208: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:244: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:190: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:231: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:252: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:307: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:568: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:351: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:368: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:360: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:375: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:421: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:560: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:438: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:472: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:456: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:491: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:381: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:544: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:511: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:315: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:387: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:399: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:328: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:339: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:298: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:413: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:583: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:707: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:643: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:608: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_config_api.py:678: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:113: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:208: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:24: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:39: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:54: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:86: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:186: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_constexpr.py:70: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_control_flow.py:240: atomic_add not supported on Pallas
+SKIPPED [1] test/test_control_flow.py:416: Pallas gather supports only dim-0 indirect indexing
+SKIPPED [1] test/test_control_flow.py:345: Pallas gather supports only dim-0 indirect indexing
+SKIPPED [1] test/test_control_flow.py:100: requires per-element tiling unavailable for small 1D tensors on TPU
+SKIPPED [1] test/test_control_flow.py:437: tensor gather indexing not supported on Pallas
+SKIPPED [1] test/test_custom_op.py:20: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_custom_op.py:138: fake launcher incompatible with output-only return capture
+SKIPPED [1] test/test_custom_op.py:148: fake launcher incompatible with output-only return capture
+SKIPPED [1] test/test_custom_op.py:118: fake launcher incompatible with output-only return capture
+SKIPPED [1] test/test_custom_op.py:128: fake launcher incompatible with output-only return capture
+SKIPPED [1] test/test_cute_device_state.py:751: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:770: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:734: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:524: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:574: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:596: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:552: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:532: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:152: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:432: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:456: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:391: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:178: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:207: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:338: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:268: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:349: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:227: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:507: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:516: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:642: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:678: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:617: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:629: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:657: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:480: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:498: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:708: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:696: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:163: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_device_state.py:722: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:43: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:24: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:37: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:30: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:58: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:52: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:83: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:90: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:75: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:121: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:139: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:209: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:194: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:256: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:320: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:277: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:377: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:362: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_layout.py:423: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14542: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14715: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14942: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13022: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13757: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14173: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13254: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13312: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13382: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13072: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13194: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13133: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14614: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14665: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12980: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12834: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12886: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12937: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12796: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13714: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13629: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13558: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13594: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13522: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13672: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13914: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13878: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14008: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15737: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14337: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14297: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15669: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15696: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14428: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14449: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14439: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14405: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14359: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14388: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14375: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13980: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13994: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13961: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:872: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:910: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15400: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9662: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13955: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14749: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14855: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13796: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13831: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14831: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13452: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13506: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:13488: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:832: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:790: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:814: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12527: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12163: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14274: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14251: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12703: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14501: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12757: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12731: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14488: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14470: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14462: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14109: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14149: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14130: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14062: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8074: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10563: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10527: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10453: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10491: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8001: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12594: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5372: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5458: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5414: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6490: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6235: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6535: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6405: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10743: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10328: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10705: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10727: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10312: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10343: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10115: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10770: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10044: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:995: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5674: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1934: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15559: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1872: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:948: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12272: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12476: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12427: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7000: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6854: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6929: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7285: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7674: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7376: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7719: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7764: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7823: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7168: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7624: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7071: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7463: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7537: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7499: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7575: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3845: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3628: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3028: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3391: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4163: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4505: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2680: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2856: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2948: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2977: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2912: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3107: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3916: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4009: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3956: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3667: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3711: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3151: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3070: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3430: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3483: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4237: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4343: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4285: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4544: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4596: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4112: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3798: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3340: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3578: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4454: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4689: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2788: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1149: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2397: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2350: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5238: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5271: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12127: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2438: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5129: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5166: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5199: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6798: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9051: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9015: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8969: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8862: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8920: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8747: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8812: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8547: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8451: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9869: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8502: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9690: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9203: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9295: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8682: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8132: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9625: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9578: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9739: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9796: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9519: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9144: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9371: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9112: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8346: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8281: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8217: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8643: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:8600: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9481: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1787: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1210: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5501: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5581: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1057: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10376: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1096: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15026: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15154: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15089: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1979: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9979: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10806: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12008: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11937: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11479: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11540: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11664: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11728: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12080: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11603: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11797: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11238: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11867: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10854: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10907: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11299: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:11417: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6559: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7937: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:9927: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:7889: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2108: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2026: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12199: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4737: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4820: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4775: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2519: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4871: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5005: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4955: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4919: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4067: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3752: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3296: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3532: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4409: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:4645: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3247: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:3190: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1725: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1680: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1252: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:1355: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2161: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:10599: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12390: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2242: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5309: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12321: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15002: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:2483: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5103: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5059: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12626: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6055: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:6170: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5852: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:5959: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:12560: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15119: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15287: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15296: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15309: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15320: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15392: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15279: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14228: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:14205: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16047: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16132: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15874: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15941: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15992: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:15838: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19063: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19420: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19486: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19004: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18957: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19365: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19312: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18917: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19102: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17272: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17355: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19229: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16361: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17420: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16446: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17224: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17177: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16744: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18771: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18816: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18686: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18601: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18267: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18520: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18172: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18422: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18304: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17664: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16869: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17112: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16824: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17041: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17073: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17004: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17132: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16906: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16952: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16991: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16612: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:16703: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17469: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18084: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18137: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17528: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17579: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17640: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17736: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17869: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17786: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17927: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17843: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18025: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:18055: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:17992: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19636: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19623: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19652: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19677: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19609: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19579: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19559: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19530: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19997: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20706: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20641: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20381: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20404: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20422: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20315: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20029: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20041: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20013: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19979: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20157: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20250: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20106: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20073: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20134: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20187: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20229: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20057: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20594: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20560: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20734: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20669: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20776: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20816: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20514: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20456: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20542: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20876: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20848: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19898: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19821: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:19964: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20267: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21341: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21095: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21047: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21302: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21146: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21134: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21158: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21108: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21191: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21174: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21196: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21014: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:20986: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21022: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21231: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21213: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21243: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21055: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21318: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21286: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21262: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21541: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21495: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21439: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21473: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21518: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21764: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21705: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21668: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21676: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21716: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21690: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21682: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21727: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21698: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21741: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21876: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21885: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21854: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21863: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21917: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21921: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21902: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21893: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21908: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21848: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21838: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21844: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_cute_lowerings.py:21834: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_debug_utils.py:107: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_debug_utils.py:155: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_debug_utils.py:207: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_debug_utils.py:240: disabled for HELION_BACKEND=pallas
+SKIPPED [11] test/test_distributed.py:195: disabled for HELION_BACKEND=pallas
+SKIPPED [22] test/test_distributed.py:258: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_distributed.py:422: disabled for HELION_BACKEND=pallas
+SKIPPED [11] test/test_distributed.py:337: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_distributed.py:167: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_distributed.py:469: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:825: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:839: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:843: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:831: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:919: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:835: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:923: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:821: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:813: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:817: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:377: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:476: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:449: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:401: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:425: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:504: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:339: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:235: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:803: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:276: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:935: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:939: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:927: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:943: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:931: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:947: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:794: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:776: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:785: disabled for HELION_BACKEND=pallas
+SKIPPED [48] test/test_dot.py:104: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1064: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1087: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1091: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1075: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1097: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1081: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1103: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1055: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1030: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1043: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:985: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1008: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1012: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:996: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1018: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1002: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:1024: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:976: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:951: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:964: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot.py:310: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1137: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1000: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1064: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:943: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:763: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:791: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:841: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:655: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:528: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1312: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1285: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1364: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:314: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:273: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2417: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1818: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1477: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1456: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1435: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1721: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1338: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1253: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2630: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:460: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1886: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2864: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2722: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2813: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2330: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2553: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2482: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2249: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2134: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1968: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2681: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:2775: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:403: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:585: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1768: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1194: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:372: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:875: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:240: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:263: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1121: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1513: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1634: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1682: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_requirements.py:1406: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:130: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:166: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:94: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:307: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:395: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:349: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:258: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_dot_scaled.py:213: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:390: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:424: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:408: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:433: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:254: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:183: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:214: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:285: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:307: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:349: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:326: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:245: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:368: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_epilogue_subtiling.py:269: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:271: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:286: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:299: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:43: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:332: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:498: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:529: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:318: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:513: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:630: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:592: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:184: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:240: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:560: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:583: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:207: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:225: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:255: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:108: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:169: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:156: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:142: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:130: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:571: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:546: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:364: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:350: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:432: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:465: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:398: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:714: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:694: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:824: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:763: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_errors.py:794: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_eviction_policy.py:75: disabled for HELION_BACKEND=pallas
+SKIPPED [3] test/test_eviction_policy.py:107: disabled for HELION_BACKEND=pallas
+SKIPPED [3] test/test_eviction_policy.py:138: disabled for HELION_BACKEND=pallas
+SKIPPED [3] test/test_eviction_policy.py:56: disabled for HELION_BACKEND=pallas
+SKIPPED [3] test/test_eviction_policy.py:167: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples.py:2512: flex_attention requires torch.compile and closures
+SKIPPED [1] test/test_examples.py:434: Test skipped: CUDA (NVIDIA GPU) is not available.
+SKIPPED [1] test/test_examples.py:1757: Pallas int32 gather coverage uses test_gather_gemv_half
+SKIPPED [1] test/test_examples.py:1002: TODO: follow up on timeout due to google-pytorch/torch_tpu@42d10ff
+SKIPPED [1] test/test_examples.py:368: CuTe-specific compile coverage
+SKIPPED [1] test/test_examples.py:1801: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples.py:1849: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples_dist.py:99: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples_dist.py:153: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_examples_dist.py:201: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples_dist.py:263: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples_dist.py:312: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:34: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:55: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:124: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:149: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:104: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:136: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_external_autotune.py:76: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:37: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:42: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:52: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:86: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:66: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:100: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:76: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:114: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:128: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:142: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:156: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:330: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:281: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:198: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:207: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:189: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:270: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:292: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:217: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:244: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:255: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:235: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:175: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_generate_ast.py:226: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_graph_module.py:28: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_graph_module.py:94: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_graph_module.py:56: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_graph_module.py:41: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_graph_module.py:71: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_grid.py:43: Tensor descriptor support is required
+SKIPPED [1] test/test_grid.py:87: Tensor descriptor support is required
+SKIPPED [1] test/test_indexing.py:1296: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1271: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1409: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1388: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1370: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1221: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1196: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:111: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1004: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:986: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:967: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:926: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:947: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:802: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:908: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1625: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1055: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1042: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1070: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:697: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:674: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2703: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1522: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:422: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2603: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2479: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2449: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:128: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2280: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1997: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2043: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2091: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2137: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:566: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:778: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2563: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:404: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:256: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:274: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:349: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:478: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2397: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1427: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1550: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1496: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2338: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:219: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:235: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1924: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1846: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1879: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:736: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1650: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1676: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1155: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1175: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2727: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1088: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1119: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1023: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1607: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1452: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2637: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:709: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1578: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:516: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:539: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:77: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:93: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:817: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:846: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:879: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2184: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2228: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2509: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2540: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1727: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1776: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1706: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:1750: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_indexing.py:2678: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_asm_elementwise.py:229: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_asm_elementwise.py:197: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:174: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_asm_elementwise.py:91: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:140: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:52: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:22: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:284: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:258: inline_asm_elementwise is only supported on CUDA
+SKIPPED [1] test/test_inline_asm_elementwise.py:319: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:114: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:97: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:73: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:44: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:176: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:158: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:21: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_inline_triton.py:131: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:380: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:71: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:309: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:190: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:252: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:135: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:47: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:103: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:345: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:281: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:160: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_int64_indexing.py:217: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:306: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:96: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:273: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:257: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:210: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:19: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:290: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:55: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:380: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:344: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_jagged_tile.py:138: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_llm_autotuner.py:165: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_llm_autotuner.py:1006: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_logging.py:80: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_logging.py:65: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_logging.py:105: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_loop_dependencies.py:21: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_loop_dependencies.py:44: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_loop_dependencies.py:67: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_loops.py:1177: L2 grouping is Triton-specific
+SKIPPED [1] test/test_loops.py:1206: L2 grouping is Triton-specific
+SKIPPED [1] test/test_loops.py:1240: L2 grouping is Triton-specific
+SKIPPED [1] test/test_loops.py:993: range loop hints are Triton-specific
+SKIPPED [1] test/test_loops.py:952: range loop hints are Triton-specific
+SKIPPED [1] test/test_loops.py:909: range loop hints are Triton-specific
+SKIPPED [1] test/test_loops.py:841: range loop hints are Triton-specific
+SKIPPED [1] test/test_loops.py:862: Test skipped: CUDA (NVIDIA GPU) is not available.
+SKIPPED [1] test/test_loops.py:1516: rolled reduction loops are Triton codegen-specific
+SKIPPED [1] test/test_loops.py:1468: tl.debug_barrier() is only emitted in Triton device codegen (not Pallas/JAX)
+SKIPPED [1] test/test_loops.py:1554: tl.debug_barrier() is Triton codegen-specific; the negative assertion is trivially true on non-Triton backends
+SKIPPED [1] test/test_loops.py:1044: static_range is Triton-specific
+SKIPPED [1] test/test_loops.py:1151: TODO(joydddd): handle constexpr type casting.
+SKIPPED [1] test/test_loops.py:1100: static_range is Triton-specific
+SKIPPED [1] test/test_loops.py:1354: TPU runtime crash with three-pass reduction pattern
+SKIPPED [1] test/test_loops.py:352: scalar tile.count stores are not supported on pallas
+SKIPPED [1] test/test_loops.py:1407: range loop hints are Triton-specific
+SKIPPED [1] test/test_loops.py:322: Requires int indexing which is unavailable on TPUs
+SKIPPED [1] test/test_masking.py:159: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:23: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:119: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:82: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:100: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:139: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:48: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:65: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_masking.py:187: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:175: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:439: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:98: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:112: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:125: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:209: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:377: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:301: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:404: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:349: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:244: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:259: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:273: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:287: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:227: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_matmul.py:139: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_metal.py:269: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:274: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:279: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:287: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:345: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:359: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:337: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:352: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:369: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:305: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:321: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:376: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:382: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:410: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:425: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:420: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:430: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:415: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:444: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:470: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:460: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:464: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:497: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:506: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:485: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:489: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:501: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:493: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:527: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:541: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:522: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:537: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:532: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:556: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:561: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:566: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:593: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:581: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:587: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:600: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:606: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:612: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:618: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:973: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:700: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:788: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:798: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:1005: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:753: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:763: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:717: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:725: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:743: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:708: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:833: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:734: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:1115: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:1140: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:811: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:1084: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:1028: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:687: Metal tests require macOS
+SKIPPED [1] test/test_metal.py:1068: Metal tests require macOS
+SKIPPED [1] test/test_misc.py:43: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:706: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:673: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:356: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:889: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:143: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:1018: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:296: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:1111: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:266: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:75: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:62: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:187: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:237: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:974: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:570: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:658: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:472: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_misc.py:585: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:397: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:419: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:125: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:785: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:758: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:839: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:808: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:740: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:916: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:946: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:600: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_misc.py:623: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:497: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:531: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:553: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:1156: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:1206: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:1220: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_misc.py:1182: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1133: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1167: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1095: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:233: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:612: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:761: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:171: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:107: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:67: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:452: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:660: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:199: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:136: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:897: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:847: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:86: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:804: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:393: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1005: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:272: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:957: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1068: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:723: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:591: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:341: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:493: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:551: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:252: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1212: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1247: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1282: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_persistent_kernels.py:1308: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:377: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:371: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:374: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:383: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:380: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:368: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:365: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:457: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:450: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:454: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:460: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:446: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_pretuned_kernels.py:442: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:131: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:238: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:389: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:285: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:466: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:163: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:194: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:216: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:328: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:260: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:426: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:357: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print.py:507: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print_ref_eager_mode.py:46: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_print_ref_eager_mode.py:21: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:99: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:58: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:68: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:30: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:46: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:151: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:139: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ptxas_config.py:183: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_quantized_ops.py:50: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_quantized_ops.py:31: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1204: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1229: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1239: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1164: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:967: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1096: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:861: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:948: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:902: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1061: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:986: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1171: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1040: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:878: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:925: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1129: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:1011: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_random.py:848: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:171: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:441: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:580: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:86: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:508: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:287: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:225: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:117: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:177: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:201: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:249: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:538: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:312: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:376: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reduce.py:141: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_reductions.py:721: Pallas TPU argreduce cannot write int64 keepdim outputs
+SKIPPED [1] test/test_reductions.py:754: nested torch.matmul argreduce lowering is unsupported on Pallas
+SKIPPED [1] test/test_reductions.py:260: Tensor descriptor support is required
+SKIPPED [1] test/test_reductions.py:293: Pallas TPU argreduce cannot write int64 scalar outputs
+SKIPPED [1] test/test_reductions.py:269: Pallas TPU argreduce cannot write int64 keepdim outputs
+SKIPPED [1] test/test_reductions.py:352: Tensor descriptor support is required
+SKIPPED [1] test/test_reductions.py:191: complex layernorm with fp16, not relevant to Pallas
+SKIPPED [1] test/test_reductions.py:112: cross-warp shared-memory reduction not supported on Pallas
+SKIPPED [1] test/test_reductions.py:559: tensor_descriptor indexing is Triton-specific
+SKIPPED [1] test/test_reductions.py:336: Tensor descriptor support is required
+SKIPPED [1] test/test_reductions.py:311: tensor_descriptor indexing is Triton-specific
+SKIPPED [1] test/test_reductions.py:780: barrier and persistent_blocked not supported on Pallas
+SKIPPED [1] test/test_reductions.py:73: non-power-of-2 reduction dims not supported on Pallas
+SKIPPED [1] test/test_reductions.py:249: tensor_descriptor indexing is Triton-specific
+SKIPPED [1] test/test_ref_eager.py:99: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:179: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:197: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:57: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:20: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:84: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:148: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:129: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:114: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_register_tunable.py:77: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_register_tunable.py:53: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_register_tunable.py:111: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_register_tunable.py:28: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_register_tunable.py:96: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:840: requires indexed accelerator devices
+SKIPPED [1] test/test_rng.py:1199: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1219: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1096: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1067: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1033: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1142: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1171: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1119: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1244: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:997: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1302: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1340: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_rng.py:1386: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:56: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:91: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:163: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:189: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:115: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:139: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:73: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:40: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:282: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:320: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:337: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:366: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:405: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:300: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:25: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:224: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:443: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:501: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_specialize.py:526: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:71: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:43: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:18: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:120: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:177: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:147: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_stack_tensor.py:208: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:98: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:431: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:415: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:726: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:493: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:560: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:1021: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:837: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:861: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:597: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:972: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:934: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:133: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:448: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:676: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:201: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:64: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:27: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:167: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:641: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:1058: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:1176: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:380: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:777: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tensor_descriptor.py:317: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tileir.py:47: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_tileir.py:17: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:621: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1222: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1509: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1246: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:970: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1854: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:5056: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4689: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4747: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4992: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4935: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4587: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4648: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:5080: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:5023: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4799: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:644: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1933: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1904: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2973: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2265: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2681: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2541: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1415: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2509: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2229: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2475: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2128: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2402: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2197: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2337: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2162: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2371: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2744: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2585: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:845: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:786: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1326: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2806: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2778: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1041: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4301: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4275: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4412: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4357: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4245: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4330: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4385: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4467: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2093: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2058: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1650: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1621: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2435: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1003: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:5152: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1594: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1101: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:904: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3617: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3510: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3322: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3207: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3441: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3690: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3653: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3474: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3058: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3021: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3555: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3166: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3127: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4113: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3095: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3868: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3826: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3781: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4041: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4077: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3242: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3734: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3280: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2835: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2874: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4005: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:736: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:761: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1351: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2299: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1294: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:707: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1476: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1777: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1802: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:674: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1677: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1702: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1271: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1384: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1880: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1753: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1560: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2997: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1534: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1189: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1443: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4518: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1961: disabled for HELION_BACKEND=pallas
+SKIPPED [6] test/test_torch_compile.py:4198: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4440: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4489: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1071: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1994: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2927: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:941: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3963: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3384: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3357: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3585: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1130: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3418: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:4868: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1828: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:4159: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2023: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:874: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:3912: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:2634: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1727: disabled for HELION_BACKEND=pallas
+SKIPPED [2] test/test_torch_compile.py:1160: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_torch_compile.py:5200: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:33: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:49: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:141: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:101: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:123: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:65: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:58: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:160: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:93: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:79: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:72: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_type_propagation.py:41: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:494: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:567: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:821: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:835: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:747: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:714: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:731: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:914: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:849: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:862: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:895: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:580: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:957: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:931: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:695: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:881: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:531: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:983: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:760: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:553: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:613: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:639: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:676: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:626: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:773: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:786: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:802: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:511: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_unroll_tuples.py:593: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_views.py:134: Tensor descriptor support is required
+SKIPPED [1] test/test_views.py:152: Tensor descriptor support is required
+SKIPPED [1] test/test_views.py:170: Tensor descriptor support is required
+SKIPPED [1] test/test_views.py:86: Tensor descriptor support is required
+SKIPPED [1] test/test_views.py:104: Tensor descriptor support is required
+SKIPPED [1] test/test_zero_size.py:42: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_zero_size.py:16: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_zero_size.py:29: disabled for HELION_BACKEND=pallas
+XFAIL test/test_atomic_ops.py::TestAtomicOperations::test_atomic_add_1d_tensor
+XFAIL test/test_atomic_ops.py::TestAtomicOperations::test_atomic_add_device_tensor_error
+XFAIL test/test_atomic_ops.py::TestAtomicOperations::test_atomic_add_float
+XFAIL test/test_atomic_ops.py::TestAtomicOperations::test_atomic_add_w_tile_attr
+XFAIL test/test_atomic_ops.py::TestAtomicOperations::test_basic_atomic_add_strided_target
+XFAIL test/test_atomic_ops.py::TestAtomicOperations::test_overlapping_atomic_add
+XFAIL test/test_broadcasting.py::TestBroadcasting::test_constexpr_index
+XFAIL test/test_examples.py::TestExamples::test_bf16xint16
+XFAIL test/test_examples.py::TestExamples::test_concat_block_ptr
+XFAIL test/test_examples.py::TestExamples::test_gdn_fwd_h
+XFAIL test/test_examples.py::TestExamples::test_grouped_gemm_jagged
+XFAIL test/test_examples.py::TestExamples::test_grouped_gemm_jagged_persistent
+XFAIL test/test_examples.py::TestExamples::test_grpo_loss_bwd
+XFAIL test/test_examples.py::TestExamples::test_int4_gemm
+XFAIL test/test_examples.py::TestExamples::test_jagged_dense_bmm
+XFAIL test/test_examples.py::TestExamples::test_jagged_hstu_attn
+XFAIL test/test_examples.py::TestExamples::test_jagged_layer_norm
+XFAIL test/test_examples.py::TestExamples::test_jagged_mean
+XFAIL test/test_examples.py::TestExamples::test_jagged_softmax
+XFAIL test/test_examples.py::TestExamples::test_jagged_sum
+XFAIL test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch
+XFAIL test/test_examples.py::TestExamples::test_mamba2_chunk_scan
+XFAIL test/test_examples.py::TestExamples::test_mamba2_chunk_state
+XFAIL test/test_examples.py::TestExamples::test_matmul_bias_epilogue_wrapper
+XFAIL test/test_examples.py::TestExamples::test_matmul_layernorm_dynamic_shapes
+XFAIL test/test_examples.py::TestExamples::test_matmul_split_k
+XFAIL test/test_examples.py::TestExamples::test_segment_reduction
+XFAIL test/test_examples.py::TestExamples::test_split_k_barrier
+XFAIL test/test_examples.py::TestExamples::test_split_k_barrier_accuracy
+XFAIL test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_da
+XFAIL test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db
+XFAIL test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_dx
+XFAIL test/test_grid.py::TestGrid::test_grid_2d_idx_nested
+XFAIL test/test_grid.py::TestGrid::test_grid_begin_end_step
+XFAIL test/test_grid.py::TestGrid::test_grid_end_step_kwarg
+XFAIL test/test_grid.py::TestGrid::test_grid_multidim_begin_end_step
+XFAIL test/test_grid.py::TestGrid::test_range_with_step
+XFAIL test/test_grid.py::TestGrid::test_tile_begin_end
+XFAIL test/test_loops.py::TestLoops::test_3d_device_loop2
+XFAIL test/test_loops.py::TestLoops::test_data_dependent_bounds1
+XFAIL test/test_loops.py::TestLoops::test_data_dependent_bounds3
+XFAIL test/test_loops.py::TestLoops::test_data_dependent_bounds4
+XFAIL test/test_loops.py::TestLoops::test_data_dependent_bounds5
+XFAIL test/test_loops.py::TestLoops::test_flattened_tile_with_unit_axis
+XFAIL test/test_loops.py::TestLoops::test_loop_fixed_block
+XFAIL test/test_loops.py::TestLoops::test_multiple_for_loop_1d
+XFAIL test/test_loops.py::TestLoops::test_multiple_for_loop_2d
+XFAIL test/test_loops.py::TestLoops::test_multiple_for_loop_2d_multiple_tile
+XFAIL test/test_loops.py::TestLoops::test_register_block_size_minimum
+XFAIL test/test_loops.py::TestLoops::test_while_atomic_cas_pass
+XFAIL test/test_pallas.py::TestPallas::test_bmm_nonzero_k_begin
+XFAIL test/test_pallas.py::TestPallas::test_mixed_scalar_write_and_slice_access
+XFAIL test/test_pallas.py::TestPallas::test_non_zero_tile_begin_emit_pipeline
+XFAIL test/test_pallas.py::TestPallas::test_pipeline_tensor_with_scalar_access
+XFAIL test/test_pallas.py::TestPallas::test_tensor_access_tile_index_offset
+XFAIL test/test_pallas.py::TestPallas::test_tensor_access_tile_index_offset_2d
+XFAIL test/test_reductions.py::TestReductions::test_fp16_math_ops_fp32_fallback
+XFAIL test/test_rng.py::TestRNG::test_explicit_seeded_rng_does_not_shift_implicit_seed_slots
+XFAIL test/test_rng.py::TestRNG::test_multiple_rng_ops
+XFAIL test/test_rng.py::TestRNG::test_rand
+XFAIL test/test_rng.py::TestRNG::test_rand_3d_tensor
+XFAIL test/test_rng.py::TestRNG::test_rand_like_nested_tiles_issue_1208
+XFAIL test/test_rng.py::TestRNG::test_rand_like_with_dynamic_tile_sizes
+XFAIL test/test_rng.py::TestRNG::test_rand_like_with_specialized_dimension
+XFAIL test/test_rng.py::TestRNG::test_rand_with_dynamic_tile_sizes
+XFAIL test/test_rng.py::TestRNG::test_randn_3d_tensor
+XFAIL test/test_rng.py::TestRNG::test_randn_different_seeds_tiled
+XFAIL test/test_rng.py::TestRNG::test_randn_like_with_dynamic_tile_sizes
+XFAIL test/test_rng.py::TestRNG::test_randn_normal_distribution
+XFAIL test/test_rng.py::TestRNG::test_randn_with_dynamic_tile_sizes
+XFAIL test/test_views.py::TestViews::test_join_broadcast_scalar
+XFAIL test/test_views.py::TestViews::test_reshape_sum
+XFAIL test/test_views.py::TestViews::test_split_join_roundtrip
+XFAIL test/test_views.py::TestViews::test_stack_dim0
+XFAIL test/test_views.py::TestViews::test_stack_non_power_of_2
+XFAIL test/test_views.py::TestViews::test_stack_power_of_2
+XFAIL test/test_views.py::TestViews::test_view_blocksize_constexpr
+XFAIL test/test_views.py::TestViews::test_view_dtype_reinterpret
+FAILED test/test_best_available.py::TestCacheMatching::test_cache_matching_with_code_object_in_spec_key
+FAILED test/test_best_available.py::TestCacheMatching::test_find_similar_cached_configs_end_to_end
+FAILED test/test_best_available.py::TestCacheMatching::test_find_similar_cached_configs_respects_max_configs
+FAILED test/test_best_available.py::TestCacheMatching::test_find_similar_matches_with_specialize_extras
+FAILED test/test_best_available.py::TestRemoteCacheMerging::test_remote_dedups_against_local
+FAILED test/test_best_available.py::TestRemoteCacheMerging::test_remote_entries_returned_when_local_empty
+FAILED test/test_best_available.py::TestRemoteCacheMerging::test_remote_malformed_entries_skipped
+FAILED test/test_examples.py::TestExamples::test_epilogue_subtiling_gelu_aux
+FAILED test/test_examples.py::TestExamples::test_epilogue_subtiling_residual_gelu
+FAILED test/test_loops.py::TestLoops::test_range_num_stages_preserved_without_aliasing
+FAILED test/test_random.py::TestRandom::test_hl_rand4x_dropout_pattern - Runt...
+FAILED test/test_random.py::TestRandom::test_hl_rand_offsets_independence - R...
+FAILED test/test_random.py::TestRandom::test_hl_rand_with_explicit_offsets - ...
+= 13 failed, 456 passed, 1908 skipped, 78 xfailed, 347 warnings in 243.42s (0:04:03) =
+I0000 00:00:1781040895.254756 3485401 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1781040895.254790 3485401 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=11083
+num_cache_hits=7563 {68.2%}
+peak_compilation_memory_bytes=unknown
+
