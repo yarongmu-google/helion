@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Mon Jun  8 18:51:35 PDT 2026
+Mon Jun  8 19:19:58 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -12,37 +12,37 @@ pltpu: importable
 
 --- Helion ---
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780969903.628865 3044911 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780969903.654724 3044911 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780969903.654760 3044911 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780969904.206382 3044911 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780971605.990436 3049483 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780971606.015064 3049483 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780971606.015095 3049483 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780971606.577805 3049483 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 helion: (unversioned)
-Git HEAD: 2d321595
+Git HEAD: 2e1d15f9
 
 ================================================
 jagged_mean: examples/jagged_mean.py main()
 ================================================
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780969907.142741 3045041 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780969907.167272 3045041 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780969907.167302 3045041 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780969907.723879 3045041 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780971609.517710 3049615 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780971609.545549 3049615 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780971609.545587 3049615 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780971610.103511 3049615 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1780969908.751289 3045041 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
-I0000 00:00:1780969911.053423 3045041 pjrt_c_api_client.cc:197] PjRtCApiClient created.
-W0000 00:00:1780969911.053462 3045041 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1780969911.086844 3045825 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1780969911.086874 3045825 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1780971611.141928 3049615 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1780971613.507144 3049615 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1780971613.507185 3049615 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1780971613.542220 3050400 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1780971613.542240 3050400 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 Testing helion correctness...
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
 Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/4u/c4u7gezecpjdt7xut7m7t4hpi5sfmqpsoy6z5f5tjhzs6cexpoxu.py
+# Output code written to: /tmp/torchinductor_ymu_google_com/zd/czdxiwzvacgpu2efv7tgizm2jzb3jjqzwjadfc4puqz4t6g6pwp3.py
 from __future__ import annotations
 
 import torch
@@ -154,7 +154,7 @@ def _helion_jagged_mean_kernel(x_offsets, x_feature_counts, out, x_flat, max_M, 
             scalar_tensor = jnp.full([], 0.0, jnp.float32)
             result = jnp.where(v_11, v_12, scalar_tensor)
             # src[jagged_mean.py:81]: out[tile_b, tile_m] = result
-            out_buf[:, :] = jnp.where(mask_1.astype(jnp.float32).astype(jnp.bool_), result, out_buf[:, :])
+            out_buf[:, :] = jnp.where(mask_1.astype(jnp.float32).astype(jnp.bool_), result, jnp.zeros_like(result))
             # src[jagged_mean.py:66]: for tile_m in hl.jagged_tile(feature_counts):
             # src[jagged_mean.py:67]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
             # src[jagged_mean.py:66-81]: ...
@@ -203,7 +203,7 @@ def call():
     # src[jagged_mean.py:33]:     x_data: torch.Tensor,
     # src[jagged_mean.py:34]:     x_offsets: torch.Tensor,
     # src[jagged_mean.py:32-83]: ...
-    x_data = rand_strided(size=(1050, 8), stride=(8, 1), dtype=torch.float32, device='tpu:0')
+    x_data = rand_strided(size=(1041, 8), stride=(8, 1), dtype=torch.float32, device='tpu:0')
     x_offsets = rand_strided(size=(33,), stride=(1,), dtype=torch.int32, device='tpu:0')
     x_feature_counts = rand_strided(size=(32,), stride=(1,), dtype=torch.int32, device='tpu:0')
     max_M = 8
@@ -212,26 +212,20 @@ if __name__ == '__main__':
     call()
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
-Traceback (most recent call last):
-  File "/home/ymu_google_com/helion/examples/jagged_mean.py", line 200, in <module>
-    main()
-  File "/home/ymu_google_com/helion/examples/jagged_mean.py", line 192, in main
-    run_example(
-  File "/home/ymu_google_com/helion/helion/_testing.py", line 1116, in wrapper
-    return fn(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/_testing.py", line 1196, in run_example
-    torch.testing.assert_close(
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1631, in assert_close
-    raise error_metas[0].to_error(msg)
-AssertionError: Tensor-likes are not close!
+Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 137/137  23.7 configs/s
 
-Mismatched elements: 55 / 256 (21.5%)
-Greatest absolute difference: 0.4908674657344818 at index (6, 4) (up to 0.1 allowed)
-Greatest relative difference: inf at index (4, 3) (up to 0.01 allowed)
-I0000 00:00:1780969915.419809 3045041 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1780969915.419830 3045041 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=176
-num_cache_hits=42 {23.8%}
+=================================================================
+Benchmark Results
+=================================================================
+Implementation       Time (ms)    Speedup        
+-----------------------------------------------------------------
+helion               0.8292       49.61x         
+torch                41.1341      1.00x (ref)    
+=================================================================
+
+I0000 00:00:1780971623.690335 3049615 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1780971623.690502 3049615 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=19239
+num_cache_hits=19110 {99.3%}
 peak_compilation_memory_bytes=unknown
 
 
