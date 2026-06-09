@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Tue Jun  9 13:03:38 PDT 2026
+Tue Jun  9 13:05:25 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -10,7 +10,7 @@ jax: 0.9.2
 devices: [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0), TpuDevice(id=1, process_index=0, coords=(0,0,0), core_on_chip=1), TpuDevice(id=2, process_index=0, coords=(1,0,0), core_on_chip=0), TpuDevice(id=3, process_index=0, coords=(1,0,0), core_on_chip=1), TpuDevice(id=4, process_index=0, coords=(0,1,0), core_on_chip=0), TpuDevice(id=5, process_index=0, coords=(0,1,0), core_on_chip=1), TpuDevice(id=6, process_index=0, coords=(1,1,0), core_on_chip=0), TpuDevice(id=7, process_index=0, coords=(1,1,0), core_on_chip=1)]
 pltpu: importable
 
-Git HEAD: 29416bc7
+Git HEAD: 4b5d1397
 
 ================================================
 Test A: lax.dynamic_slice on (N, 256), runtime offset (expect PASS)
@@ -51,13 +51,13 @@ Test E: round-down HBM offset, over-read, slice in VMEM
   Over-read BK + 7 sublanes into VMEM, then VMEM-slice at lead.
   Should give CORRECT data for any start (including start=7).
 ================================================
-  start= 0  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
-  start= 1  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
-  start= 7  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
-  start= 8  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
-  start=15  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
-  start=16  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
-  start=17  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start= 0  out[0,0]=      0  -> CORRECT
+  start= 1  out[0,0]=    256  -> CORRECT
+  start= 7  out[0,0]=   1792  -> CORRECT
+  start= 8  out[0,0]=   2048  -> CORRECT
+  start=15  out[0,0]=   3840  -> CORRECT
+  start=16  out[0,0]=   4096  -> CORRECT
+  start=17  out[0,0]=   4352  -> CORRECT
 
 ================================================
 Done.  Exit code: 0
