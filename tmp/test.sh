@@ -90,7 +90,7 @@ call = pl.pallas_call(
     out_shape=jax.ShapeDtypeStruct((16, 128), jnp.float32),
     in_specs=[
         pl.BlockSpec(memory_space=pltpu.MemorySpace.SMEM),
-        pl.BlockSpec(memory_space=pltpu.MemorySpace.ANY),  # HBM
+        pl.BlockSpec(memory_space=pltpu.MemorySpace.HBM),
     ],
     out_specs=pl.BlockSpec(memory_space=pltpu.MemorySpace.VMEM),
     scratch_shapes=[
