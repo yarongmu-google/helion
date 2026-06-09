@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Tue Jun  9 12:39:24 PDT 2026
+Tue Jun  9 13:03:38 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -10,7 +10,7 @@ jax: 0.9.2
 devices: [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0), TpuDevice(id=1, process_index=0, coords=(0,0,0), core_on_chip=1), TpuDevice(id=2, process_index=0, coords=(1,0,0), core_on_chip=0), TpuDevice(id=3, process_index=0, coords=(1,0,0), core_on_chip=1), TpuDevice(id=4, process_index=0, coords=(0,1,0), core_on_chip=0), TpuDevice(id=5, process_index=0, coords=(0,1,0), core_on_chip=1), TpuDevice(id=6, process_index=0, coords=(1,1,0), core_on_chip=0), TpuDevice(id=7, process_index=0, coords=(1,1,0), core_on_chip=1)]
 pltpu: importable
 
-Git HEAD: 9812fafa
+Git HEAD: 29416bc7
 
 ================================================
 Test A: lax.dynamic_slice on (N, 256), runtime offset (expect PASS)
@@ -43,6 +43,21 @@ Test D: reshape HBM ref before slicing (expect PASS at any start)
   start= 7  ERROR: INTERNAL: Mosaic failed to compile TPU kernel: Expected the minormost dimension to be unchanged
   start= 8  ERROR: INTERNAL: Mosaic failed to compile TPU kernel: Expected the minormost dimension to be unchanged
   start=16  ERROR: INTERNAL: Mosaic failed to compile TPU kernel: Expected the minormost dimension to be unchanged
+
+================================================
+Test E: round-down HBM offset, over-read, slice in VMEM
+  Source still (2048, 256) with tiled<(8,128)>.
+  HBM slice always at aligned_start = (start // 8) * 8 (provably 8-mult).
+  Over-read BK + 7 sublanes into VMEM, then VMEM-slice at lead.
+  Should give CORRECT data for any start (including start=7).
+================================================
+  start= 0  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start= 1  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start= 7  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start= 8  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start=15  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start=16  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
+  start=17  ERROR: Unimplemented primitive in Pallas TPU lowering for CoreType.TC: dynamic_slice. Please file an issue on https://github.com/jax-ml/jax/issues.
 
 ================================================
 Done.  Exit code: 0
