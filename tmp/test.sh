@@ -47,7 +47,7 @@ mkdir -p tmp
   echo
 
   echo "================================================"
-  echo "jagged_mean: examples/jagged_mean.py main()"
+  echo "jagged_softmax: examples/jagged_softmax.py main()"
   echo "================================================"
   HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1  \
   HELION_AUTOTUNE_LOG_LEVEL=DEBUG \
@@ -57,7 +57,7 @@ mkdir -p tmp
   HELION_BACKEND=pallas \
   HELION_AUTOTUNE_EFFORT=none \
   HELION_PRINT_OUTPUT_CODE=1 \
-  python3 examples/jagged_mean.py
+  python3 examples/jagged_softmax.py
 
   echo
   echo "================================================"
