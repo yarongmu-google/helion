@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Mon Jun  8 17:48:04 PDT 2026
+Mon Jun  8 18:51:35 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -12,41 +12,40 @@ pltpu: importable
 
 --- Helion ---
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780966092.130598 3030592 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780966092.156775 3030592 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780966092.156808 3030592 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780966092.744544 3030592 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780969903.628865 3044911 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780969903.654724 3044911 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780969903.654760 3044911 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780969904.206382 3044911 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 helion: (unversioned)
-Git HEAD: 3ef9b2e8
+Git HEAD: 2d321595
 
 ================================================
 jagged_mean: examples/jagged_mean.py main()
 ================================================
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780966096.151836 3030722 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780966096.179117 3030722 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780966096.179151 3030722 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780966096.734523 3030722 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1780969907.142741 3045041 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1780969907.167272 3045041 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1780969907.167302 3045041 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1780969907.723879 3045041 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1780966097.773095 3030722 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
-I0000 00:00:1780966100.214457 3030722 pjrt_c_api_client.cc:197] PjRtCApiClient created.
-W0000 00:00:1780966100.214499 3030722 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1780966100.247241 3031504 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1780966100.247265 3031504 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1780969908.751289 3045041 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1780969911.053423 3045041 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1780969911.053462 3045041 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1780969911.086844 3045825 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1780969911.086874 3045825 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 Testing helion correctness...
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
-Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 8, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py
+Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+# Output code written to: /tmp/torchinductor_ymu_google_com/4u/c4u7gezecpjdt7xut7m7t4hpi5sfmqpsoy6z5f5tjhzs6cexpoxu.py
 from __future__ import annotations
 
 import torch
-import helion.language as hl
 import jax
 import jax.numpy as jnp
 from jax.experimental import pallas as pl
@@ -55,28 +54,33 @@ from jax.experimental.pallas import tpu as pltpu
 from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
 
 _BLOCK_SIZE_0 = int(1)
-_BLOCK_SIZE_1 = int(8)
+_BLOCK_SIZE_1 = int(128)
 _BLOCK_SIZE_2 = int(16)
 
-def _helion_jagged_mean_kernel(x_offsets, x_feature_counts, out, x_flat, out_buf, out_sem, scratch_2, x_flat_buf, x_flat_sem):
+def _helion_jagged_mean_kernel(x_offsets, x_feature_counts, out, x_flat, max_M, out_buf, out_sem, scratch_2, x_flat_buf, x_flat_sem):
+    # src[jagged_mean.py:32]: def jagged_mean_kernel(
+    # src[jagged_mean.py:33]:     x_data: torch.Tensor,
+    # src[jagged_mean.py:34]:     x_offsets: torch.Tensor,
+    # src[jagged_mean.py:32-83]: ...
+    max_M = max_M[0]
 
     def _kernel_body(pid_0, _):
-        # src[jagged_mean.py:67]: for tile_b in hl.tile(num_rows):
+        # src[jagged_mean.py:60]: for tile_b in hl.tile(num_rows):
         offset_0 = pid_0
         indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
-        # src[jagged_mean.py:68]: starts = x_offsets[tile_b]
+        # src[jagged_mean.py:61]: starts = x_offsets[tile_b]
         starts = jnp.array([x_offsets[offset_0]])
-        # src[jagged_mean.py:69]: ends = x_offsets[tile_b.index + 1]
+        # src[jagged_mean.py:62]: ends = x_offsets[tile_b.index + 1]
         v_0 = jnp.array(1, dtype=jnp.int32)
         v_1 = indices_0 + v_0
         ends = jnp.array([x_offsets[offset_0 + 1]])
-        # src[jagged_mean.py:70]: nnz = ends - starts
+        # src[jagged_mean.py:63]: nnz = ends - starts
         v_2 = ends - starts
-        # src[jagged_mean.py:71]: feature_counts = x_feature_counts[tile_b]
+        # src[jagged_mean.py:64]: feature_counts = x_feature_counts[tile_b]
         feature_counts = jnp.array([x_feature_counts[offset_0]])
-        # src[jagged_mean.py:73]: for tile_m in hl.jagged_tile(feature_counts):
-        # src[jagged_mean.py:74]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
-        # src[jagged_mean.py:73-88]: ...
+        # src[jagged_mean.py:66]: for tile_m in hl.jagged_tile(feature_counts):
+        # src[jagged_mean.py:67]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+        # src[jagged_mean.py:66-81]: ...
         view = jnp.reshape(feature_counts, [_BLOCK_SIZE_0])
         amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
 
@@ -90,12 +94,12 @@ def _helion_jagged_mean_kernel(x_offsets, x_feature_counts, out, x_flat, out_buf
             starts_copy = starts
             v_2_copy_0 = v_2_copy
             starts_copy_0 = starts_copy
-            # src[jagged_mean.py:74]: row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[jagged_mean.py:67]: row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
             row_sums = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
-            # src[jagged_mean.py:76]: for tile_k in hl.jagged_tile(nnz):
-            # src[jagged_mean.py:77]:     flat_indices = (starts[:, None] + tile_k.index[None, :])[
-            # src[jagged_mean.py:78]:         :, :, None
-            # src[jagged_mean.py:76-83]: ...
+            # src[jagged_mean.py:69]: for tile_k in hl.jagged_tile(nnz):
+            # src[jagged_mean.py:70]:     flat_indices = (starts[:, None] + tile_k.index[None, :])[
+            # src[jagged_mean.py:71]:         :, :, None
+            # src[jagged_mean.py:69-76]: ...
             view_1 = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
             amax_1 = lax.convert_element_type(jnp.max(view_1, axis=0), jnp.int32)
             scratch_2[...] = row_sums[...]
@@ -113,58 +117,58 @@ def _helion_jagged_mean_kernel(x_offsets, x_feature_counts, out, x_flat, out_buf
                 v_3 = scratch_2[...]
                 starts_copy_0_copy_0 = starts_copy_0_copy
                 v_3_0 = v_3
-                # src[jagged_mean.py:77]: flat_indices = (starts[:, None] + tile_k.index[None, :])[
+                # src[jagged_mean.py:70]: flat_indices = (starts[:, None] + tile_k.index[None, :])[
                 subscript = starts_copy_0_copy_0[:, None]
                 subscript_1 = indices_2[None, :]
                 v_4 = subscript + subscript_1
-                # src[jagged_mean.py:77]: flat_indices = (starts[:, None] + tile_k.index[None, :])[
-                # src[jagged_mean.py:78]:     :, :, None
-                # src[jagged_mean.py:79]: ] * max_M
+                # src[jagged_mean.py:70]: flat_indices = (starts[:, None] + tile_k.index[None, :])[
+                # src[jagged_mean.py:71]:     :, :, None
+                # src[jagged_mean.py:72]: ] * max_M
                 subscript_2 = v_4[:, :, None]
-                v_5 = jnp.array(8, dtype=jnp.int32)
+                v_5 = lax.convert_element_type(max_M, jnp.int32)
                 v_6 = subscript_2 * v_5
-                # src[jagged_mean.py:80]: flat_indices = flat_indices + tile_m.index[None, None, :]
+                # src[jagged_mean.py:73]: flat_indices = flat_indices + tile_m.index[None, None, :]
                 subscript_3 = indices_1[None, None, :]
                 v_7 = v_6 + subscript_3
-                # src[jagged_mean.py:82]: x_slice = hl.load(x_flat, [flat_indices])
+                # src[jagged_mean.py:75]: x_slice = hl.load(x_flat, [flat_indices])
                 x_slice = jnp.expand_dims(x_flat_buf[:], axis=0)
-                # src[jagged_mean.py:83]: row_sums = row_sums + x_slice.sum(dim=1)
+                # src[jagged_mean.py:76]: row_sums = row_sums + x_slice.sum(dim=1)
                 _mask_to = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None] * mask_1.astype(jnp.float32)[:, None, :], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), x_slice, jnp.full([], 0, jnp.float32))
                 sum_1 = lax.convert_element_type(jnp.sum(_mask_to, axis=1), jnp.float32)
                 v_8 = v_3_0 + sum_1
-                # src[jagged_mean.py:76]: for tile_k in hl.jagged_tile(nnz):
-                # src[jagged_mean.py:77]:     flat_indices = (starts[:, None] + tile_k.index[None, :])[
-                # src[jagged_mean.py:78]:         :, :, None
-                # src[jagged_mean.py:76-83]: ...
+                # src[jagged_mean.py:69]: for tile_k in hl.jagged_tile(nnz):
+                # src[jagged_mean.py:70]:     flat_indices = (starts[:, None] + tile_k.index[None, :])[
+                # src[jagged_mean.py:71]:         :, :, None
+                # src[jagged_mean.py:69-76]: ...
                 scratch_2[...] = v_8[...]
             jax.lax.fori_loop(0, (amax_1 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
             row_sums = scratch_2[...]
-            # src[jagged_mean.py:85]: nnz_float = nnz.to(x_data.dtype)
+            # src[jagged_mean.py:78]: nnz_float = nnz.to(x_data.dtype)
             v_9 = lax.convert_element_type(v_2_copy_0, jnp.float32)
-            # src[jagged_mean.py:86]: nnz_expanded = nnz_float[:, None]
+            # src[jagged_mean.py:79]: nnz_expanded = nnz_float[:, None]
             nnz_expanded = v_9[:, None]
-            # src[jagged_mean.py:87]: result = torch.where(nnz_expanded > 0, row_sums / nnz_expanded, 0.0)
+            # src[jagged_mean.py:80]: result = torch.where(nnz_expanded > 0, row_sums / nnz_expanded, 0.0)
             v_10 = jnp.array(0, dtype=jnp.float32)
             v_11 = nnz_expanded > v_10
             v_12 = row_sums / nnz_expanded
             scalar_tensor = jnp.full([], 0.0, jnp.float32)
             result = jnp.where(v_11, v_12, scalar_tensor)
-            # src[jagged_mean.py:88]: out[tile_b, tile_m] = result
+            # src[jagged_mean.py:81]: out[tile_b, tile_m] = result
             out_buf[:, :] = jnp.where(mask_1.astype(jnp.float32).astype(jnp.bool_), result, out_buf[:, :])
-            # src[jagged_mean.py:73]: for tile_m in hl.jagged_tile(feature_counts):
-            # src[jagged_mean.py:74]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
-            # src[jagged_mean.py:73-88]: ...
+            # src[jagged_mean.py:66]: for tile_m in hl.jagged_tile(feature_counts):
+            # src[jagged_mean.py:67]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[jagged_mean.py:66-81]: ...
             _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j * _BLOCK_SIZE_1, _BLOCK_SIZE_1)], out_sem)
             _copy_out.start()
             _copy_out.wait()
         jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
-    # src[jagged_mean.py:67]: for tile_b in hl.tile(num_rows):
-    # src[jagged_mean.py:68]:     starts = x_offsets[tile_b]
-    # src[jagged_mean.py:69]:     ends = x_offsets[tile_b.index + 1]
-    # src[jagged_mean.py:67-88]: ...
+    # src[jagged_mean.py:60]: for tile_b in hl.tile(num_rows):
+    # src[jagged_mean.py:61]:     starts = x_offsets[tile_b]
+    # src[jagged_mean.py:62]:     ends = x_offsets[tile_b.index + 1]
+    # src[jagged_mean.py:60-81]: ...
     jax.lax.fori_loop(0, 32, _kernel_body, None)
 
-def jagged_mean_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, x_feature_counts: torch.Tensor, max_M: hl.constexpr, *, _launcher=_default_pallas_fori_launcher):
+def jagged_mean_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, x_feature_counts: torch.Tensor, max_M: int, *, _launcher=_default_pallas_fori_launcher):
     """
     Compute the mean of each row in a jagged tensor with variable features per row.
 
@@ -179,18 +183,18 @@ def jagged_mean_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, x_feature_
         2-D tensor of shape (num_rows, max_M) containing the mean of each row.
         Invalid features (beyond x_feature_counts[i]) are set to 0.
     """
-    # src[jagged_mean.py:59]: num_rows = x_offsets.size(0) - 1
+    # src[jagged_mean.py:52]: num_rows = x_offsets.size(0) - 1
     num_rows = x_offsets.size(0) - 1
-    # src[jagged_mean.py:61]: out = torch.zeros([num_rows, max_M], dtype=x_data.dtype, device=x_data.device)
-    out = torch.zeros([num_rows, 8], dtype=x_data.dtype, device=x_data.device)
-    # src[jagged_mean.py:64]: x_flat = x_data.view(-1)
+    # src[jagged_mean.py:54]: out = torch.zeros([num_rows, max_M], dtype=x_data.dtype, device=x_data.device)
+    out = torch.zeros([num_rows, max_M], dtype=x_data.dtype, device=x_data.device)
+    # src[jagged_mean.py:57]: x_flat = x_data.view(-1)
     x_flat = x_data.view(-1)
-    # src[jagged_mean.py:67]: for tile_b in hl.tile(num_rows):
-    # src[jagged_mean.py:68]:     starts = x_offsets[tile_b]
-    # src[jagged_mean.py:69]:     ends = x_offsets[tile_b.index + 1]
-    # src[jagged_mean.py:67-88]: ...
-    _launcher(_helion_jagged_mean_kernel, (1,), x_offsets, x_feature_counts, out, x_flat, _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(2, 1, 8, 0), (3, 0, 16, 15), (3, 1, 8, 0)], _smem_arg_indices=[0, 1], _scratch_shapes=[((1, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 8), 'jnp.float32', 'vmem'), ((16, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[2, 3], _reshape_2d_arg_indices=[(3, 8)])
-    # src[jagged_mean.py:90]: return out
+    # src[jagged_mean.py:60]: for tile_b in hl.tile(num_rows):
+    # src[jagged_mean.py:61]:     starts = x_offsets[tile_b]
+    # src[jagged_mean.py:62]:     ends = x_offsets[tile_b.index + 1]
+    # src[jagged_mean.py:60-81]: ...
+    _launcher(_helion_jagged_mean_kernel, (1,), x_offsets, x_feature_counts, out, x_flat, torch.tensor([max_M], dtype=torch.float32 if isinstance(max_M, float) else torch.int32, device=x_offsets.device), _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None,), (None,)), ((None, None), (None, None)), ((None,), (None,)), None], _ds_pad_dims=[(2, 1, 128, 0), (3, 0, 16, 15), (3, 1, 128, 0)], _smem_arg_indices=[0, 1], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 128), 'jnp.float32', 'vmem'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[2, 3], _reshape_2d_arg_indices=[(3, 8)])
+    # src[jagged_mean.py:83]: return out
     return out
 
 def call():
@@ -198,255 +202,36 @@ def call():
     # src[jagged_mean.py:32]: def jagged_mean_kernel(
     # src[jagged_mean.py:33]:     x_data: torch.Tensor,
     # src[jagged_mean.py:34]:     x_offsets: torch.Tensor,
-    # src[jagged_mean.py:32-90]: ...
-    x_data = rand_strided(size=(1107, 8), stride=(8, 1), dtype=torch.float32, device='tpu:0')
+    # src[jagged_mean.py:32-83]: ...
+    x_data = rand_strided(size=(1050, 8), stride=(8, 1), dtype=torch.float32, device='tpu:0')
     x_offsets = rand_strided(size=(33,), stride=(1,), dtype=torch.int32, device='tpu:0')
     x_feature_counts = rand_strided(size=(32,), stride=(1,), dtype=torch.int32, device='tpu:0')
     max_M = 8
     jagged_mean_kernel(x_data, x_offsets, x_feature_counts, max_M)
 if __name__ == '__main__':
     call()
-E0000 00:00:1780966103.517652 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.525939 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533241 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533256 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533260 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533262 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533263 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533266 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533268 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533272 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533274 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.533281 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.559534 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.559555 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.562527 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.562536 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.565741 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.565753 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1780966103.571463 3031505 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 Traceback (most recent call last):
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1327, in not_close_error_metas
-    pair.compare()
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 776, in compare
-    self._compare_values(actual, expected)
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 934, in _compare_values
-    compare_fn(
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1116, in _compare_regular_values_close
-    if torch.all(matches):
-       ^^^^^^^^^^^^^^^^^^
-RuntimeError: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
- - TpuMemcpyDtoHDirect: DeviceBufferRef has nonzero size, but does not have a PjRtBuffer to copy from.
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/ymu_google_com/helion/examples/jagged_mean.py", line 207, in <module>
+  File "/home/ymu_google_com/helion/examples/jagged_mean.py", line 200, in <module>
     main()
-  File "/home/ymu_google_com/helion/examples/jagged_mean.py", line 199, in main
+  File "/home/ymu_google_com/helion/examples/jagged_mean.py", line 192, in main
     run_example(
   File "/home/ymu_google_com/helion/helion/_testing.py", line 1116, in wrapper
     return fn(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^
   File "/home/ymu_google_com/helion/helion/_testing.py", line 1196, in run_example
     torch.testing.assert_close(
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1609, in assert_close
-    error_metas = not_close_error_metas(
-                  ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1335, in not_close_error_metas
-    f"{pair}\n\n"
-      ^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 440, in __repr__
-    f"    {name}={value!s},"
-                 ^^^^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/_tensor.py", line 574, in __repr__
-    return torch._tensor_str._str(self, tensor_contents=tensor_contents)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/_tensor_str.py", line 726, in _str
-    return _str_intern(self, tensor_contents=tensor_contents)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/_tensor_str.py", line 643, in _str_intern
-    tensor_str = _tensor_str(self, indent)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/_tensor_str.py", line 375, in _tensor_str
-    formatter = _Formatter(get_summarized_data(self) if summarize else self)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/pytorch/torch/_tensor_str.py", line 154, in __init__
-    nonzero_finite_vals = torch.masked_select(
-                          ^^^^^^^^^^^^^^^^^^^^
-RuntimeError: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 1 is divisible by the tile dimension 128. If it is, use tpu.assume_multiple to suppress this error.
+  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1631, in assert_close
+    raise error_metas[0].to_error(msg)
+AssertionError: Tensor-likes are not close!
 
-at location: loc("dma_start:"("dma_start"("_helion_jagged_mean_kernel.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/rk/crkg77nkezvzbgrsz4q7ih5hhitcjmp5ggjl7bn5yrqamou4g2qu.py":65:16 to :29))))
-
-The MLIR operation involved:
-  %96 = "tpu.memref_slice"(%14, %95, %48) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<1135x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xf32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<hbm>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
- - TpuMemcpyDtoHDirect: DeviceBufferRef has nonzero size, but does not have a PjRtBuffer to copy from.
-I0000 00:00:1780966104.612369 3030722 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1780966104.612388 3030722 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=168
-num_cache_hits=37 {22.0%}
+Mismatched elements: 55 / 256 (21.5%)
+Greatest absolute difference: 0.4908674657344818 at index (6, 4) (up to 0.1 allowed)
+Greatest relative difference: inf at index (4, 3) (up to 0.01 allowed)
+I0000 00:00:1780969915.419809 3045041 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1780969915.419830 3045041 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=176
+num_cache_hits=42 {23.8%}
 peak_compilation_memory_bytes=unknown
 
 
