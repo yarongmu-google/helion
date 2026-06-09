@@ -168,6 +168,62 @@ PY
 
   echo
   echo "================================================"
+  echo "Test D: reshape HBM ref before slicing (expect PASS at any start)"
+  echo "  Reshape (2048, 256) -> (2048*2, 128) so lane=128 exactly."
+  echo "  After reshape the (8,128) tile annotation should NOT apply;"
+  echo "  HBM is 1D + 32B-aligned at the hardware level."
+  echo "================================================"
+  python3 - <<'PY'
+import jax, jax.numpy as jnp
+from jax.experimental import pallas as pl
+from jax.experimental.pallas import tpu as pltpu
+
+def body(start_ref, x_ref, out_ref, x_buf, x_sem):
+    # Each original row (256 cols) becomes 2 rows of 128 in the reshape.
+    # Original row r maps to reshaped rows 2r and 2r+1.
+    flat_start = start_ref[0] * 2  # reshape-row offset
+    x_flat = x_ref.reshape(2048 * 2, 128)   # in-place memref_reshape
+    copy = pltpu.make_async_copy(
+        x_flat.at[pl.ds(flat_start, 16), pl.ds(0, 128)],  # 16 reshape-rows = 8 original rows
+        x_buf,
+        x_sem,
+    )
+    copy.start()
+    copy.wait()
+    out_ref[...] = x_buf[...]
+
+call = pl.pallas_call(
+    body,
+    out_shape=jax.ShapeDtypeStruct((16, 128), jnp.float32),
+    in_specs=[
+        pl.BlockSpec(memory_space=pltpu.MemorySpace.SMEM),
+        pl.BlockSpec(memory_space=pltpu.MemorySpace.HBM),
+    ],
+    out_specs=pl.BlockSpec(memory_space=pltpu.MemorySpace.VMEM),
+    scratch_shapes=[
+        pltpu.VMEM((16, 128), jnp.float32),
+        pltpu.SemaphoreType.DMA,
+    ],
+)
+
+x = jnp.arange(2048 * 256, dtype=jnp.float32).reshape(2048, 256)
+for s in (0, 7, 8, 16):
+    start = jnp.array([s], dtype=jnp.int32)
+    try:
+        out = call(start, x)
+        out.block_until_ready()
+        # After reshape, reshape-row 2s = original (s, 0:128).
+        # out[0, 0] should equal x[s, 0] = s*256.
+        actual = float(out[0, 0])
+        truth = s * 256
+        verdict = "CORRECT" if actual == truth else f"GOT {actual:.0f} expected {truth}"
+        print(f"  start={s:>2}  out[0,0]={actual:>7.0f}  -> {verdict}")
+    except Exception as e:
+        print(f"  start={s:>2}  ERROR: {str(e).splitlines()[0]}")
+PY
+
+  echo
+  echo "================================================"
   echo "Done.  Exit code: $?"
   echo "================================================"
 
