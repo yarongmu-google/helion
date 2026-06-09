@@ -46,21 +46,35 @@ mkdir -p tmp
   echo "Git HEAD: $(git rev-parse --short HEAD 2>/dev/null || echo 'n/a')"
   echo
 
+  # Reusable env block.  Same flags for both examples.
+  COMMON_ENV=(
+    HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1
+    HELION_AUTOTUNE_LOG_LEVEL=DEBUG
+    TORCH_COMPILE_DEBUG=1
+    PYTHONPATH=.
+    HELION_SKIP_CACHE=1
+    HELION_BACKEND=pallas
+    HELION_AUTOTUNE_EFFORT=none
+    HELION_PRINT_OUTPUT_CODE=1
+  )
+
   echo "================================================"
-  echo "jagged_sum: examples/jagged_sum.py main()"
+  echo "jagged_sum: examples/jagged_sum.py main() (regression guard)"
   echo "================================================"
-  HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1  \
-  HELION_AUTOTUNE_LOG_LEVEL=DEBUG \
-  TORCH_COMPILE_DEBUG=1 \
-  PYTHONPATH=. \
-  HELION_SKIP_CACHE=1 \
-  HELION_BACKEND=pallas \
-  HELION_AUTOTUNE_EFFORT=none \
-  HELION_PRINT_OUTPUT_CODE=1 \
-  python3 examples/jagged_sum.py
+  env "${COMMON_ENV[@]}" python3 examples/jagged_sum.py
+  jagged_sum_rc=$?
+  echo "jagged_sum exit code: $jagged_sum_rc"
 
   echo
   echo "================================================"
-  echo "Done.  Exit code: $?"
+  echo "jagged_mean: examples/jagged_mean.py main()"
+  echo "================================================"
+  env "${COMMON_ENV[@]}" python3 examples/jagged_mean.py
+  jagged_mean_rc=$?
+  echo "jagged_mean exit code: $jagged_mean_rc"
+
+  echo
+  echo "================================================"
+  echo "Done.  jagged_sum=$jagged_sum_rc  jagged_mean=$jagged_mean_rc"
   echo "================================================"
 } 2>&1 | tee tmp/log.txt
