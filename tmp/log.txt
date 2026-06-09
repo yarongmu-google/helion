@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Tue Jun  9 11:28:59 PDT 2026
+Tue Jun  9 11:36:37 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -10,7 +10,7 @@ jax: 0.9.2
 devices: [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0), TpuDevice(id=1, process_index=0, coords=(0,0,0), core_on_chip=1), TpuDevice(id=2, process_index=0, coords=(1,0,0), core_on_chip=0), TpuDevice(id=3, process_index=0, coords=(1,0,0), core_on_chip=1), TpuDevice(id=4, process_index=0, coords=(0,1,0), core_on_chip=0), TpuDevice(id=5, process_index=0, coords=(0,1,0), core_on_chip=1), TpuDevice(id=6, process_index=0, coords=(1,1,0), core_on_chip=0), TpuDevice(id=7, process_index=0, coords=(1,1,0), core_on_chip=1)]
 pltpu: importable
 
-Git HEAD: ebe60682
+Git HEAD: 1e82d963
 
 ================================================
 Test A: lax.dynamic_slice on (N, 256), runtime offset (expect PASS)
@@ -22,6 +22,16 @@ Test B: Pallas DMA, same slice (expect FAIL: Mosaic alignment)
 ================================================
 EXPECTED FAIL -- first line of error:
 INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+================================================
+Test C: same DMA wrapped in pl.multiple_of(start, 8)
+         (compiles, but the assertion is FALSE for start=7
+         so the result should be WRONG, not just unaligned)
+================================================
+  start= 0  truth=     0  out[0,0]=      0  -> CORRECT
+  start= 7  truth=  1792  out[0,0]=      0  -> ROUNDED_DOWN
+  start= 8  truth=  2048  out[0,0]=   2048  -> CORRECT
+  start=16  truth=  4096  out[0,0]=   4096  -> CORRECT
 
 ================================================
 Done.  Exit code: 0
