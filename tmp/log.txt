@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Tue Jun  9 08:35:11 PDT 2026
+Tue Jun  9 09:32:57 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -12,267 +12,74 @@ pltpu: importable
 
 --- Helion ---
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1781019319.102362 3195741 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1781019319.130978 3195741 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1781019319.131010 3195741 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1781019319.717715 3195741 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1781022785.472332 3249856 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1781022785.496451 3249856 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781022785.496482 3249856 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1781022786.059715 3249856 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 helion: (unversioned)
-Git HEAD: 9d94156d
+Git HEAD: 69988bca
 
 ================================================
 jagged_softmax: examples/jagged_softmax.py main()
 ================================================
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1781019322.665573 3195871 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1781019322.691190 3195871 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1781019322.691219 3195871 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1781019323.244366 3195871 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1781022789.057549 3249986 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1781022789.082116 3249986 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781022789.082149 3249986 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1781022789.640708 3249986 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1781019324.268596 3195871 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
-I0000 00:00:1781019326.576403 3195871 pjrt_c_api_client.cc:197] PjRtCApiClient created.
-W0000 00:00:1781019326.576437 3195871 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1781019326.609055 3196653 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1781019326.609080 3196653 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1781022790.671619 3249986 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1781022792.991298 3249986 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1781022792.991337 3249986 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781022793.023833 3250770 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781022793.023855 3250770 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
-Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/kk/ckk2olexbfcmlozydo7we76y3vxjq34b6uhzbjwxizdlk7kjefjn.py
-from __future__ import annotations
-
-import torch
-import jax
-import jax.numpy as jnp
-from jax.experimental import pallas as pl
-import jax.lax as lax
-from jax.experimental.pallas import tpu as pltpu
-from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
-
-_BLOCK_SIZE_0 = int(1)
-_BLOCK_SIZE_1 = int(128)
-_BLOCK_SIZE_2 = int(16)
-_BLOCK_SIZE_3 = int(16)
-
-def _helion_jagged_softmax_kernel(x_offsets, x_flat, out, scratch_2, scratch_3, scratch_4, x_flat_buf, x_flat_sem, x_flat_buf_1, x_flat_sem_1, out_buf, out_sem):
-
-    def _kernel_body(pid_0, _):
-        # src[jagged_softmax.py:81]: for tile_b in hl.tile(num_rows):
-        offset_0 = pid_0
-        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
-        # src[jagged_softmax.py:82]: starts = x_offsets[tile_b]
-        starts = jnp.array([x_offsets[offset_0]])
-        # src[jagged_softmax.py:83]: ends = x_offsets[tile_b.index + 1]
-        v_0 = jnp.array(1, dtype=jnp.int32)
-        v_1 = indices_0 + v_0
-        ends = jnp.array([x_offsets[offset_0 + 1]])
-        # src[jagged_softmax.py:84]: seqlens = ends - starts
-        v_2 = ends - starts
-
-        def _fori_body_2(_j, _):
-            nonlocal scratch_2, scratch_3, scratch_4, x_flat_buf, x_flat_buf_1, out_buf
-            # src[jagged_softmax.py:86]: for tile_m in hl.tile(M):
-            # src[jagged_softmax.py:87]:     block_max = hl.full([tile_b, tile_m], float("-inf"), dtype=x_data.dtype)
-            # src[jagged_softmax.py:88]:     block_new_max = hl.full([tile_b, tile_m], float("-inf"), dtype=x_data.dtype)
-            # src[jagged_softmax.py:86-112]: ...
-            offset_1 = 0 + _j * _BLOCK_SIZE_1
-            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
-            v_2_copy = v_2
-            starts_copy = starts
-            v_2_copy_0 = v_2_copy
-            starts_copy_0 = starts_copy
-            # src[jagged_softmax.py:87]: block_max = hl.full([tile_b, tile_m], float("-inf"), dtype=x_data.dtype)
-            block_max = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], float('-inf'), jnp.float32)
-            # src[jagged_softmax.py:88]: block_new_max = hl.full([tile_b, tile_m], float("-inf"), dtype=x_data.dtype)
-            block_new_max = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], float('-inf'), jnp.float32)
-            # src[jagged_softmax.py:89]: block_L = hl.full([tile_b, tile_m], 0.0, dtype=x_data.dtype)
-            block_L = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
-            # src[jagged_softmax.py:91]: for tile_k in hl.jagged_tile(seqlens):
-            # src[jagged_softmax.py:92]:     base_indices = starts[:, None] + tile_k.index[None, :]
-            # src[jagged_softmax.py:93]:     flat_indices = (
-            # src[jagged_softmax.py:91-101]: ...
-            view = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
-            amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
-            scratch_2[...] = block_max[...]
-            scratch_3[...] = block_new_max[...]
-            scratch_4[...] = block_L[...]
-
-            def _fori_body_0(_j_1, _):
-                nonlocal scratch_2, scratch_3, scratch_4, x_flat_buf
-                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
-                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
-                offset_6 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
-                mask_2 = offset_6[None, :] < v_2_copy_0[:, None]
-                _copy = pltpu.make_async_copy(x_flat.at[pl.ds(starts_copy_0[0] + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), pl.ds(offset_1, _BLOCK_SIZE_1)], x_flat_buf, x_flat_sem)
-                _copy.start()
-                _copy.wait()
-                starts_copy_0_copy = starts_copy_0
-                v_3 = scratch_2[...]
-                v_4 = scratch_4[...]
-                starts_copy_0_copy_0 = starts_copy_0_copy
-                v_3_0 = v_3
-                v_4_0 = v_4
-                # src[jagged_softmax.py:92]: base_indices = starts[:, None] + tile_k.index[None, :]
-                subscript = starts_copy_0_copy_0[:, None]
-                subscript_1 = indices_2[None, :]
-                v_5 = subscript + subscript_1
-                # src[jagged_softmax.py:94]: base_indices[:, :, None] * M + tile_m.index[None, None, :]
-                subscript_2 = v_5[:, :, None]
-                v_6 = jnp.array(128, dtype=jnp.int32)
-                v_7 = subscript_2 * v_6
-                subscript_3 = indices_1[None, None, :]
-                v_8 = v_7 + subscript_3
-                # src[jagged_softmax.py:96]: x_slice = hl.load(x_flat, [flat_indices])
-                x_slice = jnp.expand_dims(x_flat_buf[:], axis=0)
-                # src[jagged_softmax.py:97]: slice_max = x_slice.amax(dim=1)
-                _mask_to = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), x_slice, jnp.full([], float('-inf'), jnp.float32))
-                slice_max = lax.convert_element_type(jnp.max(_mask_to, axis=1), jnp.float32)
-                # src[jagged_softmax.py:98]: block_new_max = torch.maximum(block_max, slice_max)
-                v_9 = jnp.maximum(v_3_0, slice_max)
-                # src[jagged_softmax.py:99]: block_L *= torch.exp(block_max - block_new_max)
-                v_10 = v_3_0 - v_9
-                v_11 = jnp.exp(v_10)
-                v_12 = v_4_0 * v_11
-                # src[jagged_softmax.py:100]: block_L += torch.exp(x_slice - block_new_max[:, None, :]).sum(dim=1)
-                subscript_4 = v_9[:, None, :]
-                v_13 = x_slice - subscript_4
-                v_14 = jnp.exp(v_13)
-                _mask_to_1 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), v_14, jnp.full([], 0, jnp.float32))
-                sum_1 = lax.convert_element_type(jnp.sum(_mask_to_1, axis=1), jnp.float32)
-                v_15 = v_12 + sum_1
-                # src[jagged_softmax.py:101]: block_max = block_new_max
-                v_9_0 = v_9
-                # src[jagged_softmax.py:91]: for tile_k in hl.jagged_tile(seqlens):
-                # src[jagged_softmax.py:92]:     base_indices = starts[:, None] + tile_k.index[None, :]
-                # src[jagged_softmax.py:93]:     flat_indices = (
-                # src[jagged_softmax.py:91-101]: ...
-                scratch_2[...] = v_9_0[...]
-                scratch_3[...] = v_9[...]
-                scratch_4[...] = v_15[...]
-            jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
-            block_max = scratch_2[...]
-            block_new_max = scratch_3[...]
-            block_L = scratch_4[...]
-            # src[jagged_softmax.py:103]: for tile_k in hl.jagged_tile(seqlens):
-            # src[jagged_softmax.py:104]:     base_indices = starts[:, None] + tile_k.index[None, :]
-            # src[jagged_softmax.py:105]:     flat_indices = (
-            # src[jagged_softmax.py:103-112]: ...
-            view_1 = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
-            amax_1 = lax.convert_element_type(jnp.max(view_1, axis=0), jnp.int32)
-
-            def _fori_body_1(_j_2, _):
-                nonlocal scratch_2, scratch_3, scratch_4, x_flat_buf, x_flat_buf_1, out_buf
-                offset_3 = 0 + _j_2 * _BLOCK_SIZE_3
-                indices_3 = offset_3 + jnp.arange(0, _BLOCK_SIZE_3, dtype=jnp.int32)
-                offset_10 = _j_2 * _BLOCK_SIZE_3 + jnp.arange(_BLOCK_SIZE_3)
-                mask_3 = offset_10[None, :] < v_2_copy_0[:, None]
-                _copy_1 = pltpu.make_async_copy(x_flat.at[pl.ds(starts_copy_0[0] + (0 + _j_2 * _BLOCK_SIZE_3), _BLOCK_SIZE_3), pl.ds(offset_1, _BLOCK_SIZE_1)], x_flat_buf_1, x_flat_sem_1)
-                _copy_1.start()
-                _copy_1.wait()
-                starts_copy_0_copy_1 = starts_copy_0
-                block_max_copy = block_max
-                block_L_copy = block_L
-                starts_copy_0_copy_1_0 = starts_copy_0_copy_1
-                block_max_copy_0 = block_max_copy
-                block_L_copy_0 = block_L_copy
-                # src[jagged_softmax.py:104]: base_indices = starts[:, None] + tile_k.index[None, :]
-                subscript_5 = starts_copy_0_copy_1_0[:, None]
-                subscript_6 = indices_3[None, :]
-                v_16 = subscript_5 + subscript_6
-                # src[jagged_softmax.py:106]: base_indices[:, :, None] * M + tile_m.index[None, None, :]
-                subscript_7 = v_16[:, :, None]
-                v_17 = jnp.array(128, dtype=jnp.int32)
-                v_18 = subscript_7 * v_17
-                subscript_8 = indices_1[None, None, :]
-                v_19 = v_18 + subscript_8
-                # src[jagged_softmax.py:108]: x_slice = hl.load(x_flat, [flat_indices])
-                x_slice_1 = jnp.expand_dims(x_flat_buf_1[:], axis=0)
-                # src[jagged_softmax.py:110]: torch.exp(x_slice - block_max[:, None, :]) / block_L[:, None, :]
-                subscript_9 = block_max_copy_0[:, None, :]
-                v_20 = x_slice_1 - subscript_9
-                v_21 = jnp.exp(v_20)
-                subscript_10 = block_L_copy_0[:, None, :]
-                v_22 = v_21 / subscript_10
-                # src[jagged_softmax.py:112]: hl.store(out, [flat_indices], block_out)
-                out_buf[:] = jnp.squeeze(jnp.where(mask_3.astype(jnp.float32)[:, :, None].astype(jnp.bool_), v_22, jnp.zeros_like(v_22)), axis=0)
-                # src[jagged_softmax.py:103]: for tile_k in hl.jagged_tile(seqlens):
-                # src[jagged_softmax.py:104]:     base_indices = starts[:, None] + tile_k.index[None, :]
-                # src[jagged_softmax.py:105]:     flat_indices = (
-                # src[jagged_softmax.py:103-112]: ...
-                _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(starts_copy_0[0] + (0 + _j_2 * _BLOCK_SIZE_3), _BLOCK_SIZE_3), pl.ds(offset_1, _BLOCK_SIZE_1)], out_sem)
-                _copy_out.start()
-                _copy_out.wait()
-            jax.lax.fori_loop(0, (amax_1 - 0 + _BLOCK_SIZE_3 - 1) // _BLOCK_SIZE_3, _fori_body_1, None)
-        # src[jagged_softmax.py:86]: for tile_m in hl.tile(M):
-        # src[jagged_softmax.py:87]:     block_max = hl.full([tile_b, tile_m], float("-inf"), dtype=x_data.dtype)
-        # src[jagged_softmax.py:88]:     block_new_max = hl.full([tile_b, tile_m], float("-inf"), dtype=x_data.dtype)
-        # src[jagged_softmax.py:86-112]: ...
-        jax.lax.fori_loop(0, (128 - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_2, None)
-    # src[jagged_softmax.py:81]: for tile_b in hl.tile(num_rows):
-    # src[jagged_softmax.py:82]:     starts = x_offsets[tile_b]
-    # src[jagged_softmax.py:83]:     ends = x_offsets[tile_b.index + 1]
-    # src[jagged_softmax.py:81-112]: ...
-    jax.lax.fori_loop(0, 512, _kernel_body, None)
-
-def jagged_softmax_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
-    """
-    Compute the per-batch softmax in a jagged tensor.
-
-    Args:
-        x_data: 2-D tensor of shape (total_elements, max_M) holding all elements
-        x_offsets: (num_rows + 1) tensor. Row i is the slice
-                   x_data[x_offsets[i] : x_offsets[i+1], :]
-
-    Returns:
-        2-D tensor of shape (total_elements, max_M), containing the per-batch softmax scores.
-    """
-    # src[jagged_softmax.py:74]: N = int(x_offsets[-1].item())
-    N = int(x_offsets[-1].item())
-    # src[jagged_softmax.py:75]: num_rows, M = x_offsets.size(0) - 1, x_data.size(1)
-    num_rows, M = (x_offsets.size(0) - 1, x_data.size(1))
-    # src[jagged_softmax.py:76]: out = torch.zeros(N * M, dtype=x_data.dtype, device=x_data.device)
-    out = torch.zeros(N * M, dtype=x_data.dtype, device=x_data.device)
-    # src[jagged_softmax.py:79]: x_flat = x_data.view(-1)
-    x_flat = x_data.view(-1)
-    # src[jagged_softmax.py:81]: for tile_b in hl.tile(num_rows):
-    # src[jagged_softmax.py:82]:     starts = x_offsets[tile_b]
-    # src[jagged_softmax.py:83]:     ends = x_offsets[tile_b.index + 1]
-    # src[jagged_softmax.py:81-112]: ...
-    _launcher(_helion_jagged_softmax_kernel, (1,), x_offsets, x_flat, out, _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None,), (None,)), ((None,), (None,))], _ds_pad_dims=[(1, 0, 16, 15), (1, 1, 128, 0), (2, 0, 16, 15), (2, 1, 128, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((1, 128), 'jnp.float32', 'vmem'), ((1, 128), 'jnp.float32', 'vmem'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(1, 128), (2, 128)])
-    # src[jagged_softmax.py:114]: return out.reshape(N, M)
-    return out.reshape(N, M)
-
-def call():
-    from torch._dynamo.testing import rand_strided
-    # src[jagged_softmax.py:59]: def jagged_softmax_kernel(
-    # src[jagged_softmax.py:60]:     x_data: torch.Tensor,
-    # src[jagged_softmax.py:61]:     x_offsets: torch.Tensor,
-    # src[jagged_softmax.py:59-114]: ...
-    x_data = rand_strided(size=(15250, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
-    x_offsets = rand_strided(size=(513,), stride=(1,), dtype=torch.int32, device='tpu:0')
-    jagged_softmax_kernel(x_data, x_offsets)
-if __name__ == '__main__':
-    call()
-Testing helion correctness...
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
-Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 28/28   2.7 configs/s
-
-=================================================================
-Benchmark Results
-=================================================================
-Implementation       Time (ms)    Speedup        
------------------------------------------------------------------
-helion               3.8381       96.72x         
-torch                371.2054     1.00x (ref)    
-=================================================================
-
-I0000 00:00:1781019364.059809 3195871 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1781019364.059857 3195871 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=47905
-num_cache_hits=46849 {97.7%}
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/examples/jagged_softmax.py", line 182, in <module>
+    main()
+  File "/home/ymu_google_com/helion/examples/jagged_softmax.py", line 171, in main
+    out_hl = jagged_softmax_kernel(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 415, in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1077, in __call__
+    self.ensure_config_exists(args)
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1040, in ensure_config_exists
+    if (config := self._implicit_config()) is not None:
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1021, in _implicit_config
+    return self._user_provided_config()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1001, in _user_provided_config
+    config = self.config_spec.default_config()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/config_spec.py", line 1356, in default_config
+    return self._base_default_config()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/config_spec.py", line 1350, in _base_default_config
+    config = self.flat_config(lambda x: x.default())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/config_spec.py", line 1592, in flat_config
+    for key, field in self._flat_fields().items():
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/config_spec.py", line 1506, in _flat_fields
+    if CompileEnvironment.current().jagged_tile_parent_ids:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/compile_environment.py", line 1046, in current
+    raise NoCurrentEnvironment from None
+helion._compiler.compile_environment.NoCurrentEnvironment
+I0000 00:00:1781022818.352462 3249986 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1781022818.352491 3249986 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=1550
+num_cache_hits=513 {33.0%}
 peak_compilation_memory_bytes=unknown
 
 
