@@ -224,6 +224,65 @@ PY
 
   echo
   echo "================================================"
+  echo "Test E: round-down HBM offset, over-read, slice in VMEM"
+  echo "  Source still (2048, 256) with tiled<(8,128)>."
+  echo "  HBM slice always at aligned_start = (start // 8) * 8 (provably 8-mult)."
+  echo "  Over-read BK + 7 sublanes into VMEM, then VMEM-slice at lead."
+  echo "  Should give CORRECT data for any start (including start=7)."
+  echo "================================================"
+  python3 - <<'PY'
+import jax, jax.numpy as jnp
+from jax.experimental import pallas as pl
+from jax.experimental.pallas import tpu as pltpu
+
+BK = 16
+OVERREAD = 8                       # absorb up to 7 leading misaligned rows
+
+def body(start_ref, x_ref, out_ref, x_buf, x_sem):
+    s = start_ref[0]
+    aligned = (s // 8) * 8         # provably 8-aligned by construction
+    lead = s - aligned             # in [0, 8)
+    copy = pltpu.make_async_copy(
+        x_ref.at[pl.ds(aligned, BK + OVERREAD), pl.ds(0, 128)],  # tile-aligned!
+        x_buf,
+        x_sem,
+    )
+    copy.start()
+    copy.wait()
+    # VMEM-side dynamic slice: tile annotation on x_buf is (1, 128) (VMEM, lane=128 exact),
+    # so any sublane offset is unconstrained.
+    out_ref[...] = jax.lax.dynamic_slice(x_buf[...], (lead, 0), (BK, 128))
+
+call = pl.pallas_call(
+    body,
+    out_shape=jax.ShapeDtypeStruct((BK, 128), jnp.float32),
+    in_specs=[
+        pl.BlockSpec(memory_space=pltpu.MemorySpace.SMEM),
+        pl.BlockSpec(memory_space=pltpu.MemorySpace.HBM),
+    ],
+    out_specs=pl.BlockSpec(memory_space=pltpu.MemorySpace.VMEM),
+    scratch_shapes=[
+        pltpu.VMEM((BK + OVERREAD, 128), jnp.float32),  # oversized buf
+        pltpu.SemaphoreType.DMA,
+    ],
+)
+
+x = jnp.arange(2048 * 256, dtype=jnp.float32).reshape(2048, 256)
+for s in (0, 1, 7, 8, 15, 16, 17):
+    start = jnp.array([s], dtype=jnp.int32)
+    try:
+        out = call(start, x)
+        out.block_until_ready()
+        actual = float(out[0, 0])
+        truth = s * 256
+        verdict = "CORRECT" if actual == truth else f"GOT {actual:.0f} expected {truth}"
+        print(f"  start={s:>2}  out[0,0]={actual:>7.0f}  -> {verdict}")
+    except Exception as e:
+        print(f"  start={s:>2}  ERROR: {str(e).splitlines()[0]}")
+PY
+
+  echo
+  echo "================================================"
   echo "Done.  Exit code: $?"
   echo "================================================"
 
