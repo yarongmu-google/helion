@@ -1,7 +1,7 @@
 ================================================
 Environment
 ================================================
-Mon Jun  8 19:32:55 PDT 2026
+Tue Jun  9 08:35:11 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 
@@ -12,36 +12,36 @@ pltpu: importable
 
 --- Helion ---
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780972383.092584 3076542 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780972383.119726 3076542 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780972383.119763 3076542 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780972383.693651 3076542 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1781019319.102362 3195741 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1781019319.130978 3195741 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781019319.131010 3195741 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1781019319.717715 3195741 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 helion: (unversioned)
-Git HEAD: a0e51c32
+Git HEAD: 9d94156d
 
 ================================================
 jagged_softmax: examples/jagged_softmax.py main()
 ================================================
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1780972386.646041 3076672 pjrt_api.cc:96] PJRT_Api is set for device type cpu
-I0000 00:00:1780972386.671941 3076672 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1780972386.671972 3076672 pjrt_api.cc:96] PJRT_Api is set for device type tpu
-I0000 00:00:1780972387.229730 3076672 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1781019322.665573 3195871 pjrt_api.cc:96] PJRT_Api is set for device type cpu
+I0000 00:00:1781019322.691190 3195871 pjrt_api.cc:118] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781019322.691219 3195871 pjrt_api.cc:96] PJRT_Api is set for device type tpu
+I0000 00:00:1781019323.244366 3195871 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1780972388.267918 3076672 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
-I0000 00:00:1780972390.607961 3076672 pjrt_c_api_client.cc:197] PjRtCApiClient created.
-W0000 00:00:1780972390.608003 3076672 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1780972390.640961 3077455 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1780972390.640983 3077455 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1781019324.268596 3195871 pjrt_api.cc:167] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.104.
+I0000 00:00:1781019326.576403 3195871 pjrt_c_api_client.cc:197] PjRtCApiClient created.
+W0000 00:00:1781019326.576437 3195871 pjrt_state.cc:231] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781019326.609055 3196653 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781019326.609080 3196653 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
 Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 128, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/3f/c3ffws6togzwzaogeimcwxv4spos5b4aymaheagdp67rukrg4was.py
+# Output code written to: /tmp/torchinductor_ymu_google_com/kk/ckk2olexbfcmlozydo7we76y3vxjq34b6uhzbjwxizdlk7kjefjn.py
 from __future__ import annotations
 
 import torch
@@ -251,7 +251,7 @@ def call():
     # src[jagged_softmax.py:60]:     x_data: torch.Tensor,
     # src[jagged_softmax.py:61]:     x_offsets: torch.Tensor,
     # src[jagged_softmax.py:59-114]: ...
-    x_data = rand_strided(size=(17381, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
+    x_data = rand_strided(size=(15250, 128), stride=(128, 1), dtype=torch.float32, device='tpu:0')
     x_offsets = rand_strided(size=(513,), stride=(1,), dtype=torch.int32, device='tpu:0')
     jagged_softmax_kernel(x_data, x_offsets)
 if __name__ == '__main__':
@@ -259,20 +259,20 @@ if __name__ == '__main__':
 Testing helion correctness...
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
-Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 25/25   2.7 configs/s
+Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 28/28   2.7 configs/s
 
 =================================================================
 Benchmark Results
 =================================================================
 Implementation       Time (ms)    Speedup        
 -----------------------------------------------------------------
-helion               4.0861       88.69x         
-torch                362.3803     1.00x (ref)    
+helion               3.8381       96.72x         
+torch                371.2054     1.00x (ref)    
 =================================================================
 
-I0000 00:00:1780972426.827927 3076672 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1780972426.827976 3076672 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=43276
-num_cache_hits=42220 {97.5%}
+I0000 00:00:1781019364.059809 3195871 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1781019364.059857 3195871 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=47905
+num_cache_hits=46849 {97.7%}
 peak_compilation_memory_bytes=unknown
 
 
