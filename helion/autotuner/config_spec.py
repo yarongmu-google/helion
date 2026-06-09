@@ -1694,8 +1694,16 @@ class BlockSizeSpec(_PowerOfTwoBlockIdItem):
 
     def _normalize(self, name: str, value: object) -> int | None:
         result = super()._normalize(name, value)
-        if isinstance(result, int) and result < self.min_size:
-            result = self.min_size
+        if isinstance(result, int):
+            if result < self.min_size:
+                result = self.min_size
+            if result > self.max_size:
+                # Backend-imposed ceilings (e.g. Pallas jagged-tile parents
+                # pinned to block_size=1) must override user-supplied configs,
+                # otherwise downstream codegen produces shapes the kernel
+                # path doesn't support (e.g. (BB, BK, BM) instead of
+                # (1, BK, BM) for jagged-flat stores).
+                result = self.max_size
         return result
 
     def update_min(self, value: int) -> None:
