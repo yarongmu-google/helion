@@ -1693,19 +1693,23 @@ class BlockSizeSpec(_PowerOfTwoBlockIdItem):
         return f"BlockSizeSpec({', '.join(fields)})"
 
     def _normalize(self, name: str, value: object) -> int | None:
+        original = value
         result = super()._normalize(name, value)
         if isinstance(result, int):
+            in_value = result
             if result < self.min_size:
                 result = self.min_size
-            # Only clamp DOWN for a HARD pin (min_size == max_size), i.e. a
-            # backend-imposed equality constraint such as the Pallas
-            # jagged-tile parent rule that forces block_size=1.  The soft
-            # default ceiling (max_size = next_power_of_2(size_hint)) is
-            # intentionally not clamped: tests / users pass block_size larger
-            # than the tensor dim to exercise the codegen slicing path
-            # (e.g. ``out[:dim]`` when block > dim).
             if result > self.max_size and self.min_size == self.max_size:
                 result = self.max_size
+            import sys
+
+            print(
+                f"[DEBUG _normalize] name={name!r} block_ids={self.block_ids} "
+                f"in={in_value} min={self.min_size} max={self.max_size} "
+                f"size_hint={self.size_hint} out={result}",
+                file=sys.stderr,
+                flush=True,
+            )
         return result
 
     def update_min(self, value: int) -> None:
