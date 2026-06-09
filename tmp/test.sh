@@ -47,7 +47,7 @@ mkdir -p tmp
   echo
 
   echo "================================================"
-  echo "jagged_softmax: examples/jagged_softmax.py main()"
+  echo "jagged_layer_norm: examples/jagged_layer_norm.py main()"
   echo "================================================"
   HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1  \
   HELION_AUTOTUNE_LOG_LEVEL=DEBUG \
@@ -57,7 +57,7 @@ mkdir -p tmp
   HELION_BACKEND=pallas \
   HELION_AUTOTUNE_EFFORT=none \
   HELION_PRINT_OUTPUT_CODE=1 \
-  python3 examples/jagged_softmax.py
+  python3 examples/jagged_layer_norm.py
 
   echo
   echo "================================================"
