@@ -1,8 +1,8 @@
 ================================================
 Targeted sweep: 4 jagged + 6 trial-only regressions
-Git HEAD: 0dc04ad7
+Git HEAD: c16f0cac
 ================================================
-Tue Jun  9 16:08:01 PDT 2026
+Tue Jun  9 17:25:49 PDT 2026
 
 ============================= test session starts ==============================
 platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0 -- /home/ymu_google_com/miniconda3/envs/tpu/bin/python3
@@ -11,20 +11,301 @@ hypothesis profile 'default'
 rootdir: /home/ymu_google_com/helion
 configfile: pyproject.toml
 plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
-collecting ... collected 276 items / 265 deselected / 11 selected
+collecting ... collected 276 items / 262 deselected / 14 selected
 
-test/test_pallas.py::TestPallas::test_broadcast_mask_size1_last_dim PASSED [  9%]
-test/test_pallas.py::TestPallas::test_broadcast_mask_size1_multiple_dims PASSED [ 18%]
-test/test_pallas.py::TestPallas::test_emit_pipeline_loop_order PASSED    [ 27%]
-test/test_pallas.py::TestPallas::test_jagged_sum_3d PASSED               [ 36%]
-test/test_pallas.py::TestPallas::test_matmul_broadcast_bias PASSED       [ 45%]
-test/test_examples.py::TestExamples::test_jagged_layer_norm PASSED       [ 54%]
-test/test_examples.py::TestExamples::test_jagged_mean PASSED             [ 63%]
-test/test_examples.py::TestExamples::test_jagged_softmax PASSED          [ 72%]
-test/test_examples.py::TestExamples::test_jagged_sum PASSED              [ 81%]
-test/test_examples.py::TestExamples::test_template_via_closure0 PASSED   [ 90%]
+test/test_pallas.py::TestPallas::test_broadcast_mask_size1_last_dim PASSED [  7%]
+test/test_pallas.py::TestPallas::test_broadcast_mask_size1_multiple_dims PASSED [ 14%]
+test/test_pallas.py::TestPallas::test_emit_pipeline_loop_order PASSED    [ 21%]
+test/test_pallas.py::TestPallas::test_jagged_sum_3d PASSED               [ 28%]
+test/test_pallas.py::TestPallas::test_matmul_broadcast_bias PASSED       [ 35%]
+test/test_examples.py::TestExamples::test_jagged_layer_norm PASSED       [ 42%]
+test/test_examples.py::TestExamples::test_jagged_mean PASSED             [ 50%]
+test/test_examples.py::TestExamples::test_jagged_softmax PASSED          [ 57%]
+test/test_examples.py::TestExamples::test_jagged_sum PASSED              [ 64%]
+test/test_examples.py::TestExamples::test_layernorm_bwd FAILED           [ 71%]
+test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch XFAIL [ 78%]
+test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db XFAIL [ 85%]
+test/test_examples.py::TestExamples::test_template_via_closure0 PASSED   [ 92%]
 test/test_examples.py::TestExamples::test_template_via_closure1 PASSED   [100%]
 
+=================================== FAILURES ===================================
+_______________________ TestExamples.test_layernorm_bwd ________________________
+test/test_examples.py:1339: in test_layernorm_bwd
+    self._run_layernorm_bwd(batch_size=32, dim=64)
+test/test_examples.py:1324: in _run_layernorm_bwd
+    check_example(
+helion/_testing.py:1439: in check_example
+    code, result = code_and_output(
+helion/_testing.py:1080: in code_and_output
+    code, result = _run_bound_kernel(bound, args, config, emit_code=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_testing.py:1043: in _run_bound_kernel
+    synchronize_device(result)
+helion/autotuner/benchmarking.py:129: in synchronize_device
+    tpu_sync(tpu_tensors, wait=True)
+../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/sync/sync.py:51: in synchronize
+    _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
+E   RuntimeError: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E   See https://openxla.org/xla/errors/error_2003 for more details.
+E   
+E   at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+E   
+E   The MLIR operation involved:
+E     %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
+E   
+E   Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+----------------------------- Captured stderr call -----------------------------
+WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
+Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
+If this is not a tensor operation, please report this as a bug.
+While processing:
+  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 150, in layer_norm_bwd
+    grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
+Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
+If this is not a tensor operation, please report this as a bug.
+While processing:
+  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 150, in layer_norm_bwd
+    grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
+Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
+If this is not a tensor operation, please report this as a bug.
+While processing:
+  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 152, in layer_norm_bwd
+    grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+
+WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
+Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
+If this is not a tensor operation, please report this as a bug.
+While processing:
+  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 152, in layer_norm_bwd
+    grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0000 00:00:1781051177.363644 3592837 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781051177.363667 3592837 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781051177.363670 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+
+The MLIR operation involved:
+  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+E0000 00:00:1781051177.363675 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+
+The MLIR operation involved:
+  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+E0000 00:00:1781051177.363685 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+
+The MLIR operation involved:
+  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+E0000 00:00:1781051177.363695 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+
+The MLIR operation involved:
+  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+E0000 00:00:1781051177.363697 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+
+The MLIR operation involved:
+  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+Failed to run kernel:
+from __future__ import annotations
+
+import torch
+import helion.language as hl
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+
+_BLOCK_SIZE_0 = int(32)
+_BLOCK_SIZE_1 = int(32)
+
+def _helion_layer_norm_bwd(weight, x, grad_out, mean, rstd, grad_x, grad_weight_blocks, grad_bias_blocks, _RDIM_SIZE_2: int, scratch_1, scratch_2):
+    # src[layer_norm.py:122]: for mb_cta in hl.tile(x.size(0), block_size=m_block):
+    pid_0 = pl.program_id(0)
+    offset_0 = pid_0 * _BLOCK_SIZE_0
+    # src[layer_norm.py:123]: grad_w_acc = weight.new_zeros(n, dtype=torch.float32)
+    grad_w_acc = jnp.full([_RDIM_SIZE_2], 0, jnp.float32)
+    # src[layer_norm.py:125]: grad_b_acc = weight.new_zeros(n, dtype=torch.float32)
+    grad_b_acc = jnp.full([_RDIM_SIZE_2], 0, jnp.float32)
+    # src[layer_norm.py:126]: weight_cta = weight[None, :].to(torch.float32)
+    load = jnp.expand_dims(weight[:], axis=0)
+    v_0 = lax.convert_element_type(load, jnp.float32)
+    # src[layer_norm.py:127]: for mb in hl.tile(mb_cta.begin, mb_cta.end):
+    tile_end = offset_0 + _BLOCK_SIZE_0
+    # src[layer_norm.py:127]: for mb in hl.tile(mb_cta.begin, mb_cta.end):
+    # src[layer_norm.py:128]:     x_mb = x[mb, :].to(torch.float32)
+    # src[layer_norm.py:129]:     dy_mb = grad_out[mb, :].to(torch.float32)
+    # src[layer_norm.py:127-144]: ...
+    scratch_1[...] = grad_w_acc[...]
+    scratch_2[...] = grad_b_acc[...]
+
+    def _fori_body_0(_j, _):
+        nonlocal scratch_1, scratch_2
+        offset_1 = offset_0 + _j * _BLOCK_SIZE_1
+        offset_3 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
+        mask_1 = offset_3 < tile_end - offset_0
+        offset_1 = offset_0 + _j * _BLOCK_SIZE_1
+        v_0_copy = v_0
+        v_1 = scratch_1[...]
+        v_2 = scratch_2[...]
+        v_0_copy_0 = v_0_copy
+        v_1_0 = v_1
+        v_2_0 = v_2
+        # src[layer_norm.py:128]: x_mb = x[mb, :].to(torch.float32)
+        load_1 = x[pl.ds(pl.multiple_of(offset_1, _BLOCK_SIZE_1), _BLOCK_SIZE_1), :] * mask_1.astype(jnp.bfloat16)[:, None]
+        v_3 = lax.convert_element_type(load_1, jnp.float32)
+        # src[layer_norm.py:129]: dy_mb = grad_out[mb, :].to(torch.float32)
+        load_2 = grad_out[pl.ds(pl.multiple_of(offset_1, _BLOCK_SIZE_1), _BLOCK_SIZE_1), :] * mask_1.astype(jnp.bfloat16)[:, None]
+        v_4 = lax.convert_element_type(load_2, jnp.float32)
+        # src[layer_norm.py:130]: mean_mb = mean[mb].to(torch.float32)
+        mean_mb = mean[pl.ds(offset_1, _BLOCK_SIZE_1)] * mask_1.astype(jnp.float32)
+        # src[layer_norm.py:131]: rstd_mb = rstd[mb].to(torch.float32)
+        rstd_mb = rstd[pl.ds(offset_1, _BLOCK_SIZE_1)] * mask_1.astype(jnp.float32)
+        # src[layer_norm.py:133]: x_hat = (x_mb - mean_mb[:, None]) * rstd_mb[:, None]
+        subscript = mean_mb[:, None]
+        v_5 = v_3 - subscript
+        subscript_1 = rstd_mb[:, None]
+        v_6 = v_5 * subscript_1
+        # src[layer_norm.py:135]: grad_w_acc += torch.sum(dy_mb * x_hat, dim=0)
+        v_7 = v_4 * v_6
+        sum_1 = lax.convert_element_type(jnp.sum(v_7, axis=0), jnp.float32)
+        v_8 = v_1_0 + sum_1
+        # src[layer_norm.py:138]: grad_b_acc += torch.sum(dy_mb, dim=0)
+        sum_2 = lax.convert_element_type(jnp.sum(v_4, axis=0), jnp.float32)
+        v_9 = v_2_0 + sum_2
+        # src[layer_norm.py:140]: wdy = weight_cta * dy_mb
+        v_10 = v_0_copy_0 * v_4
+        # src[layer_norm.py:141]: c1 = torch.sum(x_hat * wdy, dim=-1) / n
+        v_11 = v_6 * v_10
+        sum_3 = lax.convert_element_type(jnp.sum(v_11, axis=1), jnp.float32)
+        v_12 = jnp.array(0.015625, dtype=jnp.float32)
+        v_13 = sum_3 * v_12
+        # src[layer_norm.py:142]: c2 = torch.sum(wdy, dim=-1) / n
+        sum_4 = lax.convert_element_type(jnp.sum(v_10, axis=1), jnp.float32)
+        v_14 = jnp.array(0.015625, dtype=jnp.float32)
+        v_15 = sum_4 * v_14
+        # src[layer_norm.py:143]: dx = (wdy - (x_hat * c1[:, None] + c2[:, None])) * rstd_mb[:, None]
+        subscript_2 = v_13[:, None]
+        v_16 = v_6 * subscript_2
+        subscript_3 = v_15[:, None]
+        v_17 = v_16 + subscript_3
+        v_18 = v_10 - v_17
+        subscript_4 = rstd_mb[:, None]
+        v_19 = v_18 * subscript_4
+        # src[layer_norm.py:144]: grad_x[mb, :] = dx.to(x.dtype)
+        v_20 = lax.convert_element_type(v_19, jnp.bfloat16)
+        grad_x[pl.ds(pl.multiple_of(offset_1, _BLOCK_SIZE_1), _BLOCK_SIZE_1), :] = v_20
+        # src[layer_norm.py:127]: for mb in hl.tile(mb_cta.begin, mb_cta.end):
+        # src[layer_norm.py:128]:     x_mb = x[mb, :].to(torch.float32)
+        # src[layer_norm.py:129]:     dy_mb = grad_out[mb, :].to(torch.float32)
+        # src[layer_norm.py:127-144]: ...
+        scratch_1[...] = v_8[...]
+        scratch_2[...] = v_9[...]
+    jax.lax.fori_loop(0, (tile_end - offset_0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_0, None)
+    grad_w_acc = scratch_1[...]
+    grad_b_acc = scratch_2[...]
+    # src[layer_norm.py:146]: grad_weight_blocks[mb_cta.id, :] = grad_w_acc
+    tile_id = offset_0 // _BLOCK_SIZE_0
+    grad_weight_blocks[tile_id, :] = grad_w_acc
+    # src[layer_norm.py:148]: grad_bias_blocks[mb_cta.id, :] = grad_b_acc  # type: ignore[index]
+    grad_bias_blocks[tile_id, :] = grad_b_acc
+
+def layer_norm_bwd(grad_out: torch.Tensor, x: torch.Tensor, mean: torch.Tensor, rstd: torch.Tensor, weight: torch.Tensor, compute_bias_grad: hl.constexpr=True, *, _launcher=_default_pallas_fori_launcher):
+    """
+    Compute gradients for weight (dW) and optionally bias (dB) parameters.
+
+    This kernel performs reduction across the batch dimension (M) to accumulate
+    gradients for each feature dimension's weight and bias parameters.
+
+    Args:
+        grad_out: Gradient w.r.t layer norm output [M, N]
+        x: Original input tensor [M, N]
+        mean: Per-sample mean computed in forward pass [M]
+        rstd: Per-sample reciprocal standard deviation from forward pass [M]
+        weight: Weight parameter (used only for dtype/device info) [N]
+        compute_bias_grad: Whether to compute bias gradient (default: True)
+
+    Returns:
+        (grad_x, grad_weight, grad_bias): Gradients for input, weight, and bias (if computed)
+            grad_bias is None if compute_bias_grad is False
+    """
+    # src[layer_norm.py:114]: m_block = hl.register_block_size(x.size(0))
+    m_block = 32
+    # src[layer_norm.py:115]: n = hl.specialize(x.size(1))
+    n = 64
+    # src[layer_norm.py:87]: def layer_norm_bwd(
+    # src[layer_norm.py:88]:     grad_out: torch.Tensor,
+    # src[layer_norm.py:89]:     x: torch.Tensor,
+    # src[layer_norm.py:87-154]: ...
+    grad_x = getattr(_helion_layer_norm_bwd, '_helion_output_meta_cache_0', None)
+    if grad_x is None:
+        grad_x = _helion_layer_norm_bwd._helion_output_meta_cache_0 = torch.empty_like(x, device='meta')
+    # src[layer_norm.py:118]: num_blocks = (x.size(0) + m_block - 1) // m_block
+    num_blocks = (x.size(0) + m_block - 1) // m_block
+    # src[layer_norm.py:87]: def layer_norm_bwd(
+    # src[layer_norm.py:88]:     grad_out: torch.Tensor,
+    # src[layer_norm.py:89]:     x: torch.Tensor,
+    # src[layer_norm.py:87-154]: ...
+    grad_weight_blocks = getattr(_helion_layer_norm_bwd, '_helion_output_meta_cache_1', None)
+    if grad_weight_blocks is None:
+        grad_weight_blocks = _helion_layer_norm_bwd._helion_output_meta_cache_1 = x.new_empty([num_blocks, n], dtype=torch.float32, device='meta')
+    grad_bias_blocks = getattr(_helion_layer_norm_bwd, '_helion_output_meta_cache_2', None)
+    if grad_bias_blocks is None:
+        grad_bias_blocks = _helion_layer_norm_bwd._helion_output_meta_cache_2 = x.new_empty([num_blocks, n], dtype=torch.float32, device='meta')
+    # src[layer_norm.py:122]: for mb_cta in hl.tile(x.size(0), block_size=m_block):
+    _BLOCK_SIZE_0 = 32
+    _RDIM_SIZE_2 = 64
+    # src[layer_norm.py:122]: for mb_cta in hl.tile(x.size(0), block_size=m_block):
+    # src[layer_norm.py:123]:     grad_w_acc = weight.new_zeros(n, dtype=torch.float32)
+    # src[layer_norm.py:124]:     if compute_bias_grad:
+    # src[layer_norm.py:122-148]: ...
+    grad_x, grad_weight_blocks, grad_bias_blocks = _launcher(_helion_layer_norm_bwd, ((32 + _BLOCK_SIZE_0 - 1) // _BLOCK_SIZE_0,), weight, x, grad_out, mean, rstd, grad_x, grad_weight_blocks, grad_bias_blocks, _RDIM_SIZE_2, _output_indices=[5, 6, 7], _inplace_indices=[], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None, None), (None, None)), ((None,), (None,)), ((None,), (None,)), ((None, None), (None, None)), ((None, None), (None, None)), ((None, None), (None, None))], _ds_pad_dims=[(1, 0, 32, 0), (2, 0, 32, 0), (3, 0, 32, 0), (4, 0, 32, 0), (5, 0, 32, 0)], _scratch_shapes=[((64,), 'jnp.float32', 'vmem'), ((64,), 'jnp.float32', 'vmem')])
+    # src[layer_norm.py:150]: grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
+    grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
+    # src[layer_norm.py:151]: if compute_bias_grad:
+    # src[layer_norm.py:152]:     grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
+    # src[layer_norm.py:153]:     return grad_x, grad_weight, grad_bias
+    if True:
+        # src[layer_norm.py:152]: grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
+        grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
+        # src[layer_norm.py:153]: return grad_x, grad_weight, grad_bias
+        return (grad_x, grad_weight, grad_bias)
+    # src[layer_norm.py:154]: return grad_x, grad_weight, None
+    return (grad_x, grad_weight, None)
 =============================== warnings summary ===============================
 ../pytorch/torch/jit/_script.py:365: 14 warnings
   /home/ymu_google_com/pytorch/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
@@ -35,15 +316,19 @@ test/test_pallas.py::TestPallas::test_broadcast_mask_size1_last_dim
     warn_once(
 
 test/test_pallas.py: 5 warnings
-test/test_examples.py: 6 warnings
+test/test_examples.py: 9 warnings
   /home/ymu_google_com/helion/helion/runtime/__init__.py:685: DeprecationWarning: input_output_aliases is deprecated and will be removed soon. Please use donate_argnums instead.
     super().__init__(*args, **kwargs)  # type: ignore[misc]
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=============== 11 passed, 265 deselected, 26 warnings in 27.59s ===============
-I0000 00:00:1781046511.182143 3586347 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1781046511.182171 3586347 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=1893
-num_cache_hits=1067 {56.3%}
+=========================== short test summary info ============================
+XFAIL test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch
+XFAIL test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db
+FAILED test/test_examples.py::TestExamples::test_layernorm_bwd - RuntimeError...
+==== 1 failed, 11 passed, 262 deselected, 2 xfailed, 29 warnings in 29.71s =====
+I0000 00:00:1781051181.185037 3592707 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1781051181.185075 3592707 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=2071
+num_cache_hits=1174 {56.6%}
 peak_compilation_memory_bytes=unknown
 
 
