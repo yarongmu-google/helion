@@ -1,8 +1,8 @@
 ================================================
 Targeted sweep: 4 jagged + 6 trial-only regressions
-Git HEAD: c16f0cac
+Git HEAD: f36e938b
 ================================================
-Tue Jun  9 17:25:49 PDT 2026
+Tue Jun  9 20:51:00 PDT 2026
 
 ============================= test session starts ==============================
 platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0 -- /home/ymu_google_com/miniconda3/envs/tpu/bin/python3
@@ -11,24 +11,54 @@ hypothesis profile 'default'
 rootdir: /home/ymu_google_com/helion
 configfile: pyproject.toml
 plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
-collecting ... collected 276 items / 262 deselected / 14 selected
+collecting ... collected 276 items / 260 deselected / 16 selected
 
-test/test_pallas.py::TestPallas::test_broadcast_mask_size1_last_dim PASSED [  7%]
-test/test_pallas.py::TestPallas::test_broadcast_mask_size1_multiple_dims PASSED [ 14%]
-test/test_pallas.py::TestPallas::test_emit_pipeline_loop_order PASSED    [ 21%]
-test/test_pallas.py::TestPallas::test_jagged_sum_3d PASSED               [ 28%]
-test/test_pallas.py::TestPallas::test_matmul_broadcast_bias PASSED       [ 35%]
-test/test_examples.py::TestExamples::test_jagged_layer_norm PASSED       [ 42%]
-test/test_examples.py::TestExamples::test_jagged_mean PASSED             [ 50%]
-test/test_examples.py::TestExamples::test_jagged_softmax PASSED          [ 57%]
-test/test_examples.py::TestExamples::test_jagged_sum PASSED              [ 64%]
-test/test_examples.py::TestExamples::test_layernorm_bwd FAILED           [ 71%]
-test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch XFAIL [ 78%]
-test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db XFAIL [ 85%]
-test/test_examples.py::TestExamples::test_template_via_closure0 PASSED   [ 92%]
+test/test_pallas.py::TestPallas::test_broadcast_mask_size1_last_dim PASSED [  6%]
+test/test_pallas.py::TestPallas::test_broadcast_mask_size1_multiple_dims PASSED [ 12%]
+test/test_pallas.py::TestPallas::test_emit_pipeline_loop_order PASSED    [ 18%]
+test/test_pallas.py::TestPallas::test_jagged_sum_3d PASSED               [ 25%]
+test/test_pallas.py::TestPallas::test_matmul_broadcast_bias PASSED       [ 31%]
+test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_default_torch_precision_medium_atol_1_5_rtol_0_05 FAILED [ 37%]
+test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_highest_torch_precision_highest_atol_0_01_rtol_0_01 FAILED [ 43%]
+test/test_examples.py::TestExamples::test_jagged_layer_norm PASSED       [ 50%]
+test/test_examples.py::TestExamples::test_jagged_mean PASSED             [ 56%]
+test/test_examples.py::TestExamples::test_jagged_softmax PASSED          [ 62%]
+test/test_examples.py::TestExamples::test_jagged_sum PASSED              [ 68%]
+test/test_examples.py::TestExamples::test_layernorm_bwd FAILED           [ 75%]
+test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch XFAIL [ 81%]
+test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db XFAIL [ 87%]
+test/test_examples.py::TestExamples::test_template_via_closure0 PASSED   [ 93%]
 test/test_examples.py::TestExamples::test_template_via_closure1 PASSED   [100%]
 
 =================================== FAILURES ===================================
+_ TestExamples.test_jagged_hstu_attn_2_helion_precision_default_torch_precision_medium_atol_1_5_rtol_0_05 _
+test/test_examples.py:1529: in test_jagged_hstu_attn_2
+    with float32_matmul_precision(torch_precision):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../miniconda3/envs/tpu/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+helion/_testing.py:435: in float32_matmul_precision
+    original_precision = torch.get_float32_matmul_precision()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/__init__.py:1615: in get_float32_matmul_precision
+    return _C._get_float32_matmul_precision()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: PyTorch is checking the matmul precision without a specific backend name,Current status indicate that you have used mix of the legacy and new APIs to set the matmul precision. We suggest only using the new API for matmul precision. See also: https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+_ TestExamples.test_jagged_hstu_attn_2_helion_precision_highest_torch_precision_highest_atol_0_01_rtol_0_01 _
+test/test_examples.py:1529: in test_jagged_hstu_attn_2
+    with float32_matmul_precision(torch_precision):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../miniconda3/envs/tpu/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+helion/_testing.py:435: in float32_matmul_precision
+    original_precision = torch.get_float32_matmul_precision()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/__init__.py:1615: in get_float32_matmul_precision
+    return _C._get_float32_matmul_precision()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: PyTorch is checking the matmul precision without a specific backend name,Current status indicate that you have used mix of the legacy and new APIs to set the matmul precision. We suggest only using the new API for matmul precision. See also: https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
 _______________________ TestExamples.test_layernorm_bwd ________________________
 test/test_examples.py:1339: in test_layernorm_bwd
     self._run_layernorm_bwd(batch_size=32, dim=64)
@@ -48,7 +78,7 @@ helion/autotuner/benchmarking.py:129: in synchronize_device
 E   RuntimeError: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 E   See https://openxla.org/xla/errors/error_2003 for more details.
 E   
-E   at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+E   at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmpcw_8s1xg/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 E   
 E   The MLIR operation involved:
 E     %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
@@ -87,52 +117,52 @@ While processing:
     grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0000 00:00:1781051177.363644 3592837 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781051177.363667 3592837 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781051177.363670 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781063488.215932 3600519 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781063488.215960 3600519 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781063488.215962 3600519 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmpcw_8s1xg/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781051177.363675 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781063488.215969 3600519 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmpcw_8s1xg/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781051177.363685 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781063488.215978 3600519 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmpcw_8s1xg/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781051177.363695 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781063488.215981 3600519 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmpcw_8s1xg/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781051177.363697 3592837 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781063488.215983 3600519 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp320h_erb/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmpcw_8s1xg/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
@@ -324,11 +354,13 @@ test/test_examples.py: 9 warnings
 =========================== short test summary info ============================
 XFAIL test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch
 XFAIL test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db
+FAILED test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_default_torch_precision_medium_atol_1_5_rtol_0_05
+FAILED test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_highest_torch_precision_highest_atol_0_01_rtol_0_01
 FAILED test/test_examples.py::TestExamples::test_layernorm_bwd - RuntimeError...
-==== 1 failed, 11 passed, 262 deselected, 2 xfailed, 29 warnings in 29.71s =====
-I0000 00:00:1781051181.185037 3592707 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1781051181.185075 3592707 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=2071
-num_cache_hits=1174 {56.6%}
+==== 3 failed, 11 passed, 260 deselected, 2 xfailed, 29 warnings in 29.52s =====
+I0000 00:00:1781063492.057034 3600389 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1781063492.057065 3600389 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=2129
+num_cache_hits=1230 {57.7%}
 peak_compilation_memory_bytes=unknown
 
 
