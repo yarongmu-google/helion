@@ -1,11 +1,11 @@
 ================================================
 Environment
 ================================================
-Tue Jun  9 20:59:12 PDT 2026
+Tue Jun  9 21:18:00 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 jax: 0.9.2
-Git HEAD: 55878b39
+Git HEAD: 1352548b
 
 ================================================
 Full test/ suite under HELION_BACKEND=pallas
@@ -322,7 +322,7 @@ E   RuntimeError: PyTorch is checking the matmul precision without a specific ba
 E   RuntimeError: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
     See https://openxla.org/xla/errors/error_2003 for more details.
     
-    at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp4xyr1tw_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+    at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphd5lg3ni/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
     
     The MLIR operation involved:
       %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
@@ -361,52 +361,52 @@ While processing:
     grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0000 00:00:1781064030.674674 3606898 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781064030.674709 3606898 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781064030.674711 3606898 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781065161.042308 3632816 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781065161.042352 3632816 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781065161.042354 3632816 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp4xyr1tw_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphd5lg3ni/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781064030.674717 3606898 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781065161.042368 3632816 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp4xyr1tw_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphd5lg3ni/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781064030.674728 3606898 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781065161.042376 3632816 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp4xyr1tw_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphd5lg3ni/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781064030.674731 3606898 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781065161.042378 3632816 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp4xyr1tw_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphd5lg3ni/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
-E0000 00:00:1781064030.674733 3606898 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
+E0000 00:00:1781065161.042380 3632816 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
 See https://openxla.org/xla/errors/error_2003 for more details.
 
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmp4xyr1tw_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
+at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphd5lg3ni/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
 
 The MLIR operation involved:
   %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
@@ -640,26 +640,26 @@ test/test_examples.py::TestExamples::test_jagged_dense_bmm
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ============================= slowest 20 durations =============================
-23.56s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
-13.57s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
-12.37s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
-11.80s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
-11.57s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
-8.55s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
+23.78s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
+13.72s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
+13.36s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
+12.06s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
+11.45s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
+8.52s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
+7.96s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
 7.93s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
-7.52s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
 6.68s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
-5.63s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
-5.08s call     test/test_examples.py::TestExamples::test_low_mem_dropout
-4.34s call     test/test_rng.py::TestRNG::test_rand_3d_tensor
-4.31s call     test/test_examples.py::TestExamples::test_jagged_softmax
-4.08s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
-3.70s call     test/test_examples.py::TestExamples::test_jsd
-3.65s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
-3.62s call     test/test_rng.py::TestRNG::test_randn_with_dynamic_tile_sizes
-3.54s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_unpickleable_worker_exception_is_serialized
-3.42s call     test/test_examples.py::TestExamples::test_jagged_sum
-3.24s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_spawn_precompile_loads_trusted_python_args
+5.60s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
+4.81s call     test/test_examples.py::TestExamples::test_low_mem_dropout
+4.57s call     test/test_examples.py::TestExamples::test_jagged_softmax
+4.36s call     test/test_rng.py::TestRNG::test_rand_like_nested_tiles_issue_1208
+4.04s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
+3.82s call     test/test_examples.py::TestExamples::test_jsd
+3.66s call     test/test_examples.py::TestExamples::test_jagged_sum
+3.62s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
+3.58s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_unpickleable_worker_exception_is_serialized
+3.42s call     test/test_rng.py::TestRNG::test_explicit_seeded_rng_does_not_shift_implicit_seed_slots
+3.16s call     test/test_atomic_ops.py::TestAtomicOperations::test_2d_atomic_add
 =========================== short test summary info ============================
 SKIPPED [1] test/test_breakpoint.py:16: unittest.case.SkipTest: triton not available
 SKIPPED [1] test/test_cute_backend.py:27: could not import 'cutlass': No module named 'cutlass'
@@ -2412,9 +2412,9 @@ FAILED test/test_loops.py::TestLoops::test_range_num_stages_preserved_without_al
 FAILED test/test_random.py::TestRandom::test_hl_rand4x_dropout_pattern - Runt...
 FAILED test/test_random.py::TestRandom::test_hl_rand_offsets_independence - R...
 FAILED test/test_random.py::TestRandom::test_hl_rand_with_explicit_offsets - ...
-= 17 failed, 554 passed, 1893 skipped, 68 xfailed, 384 warnings in 314.97s (0:05:14) =
-I0000 00:00:1781064278.779020 3606768 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1781064278.779089 3606768 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=12095
+= 17 failed, 554 passed, 1893 skipped, 68 xfailed, 384 warnings in 314.64s (0:05:14) =
+I0000 00:00:1781065407.197087 3632686 compilation_cache.cc:355] Compilation cache evicted.
+I0000 00:00:1781065407.197174 3632686 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=12095
 num_cache_hits=8452 {69.8%}
 peak_compilation_memory_bytes=unknown
 
