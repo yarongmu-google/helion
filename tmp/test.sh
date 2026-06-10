@@ -24,7 +24,7 @@ mkdir -p tmp
   HELION_BACKEND=pallas \
   HELION_AUTOTUNE_EFFORT=none \
   python3 -m pytest test/test_pallas.py test/test_examples.py \
-    -k "test_jagged_sum or test_jagged_mean or test_jagged_softmax or test_jagged_layer_norm or test_broadcast_mask_size1_last_dim or test_broadcast_mask_size1_multiple_dims or test_emit_pipeline_loop_order or test_matmul_broadcast_bias or test_template_via_closure0 or test_template_via_closure1 or test_layernorm_bwd or test_squeeze_and_excitation_net_bwd_db" \
+    -k "test_jagged_sum or test_jagged_mean or test_jagged_softmax or test_jagged_layer_norm or test_broadcast_mask_size1_last_dim or test_broadcast_mask_size1_multiple_dims or test_emit_pipeline_loop_order or test_matmul_broadcast_bias or test_template_via_closure0 or test_template_via_closure1 or test_layernorm_bwd or test_squeeze_and_excitation_net_bwd_db or test_jagged_hstu_attn_2" \
     -ra --tb=short -v
 
   echo
