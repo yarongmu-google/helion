@@ -1,11 +1,11 @@
 ================================================
 Environment
 ================================================
-Tue Jun  9 15:44:35 PDT 2026
+Wed Jun 10 22:29:26 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 jax: 0.9.2
-Git HEAD: bbf4dc6f
+Git HEAD: bfc8263a
 
 ================================================
 Full test/ suite under HELION_BACKEND=pallas
@@ -15,42 +15,42 @@ platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0
 rootdir: /home/ymu_google_com/helion
 configfile: pyproject.toml
 plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
-collected 2520 items / 12 skipped
+collected 2562 items / 12 skipped
 
 test/test_amd_cdna.py ssss                                               [  0%]
 test/test_aot_autotuning.py ........................                     [  1%]
 test/test_associative_scan.py sssssssssssssssssssssssssss                [  2%]
 test/test_atomic_ops.py .xss.x.x.s.ss......s.ss...xsx.....               [  3%]
 test/test_autodiff.py ssssssssssssssssssssssssssssssssssssssssssssssssss [  5%]
-ssssssss                                                                 [  5%]
-test/test_autotuner.py sssssssssssssssssssssssssssssssssssssssssssssssss [  7%]
-ssssssssssssssssssssssssssss.....sssssssssssssssss......ssssssssssssssss [ 10%]
-sssss...                                                                 [ 10%]
+sssssssssssssssssssssssss                                                [  6%]
+test/test_autotuner.py sssssssssssssssssssssssssssssssssssssssssssssssss [  8%]
+ssssssssssssssssssssssssssss.....sssssssssssssssss......ssssssssssssssss [ 11%]
+sssss...                                                                 [ 11%]
 test/test_autotuner_heuristics.py .....s..ss.s....sssssssssssssssssssss  [ 12%]
-test/test_backend_registry.py .....                                      [ 12%]
-test/test_barrier.py ssssssss                                            [ 12%]
-test/test_benchmark_worker.py ..........ss                               [ 13%]
-test/test_benchmarking.py .....                                          [ 13%]
+test/test_backend_registry.py .....                                      [ 13%]
+test/test_barrier.py ssssssss                                            [ 13%]
+test/test_benchmark_worker.py ..........sss                              [ 13%]
+test/test_benchmarking.py .....                                          [ 14%]
 test/test_best_available.py .............FFFF.F.FF...................... [ 15%]
 .                                                                        [ 15%]
-test/test_broadcasting.py .......x...                                    [ 15%]
-test/test_cache.py ssssssssssssssssssssssssssss                          [ 16%]
+test/test_broadcasting.py .......x...                                    [ 16%]
+test/test_cache.py ssssssssssssssssssssssssssss                          [ 17%]
 test/test_cache_modifier.py ssss                                         [ 17%]
 test/test_closures.py ssssss                                             [ 17%]
 test/test_codegen_comments.py ..                                         [ 17%]
-test/test_codegen_dict.py ............                                   [ 17%]
-test/test_compile_time.py .                                              [ 17%]
+test/test_codegen_dict.py ............                                   [ 18%]
+test/test_compile_time.py .                                              [ 18%]
 test/test_config_api.py sssssssssssssssssssssssssssssssssssss.....       [ 19%]
-test/test_constexpr.py ssssssss                                          [ 19%]
+test/test_constexpr.py ssssssss                                          [ 20%]
 test/test_control_flow.py ....sss...s..s                                 [ 20%]
-test/test_custom_op.py sss..ss                                           [ 20%]
-test/test_cute_device_state.py sssssssssssssssssssssssssssssss           [ 21%]
-test/test_cute_layout.py sssssssssssssssssss                             [ 22%]
+test/test_custom_op.py sss..ss                                           [ 21%]
+test/test_cute_device_state.py sssssssssssssssssssssssssssssss           [ 22%]
+test/test_cute_layout.py sssssssssssssssssss                             [ 23%]
 test/test_cute_lowerings.py ssssssssssssssssssssssssssssssssssssssssssss [ 24%]
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 27%]
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 30%]
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 33%]
-ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 35%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 36%]
 ssssssssssssssssssssssssssssssssssssssssssssssssssssss                   [ 38%]
 test/test_debug_utils.py ssss                                            [ 38%]
 test/test_distributed.py sssssssssssssssssssssssssssssssssssssssssssssss [ 40%]
@@ -59,49 +59,50 @@ test/test_dot.py sssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 42%]
 sssssssssssssssssssssssssssssssssssssssssss...................           [ 44%]
 test/test_dot_requirements.py ssssssssssssssssssssssssssssssssssssssssss [ 46%]
 sssssss.                                                                 [ 46%]
-test/test_dot_scaled.py ssssssss                                         [ 47%]
+test/test_dot_scaled.py ssssssss                                         [ 46%]
 test/test_epilogue_subtiling.py ssssssssssssss                           [ 47%]
 test/test_errors.py sssssssssssssssssssssssssssssssssss                  [ 48%]
 test/test_eviction_policy.py sssssssssssss                               [ 49%]
-test/test_examples.py .........x....x...FF..s.s..s.x..xxx.xsxxFFxxxx..Fx [ 51%]
-.........xx..x..x.s...ss......x......xxxFx..........                     [ 53%]
+test/test_examples.py .........x....x...FF..s.s..s.x..xxx.xsxx.........x [ 51%]
+.........xx..x....s...ss......x......xxx.x..........                     [ 53%]
 test/test_examples_dist.py ssssssss                                      [ 53%]
-test/test_external_autotune.py sssssss                                   [ 54%]
-test/test_generate_ast.py ssssssssssssssssssssssss                       [ 55%]
+test/test_external_autotune.py sssssss                                   [ 53%]
+test/test_generate_ast.py ssssssssssssssssssssssss                       [ 54%]
 test/test_graph_module.py sssss                                          [ 55%]
 test/test_grid.py ssx.......x.x                                          [ 55%]
 test/test_indexing.py ssssssssssssssssssssssssssssssssssssssssssssssssss [ 57%]
-sssssssssssssssssssssssssssssss                                          [ 59%]
+sssssssssssssssssssssssssssssss                                          [ 58%]
 test/test_inline_asm_elementwise.py ssssssssss                           [ 59%]
 test/test_inline_triton.py ssssssss                                      [ 59%]
-test/test_int64_indexing.py ssssssssssss                                 [ 60%]
+test/test_int64_indexing.py ssssssssssss                                 [ 59%]
 test/test_jagged_tile.py sssssssssss                                     [ 60%]
-test/test_llm_autotuner.py s.................s....                       [ 61%]
-test/test_logging.py sss                                                 [ 61%]
-test/test_loop_dependencies.py sss                                       [ 61%]
-test/test_loops.py ..x..x.xxxx.sss..x...xxx..sssF.sss.x.ss.sss...ssss..x [ 63%]
-.                                                                        [ 63%]
+test/test_kernel_metadata.py ...............                             [ 60%]
+test/test_llm_autotuner.py s........................s....                [ 62%]
+test/test_logging.py sss                                                 [ 62%]
+test/test_loop_dependencies.py sss                                       [ 62%]
+test/test_loops.py ..x..x.xxxx.sss..x...xxx..sssF.sss.x.ss.sss...ssss..x [ 64%]
+.                                                                        [ 64%]
 test/test_masking.py sssssssss                                           [ 64%]
-test/test_matmul.py ssssssssssssssss                                     [ 64%]
+test/test_matmul.py ssssssssssssssss                                     [ 65%]
 test/test_matmul_heuristics.py ....                                      [ 65%]
 test/test_memory_op_facts.py .s...                                       [ 65%]
 test/test_metal.py sssssssssssssssssssssssssssssssssssssssssssssssssssss [ 67%]
-ssssssssss                                                               [ 67%]
+ssssssssss                                                               [ 68%]
 test/test_metal_mpp_graph_transform.py ........                          [ 68%]
-test/test_misc.py ssssssssssssssssssssssssssssssssssssssssssss           [ 69%]
-test/test_pallas.py ...............x.................................... [ 71%]
-.......x...........................x.................................... [ 74%]
-..........xx......................................                       [ 76%]
+test/test_misc.py ssssssssssssssssssssssssssssssssssssssssssss           [ 70%]
+test/test_pallas.py ...............x.................................... [ 72%]
+.......x...........................x.................................... [ 75%]
+..........xx......................................                       [ 77%]
 test/test_persistent_kernels.py ssssssssssssssssssssssssssssssss         [ 78%]
 test/test_pretuned_kernels.py sssssssssssss                              [ 78%]
 test/test_print.py sssssssssssss                                         [ 79%]
 test/test_print_ref_eager_mode.py ss                                     [ 79%]
 test/test_ptxas_config.py ssssssss                                       [ 79%]
 test/test_quantized_ops.py ss                                            [ 79%]
-test/test_random.py F......F....F.....ssssssssssssssssss                 [ 80%]
+test/test_random.py F......F....F.....ssssssssssssssssss                 [ 81%]
 test/test_reduce.py sssssssssssssss                                      [ 81%]
 test/test_reductions.py ...ssssssssx..ssss.....s..s.                     [ 82%]
-test/test_ref_eager.py sssssssss                                         [ 83%]
+test/test_ref_eager.py sssssssssss                                       [ 83%]
 test/test_register_tunable.py sssss                                      [ 83%]
 test/test_rng.py x..sxxxxxxxxxxxx.ssssssssss.sss                         [ 84%]
 test/test_specialize.py sssssssssssssssssss                              [ 85%]
@@ -110,7 +111,7 @@ test/test_tensor_descriptor.py sssssssssssssssssssssssss                 [ 86%]
 test/test_tensor_numel_constraints.py ...................                [ 87%]
 test/test_tileir.py ss                                                   [ 87%]
 test/test_torch_compile.py sssssssssssssssssssssssssssssssssssssssssssss [ 89%]
-ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 91%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 92%]
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 94%]
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss       [ 97%]
 test/test_type_propagation.py ssssssssssss                               [ 97%]
@@ -119,134 +120,34 @@ test/test_views.py ss.sx.x....xsxxxs.xxx                                 [ 99%]
 test/test_zero_size.py sss                                               [100%]
 
 =================================== FAILURES ===================================
-______ TestCacheMatching.test_cache_matching_with_code_object_in_spec_key ______
-test/test_best_available.py:571: in test_cache_matching_with_code_object_in_spec_key
-    self.assertEqual(len(entries), 1)
 E   AssertionError: 0 != 1
-________ TestCacheMatching.test_find_similar_cached_configs_end_to_end _________
-test/test_best_available.py:438: in test_find_similar_cached_configs_end_to_end
-    self.assertEqual(len(entries), 2)
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
 E   AssertionError: 0 != 2
-___ TestCacheMatching.test_find_similar_cached_configs_respects_max_configs ____
-test/test_best_available.py:481: in test_find_similar_cached_configs_respects_max_configs
-    self.assertEqual(len(entries), 2)
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 2
 E   AssertionError: 0 != 2
-______ TestCacheMatching.test_find_similar_matches_with_specialize_extras ______
-test/test_best_available.py:639: in test_find_similar_matches_with_specialize_extras
-    self.assertEqual(len(entries), 1)
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 2
 E   AssertionError: 0 != 1
-___________ TestRemoteCacheMerging.test_remote_dedups_against_local ____________
-test/test_best_available.py:787: in test_remote_dedups_against_local
-    self.assertEqual(flats, [([16, 32], 4), ([64, 128], 8)])
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
 E   AssertionError: Lists differ: [] != [([16, 32], 4), ([64, 128], 8)]
-E   
-E   Second list contains 2 additional elements.
-E   First extra element 0:
-E   ([16, 32], 4)
-E   
-E   - []
-E   + [([16, 32], 4), ([64, 128], 8)]
-_____ TestRemoteCacheMerging.test_remote_entries_returned_when_local_empty _____
-test/test_best_available.py:721: in test_remote_entries_returned_when_local_empty
-    self.assertEqual(len(entries), 1)
+    
+    Second list contains 2 additional elements.
+    First extra element 0:
+    ([16, 32], 4)
+    
+    - []
+    + [([16, 32], 4), ([64, 128], 8)]
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:715: AssertionError: Lists differ: [] != [([16, 32], 4), ([64, 128], 8)]
 E   AssertionError: 0 != 1
-_________ TestRemoteCacheMerging.test_remote_malformed_entries_skipped _________
-test/test_best_available.py:866: in test_remote_malformed_entries_skipped
-    self.assertEqual(len(entries), 1)
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
 E   AssertionError: 0 != 1
-________________ TestExamples.test_epilogue_subtiling_gelu_aux _________________
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/primitives.py:652: in wrap_with_transforms
-    return f(*new_args)
-helion/runtime/__init__.py:1159: in reordered_kernel
-    pallas_kernel(*original_order, *extra_refs)  # type: ignore[operator]
-/tmp/tmptmhof5mi/tv/ctvh2b5rex2it6fjklgvvxppjqjafuok4ngxtsozwube3y2krpk2.py:48: in _helion_matmul_bias_gelu_aux
-    ???
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:878: AssertionError: 0 != 1
 E   jax._src.source_info_util.JaxStackTraceBeforeTransformation: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
-E   
-E   The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
-E   
-E   --------------------
+    
+    The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+    
+    --------------------
 
 The above exception was the direct cause of the following exception:
-test/test_examples.py:881: in test_epilogue_subtiling_gelu_aux
-    check_example(
-helion/_testing.py:1439: in check_example
-    code, result = code_and_output(
-helion/_testing.py:1080: in code_and_output
-    code, result = _run_bound_kernel(bound, args, config, emit_code=True)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/_testing.py:1039: in _run_bound_kernel
-    result = compiled_kernel(*args)
-             ^^^^^^^^^^^^^^^^^^^^^^
-/tmp/tmptmhof5mi/tv/ctvh2b5rex2it6fjklgvvxppjqjafuok4ngxtsozwube3y2krpk2.py:74: in matmul_bias_gelu_aux
-    ???
-helion/runtime/__init__.py:1856: in default_pallas_pipeline_launcher
-    return _pallas_invoke_cached_launcher(
-helion/runtime/__init__.py:1756: in _pallas_invoke_cached_launcher
-    return _pallas_invoke_and_return_fast(
-helion/runtime/__init__.py:969: in _pallas_invoke_and_return_fast
-    results = jax_callable(*input_tensors)  # type: ignore[operator]
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/runtime/__init__.py:693: in __call__
-    result = super().__call__(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/pallas/pallas.py:514: in __call__
-    lowered = self.exported(*jax_args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/export/_export.py:646: in do_export
-    lowered = traced.lower(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/stages.py:484: in lower
-    lowering = _resolve_and_lower(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pjit.py:1076: in _resolve_and_lower
-    return _pjit_lower(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pjit.py:1256: in _pjit_lower
-    return pxla.lower_sharding_computation(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/profiler.py:384: in wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py:2395: in lower_sharding_computation
-    nreps, tuple_args, shape_poly_state) = _cached_lowering_to_hlo(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py:1990: in _cached_lowering_to_hlo
-    lowering_result = mlir.lower_jaxpr_to_module(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:1310: in lower_jaxpr_to_module
-    lower_jaxpr_to_fun(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:1894: in lower_jaxpr_to_fun
-    out_vals, tokens_out = jaxpr_subcomp(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2082: in jaxpr_subcomp
-    out_nodes, tokens_out = _cached_lowering(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2157: in _cached_lowering
-    cache_entry = _emit_lowering_rule_as_fun(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2240: in _emit_lowering_rule_as_fun
-    outs, inline = lowering_rule(sub_ctx, *unflattened_args, **params)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2294: in _uncached_lowering
-    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2419: in lower_per_platform
-    Sequence[IrValues], kept_rules[0](ctx, *rule_args, **rule_kwargs)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py:1191: in _pallas_call_lowering
-    return mlir.lower_per_platform(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2419: in lower_per_platform
-    Sequence[IrValues], kept_rules[0](ctx, *rule_args, **rule_kwargs)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py:1150: in tpu_lowering
-    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py:396: in pallas_call_tpu_lowering_rule
-    mosaic_module = lower_jaxpr_to_module(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:782: in lower_jaxpr_to_module
-    lower_jaxpr_into_module(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:853: in lower_jaxpr_into_module
-    func_op = lower_jaxpr_to_func(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1204: in lower_jaxpr_to_func
-    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py:197: in decorator
-    return_values = f(*func_args, **func_kwargs)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1200: in body_func
-    return jaxpr_subcomp(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: in jaxpr_subcomp
-    ans = lowering_rules[ctx.kernel_type][eqn.primitive](
 E   TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
 ----------------------------- Captured stderr call -----------------------------
 Failed to run kernel:
@@ -326,99 +227,14 @@ def matmul_bias_gelu_aux(x: torch.Tensor, w: torch.Tensor, bias: torch.Tensor, *
     aux, out = _launcher(_helion_matmul_bias_gelu_aux, ((8192 + _BLOCK_SIZE_0 - 1) // _BLOCK_SIZE_0, (8192 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1), x, w, bias, aux, out, _output_indices=[3, 4], _inplace_indices=[], _block_spec_info=[((64, None), (0, None)), ((None, 256), (None, 1)), ((256,), (1,)), ((64, 256), (0, 1)), ((64, 256), (0, 1))], _ds_pad_dims=[(0, 1, 128, 0), (1, 0, 128, 0)], _scratch_shapes=[((64, 256), 'jnp.float32', 'vmem')], _pipeline_arg_indices=[0, 1])
     # src[epilogue_subtiling.py:88]: return out, aux
     return (out, aux)
-______________ TestExamples.test_epilogue_subtiling_residual_gelu ______________
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/primitives.py:652: in wrap_with_transforms
-    return f(*new_args)
-helion/runtime/__init__.py:1159: in reordered_kernel
-    pallas_kernel(*original_order, *extra_refs)  # type: ignore[operator]
-/tmp/tmprgs9og0z/do/cdozjo7jnijuh7onen47ds6ugjrinvu2tak6zscmplb3pjg6xaaq.py:51: in _helion_matmul_bias_residual_gelu_cast
-    ???
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
 E   jax._src.source_info_util.JaxStackTraceBeforeTransformation: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
-E   
-E   The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
-E   
-E   --------------------
+    
+    The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+    
+    --------------------
 
 The above exception was the direct cause of the following exception:
-test/test_examples.py:860: in test_epilogue_subtiling_residual_gelu
-    check_example(
-helion/_testing.py:1439: in check_example
-    code, result = code_and_output(
-helion/_testing.py:1080: in code_and_output
-    code, result = _run_bound_kernel(bound, args, config, emit_code=True)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/_testing.py:1039: in _run_bound_kernel
-    result = compiled_kernel(*args)
-             ^^^^^^^^^^^^^^^^^^^^^^
-/tmp/tmprgs9og0z/do/cdozjo7jnijuh7onen47ds6ugjrinvu2tak6zscmplb3pjg6xaaq.py:75: in matmul_bias_residual_gelu_cast
-    ???
-helion/runtime/__init__.py:1856: in default_pallas_pipeline_launcher
-    return _pallas_invoke_cached_launcher(
-helion/runtime/__init__.py:1756: in _pallas_invoke_cached_launcher
-    return _pallas_invoke_and_return_fast(
-helion/runtime/__init__.py:969: in _pallas_invoke_and_return_fast
-    results = jax_callable(*input_tensors)  # type: ignore[operator]
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/runtime/__init__.py:693: in __call__
-    result = super().__call__(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/pallas/pallas.py:514: in __call__
-    lowered = self.exported(*jax_args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/export/_export.py:646: in do_export
-    lowered = traced.lower(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/stages.py:484: in lower
-    lowering = _resolve_and_lower(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pjit.py:1076: in _resolve_and_lower
-    return _pjit_lower(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pjit.py:1256: in _pjit_lower
-    return pxla.lower_sharding_computation(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/profiler.py:384: in wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py:2395: in lower_sharding_computation
-    nreps, tuple_args, shape_poly_state) = _cached_lowering_to_hlo(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py:1990: in _cached_lowering_to_hlo
-    lowering_result = mlir.lower_jaxpr_to_module(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:1310: in lower_jaxpr_to_module
-    lower_jaxpr_to_fun(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:1894: in lower_jaxpr_to_fun
-    out_vals, tokens_out = jaxpr_subcomp(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2082: in jaxpr_subcomp
-    out_nodes, tokens_out = _cached_lowering(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2157: in _cached_lowering
-    cache_entry = _emit_lowering_rule_as_fun(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2240: in _emit_lowering_rule_as_fun
-    outs, inline = lowering_rule(sub_ctx, *unflattened_args, **params)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2294: in _uncached_lowering
-    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2419: in lower_per_platform
-    Sequence[IrValues], kept_rules[0](ctx, *rule_args, **rule_kwargs)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py:1191: in _pallas_call_lowering
-    return mlir.lower_per_platform(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py:2419: in lower_per_platform
-    Sequence[IrValues], kept_rules[0](ctx, *rule_args, **rule_kwargs)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py:1150: in tpu_lowering
-    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py:396: in pallas_call_tpu_lowering_rule
-    mosaic_module = lower_jaxpr_to_module(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:782: in lower_jaxpr_to_module
-    lower_jaxpr_into_module(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:853: in lower_jaxpr_into_module
-    func_op = lower_jaxpr_to_func(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1204: in lower_jaxpr_to_func
-    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py:197: in decorator
-    return_values = f(*func_args, **func_kwargs)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1200: in body_func
-    return jaxpr_subcomp(
-../miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: in jaxpr_subcomp
-    ans = lowering_rules[ctx.kernel_type][eqn.primitive](
 E   TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
 ----------------------------- Captured stderr call -----------------------------
 Failed to run kernel:
@@ -499,378 +315,15 @@ def matmul_bias_residual_gelu_cast(x: torch.Tensor, w: torch.Tensor, bias: torch
     out = _launcher(_helion_matmul_bias_residual_gelu_cast, ((8192 + _BLOCK_SIZE_0 - 1) // _BLOCK_SIZE_0, (8192 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1), x, w, residual, bias, out, _output_indices=[4], _inplace_indices=[], _block_spec_info=[((64, None), (0, None)), ((None, 256), (None, 1)), ((64, 256), (0, 1)), ((256,), (1,)), ((64, 256), (0, 1))], _ds_pad_dims=[(0, 1, 128, 0), (1, 0, 128, 0)], _scratch_shapes=[((64, 256), 'jnp.float32', 'vmem')], _pipeline_arg_indices=[0, 1])
     # src[epilogue_subtiling.py:56]: return out
     return out
-_ TestExamples.test_jagged_hstu_attn_2_helion_precision_default_torch_precision_medium_atol_1_5_rtol_0_05 _
-test/test_examples.py:1531: in test_jagged_hstu_attn_2
-    with float32_matmul_precision(torch_precision):
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/contextlib.py:137: in __enter__
-    return next(self.gen)
-           ^^^^^^^^^^^^^^
-helion/_testing.py:435: in float32_matmul_precision
-    original_precision = torch.get_float32_matmul_precision()
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../pytorch/torch/__init__.py:1615: in get_float32_matmul_precision
-    return _C._get_float32_matmul_precision()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   RuntimeError: PyTorch is checking the matmul precision without a specific backend name,Current status indicate that you have used mix of the legacy and new APIs to set the matmul precision. We suggest only using the new API for matmul precision. See also: https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
-_ TestExamples.test_jagged_hstu_attn_2_helion_precision_highest_torch_precision_highest_atol_0_01_rtol_0_01 _
-test/test_examples.py:1531: in test_jagged_hstu_attn_2
-    with float32_matmul_precision(torch_precision):
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/contextlib.py:137: in __enter__
-    return next(self.gen)
-           ^^^^^^^^^^^^^^
-helion/_testing.py:435: in float32_matmul_precision
-    original_precision = torch.get_float32_matmul_precision()
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../pytorch/torch/__init__.py:1615: in get_float32_matmul_precision
-    return _C._get_float32_matmul_precision()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   RuntimeError: PyTorch is checking the matmul precision without a specific backend name,Current status indicate that you have used mix of the legacy and new APIs to set the matmul precision. We suggest only using the new API for matmul precision. See also: https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
-_______________________ TestExamples.test_layernorm_bwd ________________________
-test/test_examples.py:1340: in test_layernorm_bwd
-    self._run_layernorm_bwd(batch_size=32, dim=64)
-test/test_examples.py:1325: in _run_layernorm_bwd
-    check_example(
-helion/_testing.py:1439: in check_example
-    code, result = code_and_output(
-helion/_testing.py:1080: in code_and_output
-    code, result = _run_bound_kernel(bound, args, config, emit_code=True)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/_testing.py:1043: in _run_bound_kernel
-    synchronize_device(result)
-helion/autotuner/benchmarking.py:129: in synchronize_device
-    tpu_sync(tpu_tensors, wait=True)
-../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/sync/sync.py:51: in synchronize
-    _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
-E   RuntimeError: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
-E   See https://openxla.org/xla/errors/error_2003 for more details.
-E   
-E   at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphzaswwh_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
-E   
-E   The MLIR operation involved:
-E     %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
-E   
-E   Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
------------------------------ Captured stderr call -----------------------------
-WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
-Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
-If this is not a tensor operation, please report this as a bug.
-While processing:
-  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 150, in layer_norm_bwd
-    grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
-Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
-If this is not a tensor operation, please report this as a bug.
-While processing:
-  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 150, in layer_norm_bwd
-    grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
-Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
-If this is not a tensor operation, please report this as a bug.
-While processing:
-  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 152, in layer_norm_bwd
-    grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
-                ^^^^^^^^^^^^^^^^^^^^^^^
-
-WARNING[TensorOperationInWrapper]: A tensor operation outside of the `hl.tile` or `hl.grid` loop will not be fused in the generated kernel.
-Use @helion.kernel(ignore_warnings=[helion.exc.TensorOperationInWrapper]) to suppress this warning.
-If this is not a tensor operation, please report this as a bug.
-While processing:
-  File "/home/ymu_google_com/helion/examples/layer_norm.py", line 152, in layer_norm_bwd
-    grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-E0000 00:00:1781045156.797076 3557700 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781045156.797152 3557700 device_buffer.cc:704] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781045156.797160 3557700 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
-See https://openxla.org/xla/errors/error_2003 for more details.
-
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphzaswwh_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
-
-The MLIR operation involved:
-  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1781045156.797167 3557700 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
-See https://openxla.org/xla/errors/error_2003 for more details.
-
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphzaswwh_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
-
-The MLIR operation involved:
-  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1781045156.797180 3557700 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
-See https://openxla.org/xla/errors/error_2003 for more details.
-
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphzaswwh_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
-
-The MLIR operation involved:
-  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1781045156.797184 3557700 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
-See https://openxla.org/xla/errors/error_2003 for more details.
-
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphzaswwh_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
-
-The MLIR operation involved:
-  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-E0000 00:00:1781045156.797186 3557700 materialize.cc:331] [MaterializationWorker] ExecutionTask failed: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 0 is a multiple of 128
-See https://openxla.org/xla/errors/error_2003 for more details.
-
-at location: loc("get:"("get"("_helion_layer_norm_bwd.<locals>._fori_body_0"("/tmp/tmphzaswwh_/yo/cyo3q5ajazojskcjfwxqy6gnwrzjc7spjiqahzdepjsaamgfy6pg.py":53:18 to :54))))
-
-The MLIR operation involved:
-  %33 = "tpu.vector_load"(%arg4, %32) <{operandSegmentSizes = array<i32: 1, 1, 0>, strides = array<i32>}> : (memref<32xf32, #tpu.tiled<(128),[1]>, #tpu.memory_space<vmem>>, index) -> vector<32xf32>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-
-Failed to run kernel:
-from __future__ import annotations
-
-import torch
-import helion.language as hl
-import jax
-import jax.numpy as jnp
-from jax.experimental import pallas as pl
-import jax.lax as lax
-from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
-
-_BLOCK_SIZE_0 = int(32)
-_BLOCK_SIZE_1 = int(32)
-
-def _helion_layer_norm_bwd(weight, x, grad_out, mean, rstd, grad_x, grad_weight_blocks, grad_bias_blocks, _RDIM_SIZE_2: int, scratch_1, scratch_2):
-    # src[layer_norm.py:122]: for mb_cta in hl.tile(x.size(0), block_size=m_block):
-    pid_0 = pl.program_id(0)
-    offset_0 = pid_0 * _BLOCK_SIZE_0
-    # src[layer_norm.py:123]: grad_w_acc = weight.new_zeros(n, dtype=torch.float32)
-    grad_w_acc = jnp.full([_RDIM_SIZE_2], 0, jnp.float32)
-    # src[layer_norm.py:125]: grad_b_acc = weight.new_zeros(n, dtype=torch.float32)
-    grad_b_acc = jnp.full([_RDIM_SIZE_2], 0, jnp.float32)
-    # src[layer_norm.py:126]: weight_cta = weight[None, :].to(torch.float32)
-    load = jnp.expand_dims(weight[:], axis=0)
-    v_0 = lax.convert_element_type(load, jnp.float32)
-    # src[layer_norm.py:127]: for mb in hl.tile(mb_cta.begin, mb_cta.end):
-    tile_end = offset_0 + _BLOCK_SIZE_0
-    # src[layer_norm.py:127]: for mb in hl.tile(mb_cta.begin, mb_cta.end):
-    # src[layer_norm.py:128]:     x_mb = x[mb, :].to(torch.float32)
-    # src[layer_norm.py:129]:     dy_mb = grad_out[mb, :].to(torch.float32)
-    # src[layer_norm.py:127-144]: ...
-    scratch_1[...] = grad_w_acc[...]
-    scratch_2[...] = grad_b_acc[...]
-
-    def _fori_body_0(_j, _):
-        nonlocal scratch_1, scratch_2
-        offset_1 = offset_0 + _j * _BLOCK_SIZE_1
-        offset_3 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
-        mask_1 = offset_3 < tile_end - offset_0
-        offset_1 = offset_0 + _j * _BLOCK_SIZE_1
-        v_0_copy = v_0
-        v_1 = scratch_1[...]
-        v_2 = scratch_2[...]
-        v_0_copy_0 = v_0_copy
-        v_1_0 = v_1
-        v_2_0 = v_2
-        # src[layer_norm.py:128]: x_mb = x[mb, :].to(torch.float32)
-        load_1 = x[pl.ds(pl.multiple_of(offset_1, _BLOCK_SIZE_1), _BLOCK_SIZE_1), :] * mask_1.astype(jnp.bfloat16)[:, None]
-        v_3 = lax.convert_element_type(load_1, jnp.float32)
-        # src[layer_norm.py:129]: dy_mb = grad_out[mb, :].to(torch.float32)
-        load_2 = grad_out[pl.ds(pl.multiple_of(offset_1, _BLOCK_SIZE_1), _BLOCK_SIZE_1), :] * mask_1.astype(jnp.bfloat16)[:, None]
-        v_4 = lax.convert_element_type(load_2, jnp.float32)
-        # src[layer_norm.py:130]: mean_mb = mean[mb].to(torch.float32)
-        mean_mb = mean[pl.ds(offset_1, _BLOCK_SIZE_1)] * mask_1.astype(jnp.float32)
-        # src[layer_norm.py:131]: rstd_mb = rstd[mb].to(torch.float32)
-        rstd_mb = rstd[pl.ds(offset_1, _BLOCK_SIZE_1)] * mask_1.astype(jnp.float32)
-        # src[layer_norm.py:133]: x_hat = (x_mb - mean_mb[:, None]) * rstd_mb[:, None]
-        subscript = mean_mb[:, None]
-        v_5 = v_3 - subscript
-        subscript_1 = rstd_mb[:, None]
-        v_6 = v_5 * subscript_1
-        # src[layer_norm.py:135]: grad_w_acc += torch.sum(dy_mb * x_hat, dim=0)
-        v_7 = v_4 * v_6
-        sum_1 = lax.convert_element_type(jnp.sum(v_7, axis=0), jnp.float32)
-        v_8 = v_1_0 + sum_1
-        # src[layer_norm.py:138]: grad_b_acc += torch.sum(dy_mb, dim=0)
-        sum_2 = lax.convert_element_type(jnp.sum(v_4, axis=0), jnp.float32)
-        v_9 = v_2_0 + sum_2
-        # src[layer_norm.py:140]: wdy = weight_cta * dy_mb
-        v_10 = v_0_copy_0 * v_4
-        # src[layer_norm.py:141]: c1 = torch.sum(x_hat * wdy, dim=-1) / n
-        v_11 = v_6 * v_10
-        sum_3 = lax.convert_element_type(jnp.sum(v_11, axis=1), jnp.float32)
-        v_12 = jnp.array(0.015625, dtype=jnp.float32)
-        v_13 = sum_3 * v_12
-        # src[layer_norm.py:142]: c2 = torch.sum(wdy, dim=-1) / n
-        sum_4 = lax.convert_element_type(jnp.sum(v_10, axis=1), jnp.float32)
-        v_14 = jnp.array(0.015625, dtype=jnp.float32)
-        v_15 = sum_4 * v_14
-        # src[layer_norm.py:143]: dx = (wdy - (x_hat * c1[:, None] + c2[:, None])) * rstd_mb[:, None]
-        subscript_2 = v_13[:, None]
-        v_16 = v_6 * subscript_2
-        subscript_3 = v_15[:, None]
-        v_17 = v_16 + subscript_3
-        v_18 = v_10 - v_17
-        subscript_4 = rstd_mb[:, None]
-        v_19 = v_18 * subscript_4
-        # src[layer_norm.py:144]: grad_x[mb, :] = dx.to(x.dtype)
-        v_20 = lax.convert_element_type(v_19, jnp.bfloat16)
-        grad_x[pl.ds(pl.multiple_of(offset_1, _BLOCK_SIZE_1), _BLOCK_SIZE_1), :] = v_20
-        # src[layer_norm.py:127]: for mb in hl.tile(mb_cta.begin, mb_cta.end):
-        # src[layer_norm.py:128]:     x_mb = x[mb, :].to(torch.float32)
-        # src[layer_norm.py:129]:     dy_mb = grad_out[mb, :].to(torch.float32)
-        # src[layer_norm.py:127-144]: ...
-        scratch_1[...] = v_8[...]
-        scratch_2[...] = v_9[...]
-    jax.lax.fori_loop(0, (tile_end - offset_0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_0, None)
-    grad_w_acc = scratch_1[...]
-    grad_b_acc = scratch_2[...]
-    # src[layer_norm.py:146]: grad_weight_blocks[mb_cta.id, :] = grad_w_acc
-    tile_id = offset_0 // _BLOCK_SIZE_0
-    grad_weight_blocks[tile_id, :] = grad_w_acc
-    # src[layer_norm.py:148]: grad_bias_blocks[mb_cta.id, :] = grad_b_acc  # type: ignore[index]
-    grad_bias_blocks[tile_id, :] = grad_b_acc
-
-def layer_norm_bwd(grad_out: torch.Tensor, x: torch.Tensor, mean: torch.Tensor, rstd: torch.Tensor, weight: torch.Tensor, compute_bias_grad: hl.constexpr=True, *, _launcher=_default_pallas_fori_launcher):
-    """
-    Compute gradients for weight (dW) and optionally bias (dB) parameters.
-
-    This kernel performs reduction across the batch dimension (M) to accumulate
-    gradients for each feature dimension's weight and bias parameters.
-
-    Args:
-        grad_out: Gradient w.r.t layer norm output [M, N]
-        x: Original input tensor [M, N]
-        mean: Per-sample mean computed in forward pass [M]
-        rstd: Per-sample reciprocal standard deviation from forward pass [M]
-        weight: Weight parameter (used only for dtype/device info) [N]
-        compute_bias_grad: Whether to compute bias gradient (default: True)
-
-    Returns:
-        (grad_x, grad_weight, grad_bias): Gradients for input, weight, and bias (if computed)
-            grad_bias is None if compute_bias_grad is False
-    """
-    # src[layer_norm.py:114]: m_block = hl.register_block_size(x.size(0))
-    m_block = 32
-    # src[layer_norm.py:115]: n = hl.specialize(x.size(1))
-    n = 64
-    # src[layer_norm.py:87]: def layer_norm_bwd(
-    # src[layer_norm.py:88]:     grad_out: torch.Tensor,
-    # src[layer_norm.py:89]:     x: torch.Tensor,
-    # src[layer_norm.py:87-154]: ...
-    grad_x = getattr(_helion_layer_norm_bwd, '_helion_output_meta_cache_0', None)
-    if grad_x is None:
-        grad_x = _helion_layer_norm_bwd._helion_output_meta_cache_0 = torch.empty_like(x, device='meta')
-    # src[layer_norm.py:118]: num_blocks = (x.size(0) + m_block - 1) // m_block
-    num_blocks = (x.size(0) + m_block - 1) // m_block
-    # src[layer_norm.py:87]: def layer_norm_bwd(
-    # src[layer_norm.py:88]:     grad_out: torch.Tensor,
-    # src[layer_norm.py:89]:     x: torch.Tensor,
-    # src[layer_norm.py:87-154]: ...
-    grad_weight_blocks = getattr(_helion_layer_norm_bwd, '_helion_output_meta_cache_1', None)
-    if grad_weight_blocks is None:
-        grad_weight_blocks = _helion_layer_norm_bwd._helion_output_meta_cache_1 = x.new_empty([num_blocks, n], dtype=torch.float32, device='meta')
-    grad_bias_blocks = getattr(_helion_layer_norm_bwd, '_helion_output_meta_cache_2', None)
-    if grad_bias_blocks is None:
-        grad_bias_blocks = _helion_layer_norm_bwd._helion_output_meta_cache_2 = x.new_empty([num_blocks, n], dtype=torch.float32, device='meta')
-    # src[layer_norm.py:122]: for mb_cta in hl.tile(x.size(0), block_size=m_block):
-    _BLOCK_SIZE_0 = 32
-    _RDIM_SIZE_2 = 64
-    # src[layer_norm.py:122]: for mb_cta in hl.tile(x.size(0), block_size=m_block):
-    # src[layer_norm.py:123]:     grad_w_acc = weight.new_zeros(n, dtype=torch.float32)
-    # src[layer_norm.py:124]:     if compute_bias_grad:
-    # src[layer_norm.py:122-148]: ...
-    grad_x, grad_weight_blocks, grad_bias_blocks = _launcher(_helion_layer_norm_bwd, ((32 + _BLOCK_SIZE_0 - 1) // _BLOCK_SIZE_0,), weight, x, grad_out, mean, rstd, grad_x, grad_weight_blocks, grad_bias_blocks, _RDIM_SIZE_2, _output_indices=[5, 6, 7], _inplace_indices=[], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None, None), (None, None)), ((None,), (None,)), ((None,), (None,)), ((None, None), (None, None)), ((None, None), (None, None)), ((None, None), (None, None))], _ds_pad_dims=[(1, 0, 32, 0), (2, 0, 32, 0), (3, 0, 32, 0), (4, 0, 32, 0), (5, 0, 32, 0)], _scratch_shapes=[((64,), 'jnp.float32', 'vmem'), ((64,), 'jnp.float32', 'vmem')])
-    # src[layer_norm.py:150]: grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
-    grad_weight = grad_weight_blocks.sum(0).to(weight.dtype)
-    # src[layer_norm.py:151]: if compute_bias_grad:
-    # src[layer_norm.py:152]:     grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
-    # src[layer_norm.py:153]:     return grad_x, grad_weight, grad_bias
-    if True:
-        # src[layer_norm.py:152]: grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
-        grad_bias = grad_bias_blocks.sum(0).to(weight.dtype)
-        # src[layer_norm.py:153]: return grad_x, grad_weight, grad_bias
-        return (grad_x, grad_weight, grad_bias)
-    # src[layer_norm.py:154]: return grad_x, grad_weight, None
-    return (grad_x, grad_weight, None)
-_____________ TestExamples.test_squeeze_and_excitation_net_bwd_db ______________
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
 Unexpected success
-__________ TestLoops.test_range_num_stages_preserved_without_aliasing __________
-Unexpected success
-__________________ TestRandom.test_hl_rand4x_dropout_pattern ___________________
-test/test_random.py:672: in test_hl_rand4x_dropout_pattern
-    r0, r1, r2, _ = _triton_rand4x_reference(seed, ref_offsets)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-test/test_random.py:199: in _triton_rand4x_reference
-    _triton_rand4x_from_offsets[(triton.cdiv(n, 256),)](
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/jit.py:370: in <lambda>
-    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/jit.py:713: in run
-    device = driver.active.get_current_device()
-             ^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:39: in active
-    self._active = self.default
-                   ^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:33: in default
-    self._default = _create_driver()
-                    ^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: in _create_driver
-    raise RuntimeError(f"{len(active_drivers)} active drivers ({active_drivers}). There should only be one.")
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/_pytest/unittest.py:347: Failed: Unexpected success
 E   RuntimeError: 0 active drivers ([]). There should only be one.
-_________________ TestRandom.test_hl_rand_offsets_independence _________________
-test/test_random.py:642: in test_hl_rand_offsets_independence
-    expected_a = _triton_rand_reference(seed, ref_offsets_a).reshape_as(x)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-test/test_random.py:182: in _triton_rand_reference
-    _triton_rand_from_offsets[(triton.cdiv(offsets.numel(), 256),)](
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/jit.py:370: in <lambda>
-    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/jit.py:713: in run
-    device = driver.active.get_current_device()
-             ^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:39: in active
-    self._active = self.default
-                   ^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:33: in default
-    self._default = _create_driver()
-                    ^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: in _create_driver
-    raise RuntimeError(f"{len(active_drivers)} active drivers ({active_drivers}). There should only be one.")
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
 E   RuntimeError: 0 active drivers ([]). There should only be one.
-________________ TestRandom.test_hl_rand_with_explicit_offsets _________________
-test/test_random.py:604: in test_hl_rand_with_explicit_offsets
-    expected = _triton_rand_reference(seed, ref_offsets).reshape_as(x)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-test/test_random.py:182: in _triton_rand_reference
-    _triton_rand_from_offsets[(triton.cdiv(offsets.numel(), 256),)](
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/jit.py:370: in <lambda>
-    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/jit.py:713: in run
-    device = driver.active.get_current_device()
-             ^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:39: in active
-    self._active = self.default
-                   ^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:33: in default
-    self._default = _create_driver()
-                    ^^^^^^^^^^^^^^^^
-../miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: in _create_driver
-    raise RuntimeError(f"{len(active_drivers)} active drivers ({active_drivers}). There should only be one.")
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
 E   RuntimeError: 0 active drivers ([]). There should only be one.
+/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
 =============================== warnings summary ===============================
 ../pytorch/torch/jit/_script.py:365: 14 warnings
   /home/ymu_google_com/pytorch/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
@@ -896,7 +349,7 @@ test/test_atomic_ops.py: 23 warnings
 test/test_broadcasting.py: 10 warnings
 test/test_control_flow.py: 9 warnings
 test/test_dot.py: 6 warnings
-test/test_examples.py: 86 warnings
+test/test_examples.py: 93 warnings
 test/test_grid.py: 10 warnings
 test/test_loops.py: 23 warnings
 test/test_pallas.py: 148 warnings
@@ -907,39 +360,60 @@ test/test_views.py: 8 warnings
     super().__init__(*args, **kwargs)  # type: ignore[misc]
 
 test/test_examples.py::TestExamples::test_grpo_loss_bwd
-  /home/ymu_google_com/helion/examples/grpo_loss.py:41: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:499.)
+  /home/ymu_google_com/helion/examples/grpo_loss.py:41: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
     return sel.to(torch.float32) / temperature
 
 test/test_examples.py::TestExamples::test_grpo_loss_bwd
-  /home/ymu_google_com/helion/helion/runtime/__init__.py:949: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:499.)
+  /home/ymu_google_com/helion/helion/runtime/__init__.py:949: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
     cast("torch.Tensor", args[i]).contiguous() for i in tensor_arg_indices
 
 test/test_examples.py::TestExamples::test_jagged_dense_bmm
-  /home/ymu_google_com/helion/examples/jagged_dense_bmm.py:119: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:499.)
+  /home/ymu_google_com/helion/examples/jagged_dense_bmm.py:119: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
     ref_output[seq_start:seq_end] = result
+
+test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_highest_torch_precision_highest_atol_0_01_rtol_0_01
+  /home/ymu_google_com/pytorch/torch/functional.py:372: UserWarning: TPU is using HIGHEST precision as requested, but performance may be significantly lower. Consider using torch.set_float32_matmul_precision('medium') for better performance. (Triggered internally at torch_tpu/ops/precision_context.cc:69.)
+    return _VF.einsum(equation, operands)  # type: ignore[attr-defined]
+
+test/test_pallas.py::TestPallas::test_attention_emit_pipeline_correctness
+test/test_pallas.py::TestPallas::test_attention_emit_pipeline_correctness_head_dim_256
+test/test_pallas.py::TestPallas::test_attention_emit_pipeline_non_divisible
+test/test_pallas.py::TestPallas::test_attention_fori_loop_correctness
+test/test_pallas.py::TestPallas::test_attention_fori_loop_correctness_head_dim_256
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u2) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x780dcce2eb60>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+    return self.create_node(
+
+test/test_pallas.py::TestPallas::test_get_reduced_block_ids_carried_acc_collapses_loop_bid
+test/test_pallas.py::TestPallas::test_store_is_post_reduction_via_loop_getitem
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u0) passed as argument to Graph.create_node(op='call_function', target=<function _for_loop at 0x780dcce2d3a0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+    return self.create_node(
+
+test/test_pallas.py::TestPallas::test_pre_broadcast_dynamic_shapes
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (256) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x780dcce2eb60>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+    return self.create_node(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ============================= slowest 20 durations =============================
-24.79s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
-13.37s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
-13.26s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
-12.14s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
-12.13s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
-8.65s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
-8.34s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
-6.64s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
-6.12s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
-4.72s call     test/test_examples.py::TestExamples::test_low_mem_dropout
-4.34s call     test/test_examples.py::TestExamples::test_jagged_softmax
-4.27s call     test/test_random.py::TestRandom::test_hl_rand_3d
-4.26s call     test/test_random.py::TestRandom::test_hl_rand_specialize
-4.25s call     test/test_examples.py::TestExamples::test_jsd
-4.01s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
-3.79s call     test/test_random.py::TestRandom::test_hl_randint_negative_range
-3.67s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
-3.63s call     test/test_rng.py::TestRNG::test_randn_like_with_dynamic_tile_sizes
-3.60s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
-3.50s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_unpickleable_worker_exception_is_serialized
+24.32s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
+14.25s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
+13.35s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
+12.26s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
+11.94s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
+8.62s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
+7.95s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
+6.86s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
+6.21s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
+5.11s call     test/test_examples.py::TestExamples::test_low_mem_dropout
+4.94s call     test/test_random.py::TestRandom::test_hl_rand_block_size_determinism
+4.68s call     test/test_examples.py::TestExamples::test_jagged_softmax
+4.56s call     test/test_random.py::TestRandom::test_hl_rand_specialize
+4.53s call     test/test_random.py::TestRandom::test_hl_randint_specialize
+4.36s call     test/test_rng.py::TestRNG::test_randn_normal_distribution
+4.17s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
+3.93s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
+3.90s call     test/test_examples.py::TestExamples::test_jagged_sum
+3.84s call     test/test_examples.py::TestExamples::test_jsd
+3.79s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
 =========================== short test summary info ============================
 SKIPPED [1] test/test_breakpoint.py:16: unittest.case.SkipTest: triton not available
 SKIPPED [1] test/test_cute_backend.py:27: could not import 'cutlass': No module named 'cutlass'
@@ -993,66 +467,83 @@ SKIPPED [1] test/test_atomic_ops.py:852: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_atomic_ops.py:758: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_atomic_ops.py:956: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_atomic_ops.py:929: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autodiff.py:781: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:78: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:519: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:734: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:894: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:532: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:747: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:937: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:993: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:80: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:731: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:946: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1106: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:744: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:959: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1149: autodiff not tested on non Triton backends
 SKIPPED [1] test/test_autodiff.py:289: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:581: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:323: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:164: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:816: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:502: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:224: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:455: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:266: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:111: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:619: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:793: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1272: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1291: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1212: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1166: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1184: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1225: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1251: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1201: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1238: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:166: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1028: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:714: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:226: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:667: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:267: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:113: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1312: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:831: autodiff not tested on non Triton backends
 SKIPPED [1] test/test_autodiff.py:310: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:184: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:760: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:412: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:708: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:721: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:89: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:357: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:869: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:174: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:600: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:640: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:204: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:154: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:214: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:244: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:472: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:277: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:545: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:850: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:561: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:256: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:798: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:489: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:100: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:442: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:132: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:386: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:907: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:186: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:972: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:323: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:624: autodiff not tested on non Triton backends
 SKIPPED [1] test/test_autodiff.py:920: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:695: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:399: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:344: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:194: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:143: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:833: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:425: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:122: autodiff not tested on non Triton backends
-SKIPPED [1] test/test_autodiff.py:234: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:933: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:91: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:569: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1081: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:176: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:812: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:852: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:206: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:156: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:216: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:246: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:684: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:278: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:433: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:460: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:353: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:405: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:379: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:486: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:757: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1062: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:773: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:526: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:257: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1010: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:701: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:102: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:654: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:134: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:598: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1119: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1132: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:907: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:611: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:556: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:196: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:145: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:1045: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:637: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:124: autodiff not tested on non Triton backends
+SKIPPED [1] test/test_autodiff.py:236: autodiff not tested on non Triton backends
 SKIPPED [1] test/test_autotuner.py:433: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:717: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:723: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:315: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:284: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:141: disabled for HELION_BACKEND=pallas
@@ -1061,111 +552,111 @@ SKIPPED [1] test/test_autotuner.py:210: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:234: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:263: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:175: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:477: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:504: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:534: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:581: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:621: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:647: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:482: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:509: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:539: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:586: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:626: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:652: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:192: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:158: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:134: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:364: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:337: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1553: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1476: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2516: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2619: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1639: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1679: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1747: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1778: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2232: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2352: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1933: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1976: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1818: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1854: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1881: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2142: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2217: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2457: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:755: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:770: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:813: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:858: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:790: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1054: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1013: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1027: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:999: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1229: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1948: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2053: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:894: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:952: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2163: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1457: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1282: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1254: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1326: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1905: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2099: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2392: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1081: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1153: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1095: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1110: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1189: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:986: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2286: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:922: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:873: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:842: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:1427: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2684: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2753: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2655: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2811: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2835: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2954: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2890: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:2923: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3096: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3007: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3180: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3259: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3282: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3269: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3348: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3330: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3337: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3364: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3433: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3469: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3452: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3399: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:4022: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3974: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3923: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3808: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3787: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3798: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3779: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3826: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3734: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3711: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3687: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:4039: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3864: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3841: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3770: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:4049: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1559: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1482: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2528: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2631: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1645: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1685: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1753: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1784: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2238: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2358: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1939: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1982: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1824: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1860: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1887: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2148: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2223: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2463: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:761: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:776: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:819: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:864: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:796: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1060: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1019: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1033: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1005: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1235: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1954: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2059: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:900: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:958: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2169: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1463: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1288: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1260: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1332: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1911: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2105: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2398: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1087: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1159: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1101: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1116: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1195: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:992: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2292: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:928: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:879: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:848: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:1433: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2696: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2765: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2667: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2823: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2847: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2966: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2902: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:2935: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3108: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3019: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3192: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3271: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3294: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3281: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3360: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3342: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3349: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3376: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3445: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3481: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3464: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3411: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:4035: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3987: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3936: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3820: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3799: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3810: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3791: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3838: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3746: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3723: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3699: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:4052: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner.py:3876: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3682: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3757: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3766: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_autotuner.py:3835: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3853: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3782: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:4062: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3888: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3694: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3769: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3778: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_autotuner.py:3847: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner_heuristics.py:277: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner_heuristics.py:491: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_autotuner_heuristics.py:612: disabled for HELION_BACKEND=pallas
@@ -1199,6 +690,7 @@ SKIPPED [1] test/test_barrier.py:114: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_barrier.py:127: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_barrier.py:213: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_barrier.py:294: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_benchmark_worker.py:393: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_benchmark_worker.py:347: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_benchmark_worker.py:327: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_cache.py:310: disabled for HELION_BACKEND=pallas
@@ -1898,13 +1390,13 @@ SKIPPED [3] test/test_eviction_policy.py:107: disabled for HELION_BACKEND=pallas
 SKIPPED [3] test/test_eviction_policy.py:138: disabled for HELION_BACKEND=pallas
 SKIPPED [3] test/test_eviction_policy.py:56: disabled for HELION_BACKEND=pallas
 SKIPPED [3] test/test_eviction_policy.py:167: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_examples.py:2507: flex_attention requires torch.compile and closures
-SKIPPED [1] test/test_examples.py:428: Test skipped: CUDA (NVIDIA GPU) is not available.
-SKIPPED [1] test/test_examples.py:1764: Pallas int32 gather coverage uses test_gather_gemv_half
-SKIPPED [1] test/test_examples.py:995: TODO: follow up on timeout due to google-pytorch/torch_tpu@42d10ff
+SKIPPED [1] test/test_examples.py:2502: flex_attention requires torch.compile and closures
+SKIPPED [1] test/test_examples.py:427: Test skipped: CUDA (NVIDIA GPU) is not available.
+SKIPPED [1] test/test_examples.py:1761: Pallas int32 gather coverage uses test_gather_gemv_half
+SKIPPED [1] test/test_examples.py:994: TODO: follow up on timeout due to google-pytorch/torch_tpu@42d10ff
 SKIPPED [1] test/test_examples.py:362: CuTe-specific compile coverage
-SKIPPED [1] test/test_examples.py:1807: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_examples.py:1855: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples.py:1804: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples.py:1852: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_examples_dist.py:99: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_examples_dist.py:153: disabled for HELION_BACKEND=pallas
 SKIPPED [2] test/test_examples_dist.py:201: disabled for HELION_BACKEND=pallas
@@ -2072,7 +1564,7 @@ SKIPPED [1] test/test_jagged_tile.py:380: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_jagged_tile.py:344: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_jagged_tile.py:138: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_llm_autotuner.py:168: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_llm_autotuner.py:1130: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_llm_autotuner.py:1323: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_logging.py:80: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_logging.py:65: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_logging.py:105: disabled for HELION_BACKEND=pallas
@@ -2346,13 +1838,15 @@ SKIPPED [1] test/test_reductions.py:931: barrier and persistent_blocked not supp
 SKIPPED [1] test/test_reductions.py:72: non-power-of-2 reduction dims not supported on Pallas
 SKIPPED [1] test/test_reductions.py:303: tensor_descriptor indexing is Triton-specific
 SKIPPED [1] test/test_ref_eager.py:99: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_ref_eager.py:179: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_ref_eager.py:197: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:221: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:239: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_ref_eager.py:57: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_ref_eager.py:20: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_ref_eager.py:84: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_ref_eager.py:148: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_ref_eager.py:129: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:179: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_ref_eager.py:199: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_ref_eager.py:114: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_register_tunable.py:77: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_register_tunable.py:53: disabled for HELION_BACKEND=pallas
@@ -2622,15 +2116,10 @@ XFAIL test/test_examples.py::TestExamples::test_grpo_loss_bwd
 XFAIL test/test_examples.py::TestExamples::test_int4_gemm
 XFAIL test/test_examples.py::TestExamples::test_jagged_dense_bmm
 XFAIL test/test_examples.py::TestExamples::test_jagged_hstu_attn
-XFAIL test/test_examples.py::TestExamples::test_jagged_layer_norm
-XFAIL test/test_examples.py::TestExamples::test_jagged_mean
-XFAIL test/test_examples.py::TestExamples::test_jagged_softmax
-XFAIL test/test_examples.py::TestExamples::test_jagged_sum
 XFAIL test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch
 XFAIL test/test_examples.py::TestExamples::test_mamba2_chunk_scan
 XFAIL test/test_examples.py::TestExamples::test_mamba2_chunk_state
 XFAIL test/test_examples.py::TestExamples::test_matmul_bias_epilogue_wrapper
-XFAIL test/test_examples.py::TestExamples::test_matmul_layernorm_dynamic_shapes
 XFAIL test/test_examples.py::TestExamples::test_segment_reduction
 XFAIL test/test_examples.py::TestExamples::test_split_k_barrier
 XFAIL test/test_examples.py::TestExamples::test_split_k_barrier_accuracy
@@ -2688,18 +2177,14 @@ FAILED test/test_best_available.py::TestRemoteCacheMerging::test_remote_entries_
 FAILED test/test_best_available.py::TestRemoteCacheMerging::test_remote_malformed_entries_skipped
 FAILED test/test_examples.py::TestExamples::test_epilogue_subtiling_gelu_aux
 FAILED test/test_examples.py::TestExamples::test_epilogue_subtiling_residual_gelu
-FAILED test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_default_torch_precision_medium_atol_1_5_rtol_0_05
-FAILED test/test_examples.py::TestExamples::test_jagged_hstu_attn_2_helion_precision_highest_torch_precision_highest_atol_0_01_rtol_0_01
-FAILED test/test_examples.py::TestExamples::test_layernorm_bwd - RuntimeError...
-FAILED test/test_examples.py::TestExamples::test_squeeze_and_excitation_net_bwd_db
 FAILED test/test_loops.py::TestLoops::test_range_num_stages_preserved_without_aliasing
 FAILED test/test_random.py::TestRandom::test_hl_rand4x_dropout_pattern - Runt...
 FAILED test/test_random.py::TestRandom::test_hl_rand_offsets_independence - R...
 FAILED test/test_random.py::TestRandom::test_hl_rand_with_explicit_offsets - ...
-= 17 failed, 550 passed, 1893 skipped, 72 xfailed, 380 warnings in 317.50s (0:05:17) =
-I0000 00:00:1781045403.909022 3557569 compilation_cache.cc:355] Compilation cache evicted.
-I0000 00:00:1781045403.909074 3557569 compilation_cache.cc:219] CompilationCache final stats: num_cache_reqs=12024
-num_cache_hits=8434 {70.1%}
+= 13 failed, 581 passed, 1913 skipped, 67 xfailed, 396 warnings in 327.13s (0:05:27) =
+I0000 00:00:1781156105.237983  577083 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781156105.238038  577083 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=13050
+num_cache_hits=9258 {70.9%}
 peak_compilation_memory_bytes=unknown
 
 
