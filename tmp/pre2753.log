@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0 -- /home/ymu_google_com/miniconda3/envs/tpu/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /home/ymu_google_com/helion
+configfile: pyproject.toml
+plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
+collecting ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781202972.222155  934769 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781202972.803426  934769 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+collected 1 item
+
+test/test_examples.py::TestExamples::test_layernorm_no_bias I0000 00:00:1781202973.839609  934769 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781202976.169283  934769 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781202976.169317  934769 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781202976.202131  935555 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781202976.202156  935555 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+PASSED
+
+=============================== warnings summary ===============================
+../pytorch/torch/jit/_script.py:365: 14 warnings
+  /home/ymu_google_com/pytorch/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+test/test_examples.py::TestExamples::test_layernorm_no_bias
+  /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+    warn_once(
+
+test/test_examples.py::TestExamples::test_layernorm_no_bias
+  /home/ymu_google_com/helion/helion/runtime/__init__.py:685: DeprecationWarning: input_output_aliases is deprecated and will be removed soon. Please use donate_argnums instead.
+    super().__init__(*args, **kwargs)  # type: ignore[misc]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 1 passed, 16 warnings in 6.51s ========================
+I0000 00:00:1781202978.548588  934769 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781202978.548615  934769 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=33
+num_cache_hits=8 {24.2%}
+peak_compilation_memory_bytes=unknown
+
