@@ -1,11 +1,11 @@
 ================================================
 Environment
 ================================================
-Wed Jun 10 19:15:21 PDT 2026
+Wed Jun 10 20:13:57 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1009-gcp #9~24.04.3-Ubuntu SMP Sat Mar  7 00:58:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 jax: 0.9.2
-Git HEAD: eb1867f0
+Git HEAD: 68aa3ee2
 
 ================================================
 Full test/ suite under HELION_BACKEND=pallas
@@ -15,7 +15,7 @@ platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0
 rootdir: /home/ymu_google_com/helion
 configfile: pyproject.toml
 plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
-collected 2544 items / 12 skipped
+collected 2551 items / 12 skipped
 
 test/test_amd_cdna.py ssss                                               [  0%]
 test/test_aot_autotuning.py ........................                     [  1%]
@@ -56,7 +56,7 @@ test/test_debug_utils.py ssss                                            [ 38%]
 test/test_distributed.py sssssssssssssssssssssssssssssssssssssssssssssss [ 40%]
                                                                          [ 40%]
 test/test_dot.py sssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 42%]
-sssssssssssssssssssssssssssssssssssssssssss...................           [ 45%]
+sssssssssssssssssssssssssssssssssssssssssss...................           [ 44%]
 test/test_dot_requirements.py ssssssssssssssssssssssssssssssssssssssssss [ 46%]
 sssssss.                                                                 [ 46%]
 test/test_dot_scaled.py ssssssss                                         [ 47%]
@@ -64,28 +64,28 @@ test/test_epilogue_subtiling.py ssssssssssssss                           [ 47%]
 test/test_errors.py sssssssssssssssssssssssssssssssssss                  [ 49%]
 test/test_eviction_policy.py sssssssssssss                               [ 49%]
 test/test_examples.py .........x....x...FF..s.s..s.x..xxx.xsxx..xxxx...x [ 51%]
-.........xx..x..x.s...ss......x......xxx.x..........                     [ 53%]
-test/test_examples_dist.py ssssssss                                      [ 54%]
+.........xx..x....s...ss......x......xxx.x..........                     [ 53%]
+test/test_examples_dist.py ssssssss                                      [ 53%]
 test/test_external_autotune.py sssssss                                   [ 54%]
 test/test_generate_ast.py ssssssssssssssssssssssss                       [ 55%]
 test/test_graph_module.py sssss                                          [ 55%]
 test/test_grid.py ssx.......x.x                                          [ 55%]
 test/test_indexing.py ssssssssssssssssssssssssssssssssssssssssssssssssss [ 57%]
-sssssssssssssssssssssssssssssss                                          [ 59%]
+sssssssssssssssssssssssssssssss                                          [ 58%]
 test/test_inline_asm_elementwise.py ssssssssss                           [ 59%]
 test/test_inline_triton.py ssssssss                                      [ 59%]
 test/test_int64_indexing.py ssssssssssss                                 [ 60%]
 test/test_jagged_tile.py sssssssssss                                     [ 60%]
 test/test_kernel_metadata.py ...............                             [ 61%]
-test/test_llm_autotuner.py s.................s....                       [ 62%]
+test/test_llm_autotuner.py s........................s....                [ 62%]
 test/test_logging.py sss                                                 [ 62%]
 test/test_loop_dependencies.py sss                                       [ 62%]
 test/test_loops.py ..x..x.xxxx.sss..x...xxx..sssF.sss.x.ss.sss...ssss..x [ 64%]
 .                                                                        [ 64%]
-test/test_masking.py sssssssss                                           [ 64%]
+test/test_masking.py sssssssss                                           [ 65%]
 test/test_matmul.py ssssssssssssssss                                     [ 65%]
 test/test_matmul_heuristics.py ....                                      [ 65%]
-test/test_memory_op_facts.py .s...                                       [ 65%]
+test/test_memory_op_facts.py .s...                                       [ 66%]
 test/test_metal.py sssssssssssssssssssssssssssssssssssssssssssssssssssss [ 68%]
 ssssssssss                                                               [ 68%]
 test/test_metal_mpp_graph_transform.py ........                          [ 68%]
@@ -349,7 +349,7 @@ test/test_atomic_ops.py: 23 warnings
 test/test_broadcasting.py: 10 warnings
 test/test_control_flow.py: 9 warnings
 test/test_dot.py: 6 warnings
-test/test_examples.py: 88 warnings
+test/test_examples.py: 89 warnings
 test/test_grid.py: 10 warnings
 test/test_loops.py: 23 warnings
 test/test_pallas.py: 148 warnings
@@ -380,35 +380,35 @@ test/test_pallas.py::TestPallas::test_attention_emit_pipeline_correctness_head_d
 test/test_pallas.py::TestPallas::test_attention_emit_pipeline_non_divisible
 test/test_pallas.py::TestPallas::test_attention_fori_loop_correctness
 test/test_pallas.py::TestPallas::test_attention_fori_loop_correctness_head_dim_256
-  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u2) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x72df719422a0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u2) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x73330daa65c0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
     return self.create_node(
 
 test/test_pallas.py::TestPallas::test_pre_broadcast_dynamic_shapes
-  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (256) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x72df719422a0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (256) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x73330daa65c0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
     return self.create_node(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ============================= slowest 20 durations =============================
-23.44s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
-14.23s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
-13.19s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
-12.01s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
-11.97s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
-8.38s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
-7.89s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
-6.92s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
-6.14s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
-5.48s call     test/test_examples.py::TestExamples::test_low_mem_dropout
-5.13s call     test/test_random.py::TestRandom::test_hl_randint_1d
-5.09s call     test/test_random.py::TestRandom::test_hl_rand_non_tiled_dimensions
-4.40s call     test/test_examples.py::TestExamples::test_jagged_softmax
-4.15s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
-3.90s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
-3.88s call     test/test_examples.py::TestExamples::test_jsd
-3.78s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
-3.76s call     test/test_random.py::TestRandom::test_hl_rand4x_dropout_pattern
-3.66s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_unpickleable_worker_exception_is_serialized
-3.49s call     test/test_examples.py::TestExamples::test_jagged_sum
+23.15s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
+13.51s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
+13.23s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
+12.21s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
+11.83s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
+8.55s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
+8.07s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
+8.03s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
+6.89s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
+5.84s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
+5.15s call     test/test_examples.py::TestExamples::test_low_mem_dropout
+4.35s call     test/test_examples.py::TestExamples::test_jagged_softmax
+4.29s call     test/test_rng.py::TestRNG::test_rand_3d_tensor
+4.10s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
+3.96s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
+3.87s call     test/test_examples.py::TestExamples::test_jsd
+3.67s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_unpickleable_worker_exception_is_serialized
+3.60s call     test/test_examples.py::TestExamples::test_jagged_sum
+3.26s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_spawn_precompile_loads_trusted_python_args
+3.23s call     test/test_random.py::TestRandom::test_hl_randint_1d
 =========================== short test summary info ============================
 SKIPPED [1] test/test_breakpoint.py:16: unittest.case.SkipTest: triton not available
 SKIPPED [1] test/test_cute_backend.py:27: could not import 'cutlass': No module named 'cutlass'
@@ -1385,13 +1385,13 @@ SKIPPED [3] test/test_eviction_policy.py:107: disabled for HELION_BACKEND=pallas
 SKIPPED [3] test/test_eviction_policy.py:138: disabled for HELION_BACKEND=pallas
 SKIPPED [3] test/test_eviction_policy.py:56: disabled for HELION_BACKEND=pallas
 SKIPPED [3] test/test_eviction_policy.py:167: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_examples.py:2507: flex_attention requires torch.compile and closures
-SKIPPED [1] test/test_examples.py:428: Test skipped: CUDA (NVIDIA GPU) is not available.
-SKIPPED [1] test/test_examples.py:1764: Pallas int32 gather coverage uses test_gather_gemv_half
-SKIPPED [1] test/test_examples.py:995: TODO: follow up on timeout due to google-pytorch/torch_tpu@42d10ff
+SKIPPED [1] test/test_examples.py:2506: flex_attention requires torch.compile and closures
+SKIPPED [1] test/test_examples.py:427: Test skipped: CUDA (NVIDIA GPU) is not available.
+SKIPPED [1] test/test_examples.py:1763: Pallas int32 gather coverage uses test_gather_gemv_half
+SKIPPED [1] test/test_examples.py:994: TODO: follow up on timeout due to google-pytorch/torch_tpu@42d10ff
 SKIPPED [1] test/test_examples.py:362: CuTe-specific compile coverage
-SKIPPED [1] test/test_examples.py:1807: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_examples.py:1855: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples.py:1806: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_examples.py:1854: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_examples_dist.py:99: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_examples_dist.py:153: disabled for HELION_BACKEND=pallas
 SKIPPED [2] test/test_examples_dist.py:201: disabled for HELION_BACKEND=pallas
@@ -1559,7 +1559,7 @@ SKIPPED [1] test/test_jagged_tile.py:380: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_jagged_tile.py:344: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_jagged_tile.py:138: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_llm_autotuner.py:168: disabled for HELION_BACKEND=pallas
-SKIPPED [1] test/test_llm_autotuner.py:1130: disabled for HELION_BACKEND=pallas
+SKIPPED [1] test/test_llm_autotuner.py:1323: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_logging.py:80: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_logging.py:65: disabled for HELION_BACKEND=pallas
 SKIPPED [1] test/test_logging.py:105: disabled for HELION_BACKEND=pallas
@@ -2119,7 +2119,6 @@ XFAIL test/test_examples.py::TestExamples::test_layernorm_bwd_large_batch
 XFAIL test/test_examples.py::TestExamples::test_mamba2_chunk_scan
 XFAIL test/test_examples.py::TestExamples::test_mamba2_chunk_state
 XFAIL test/test_examples.py::TestExamples::test_matmul_bias_epilogue_wrapper
-XFAIL test/test_examples.py::TestExamples::test_matmul_layernorm_dynamic_shapes
 XFAIL test/test_examples.py::TestExamples::test_segment_reduction
 XFAIL test/test_examples.py::TestExamples::test_split_k_barrier
 XFAIL test/test_examples.py::TestExamples::test_split_k_barrier_accuracy
@@ -2181,10 +2180,10 @@ FAILED test/test_loops.py::TestLoops::test_range_num_stages_preserved_without_al
 FAILED test/test_random.py::TestRandom::test_hl_rand4x_dropout_pattern - Runt...
 FAILED test/test_random.py::TestRandom::test_hl_rand_offsets_independence - R...
 FAILED test/test_random.py::TestRandom::test_hl_rand_with_explicit_offsets - ...
-= 13 failed, 558 passed, 1913 skipped, 72 xfailed, 389 warnings in 324.20s (0:05:24) =
-I0000 00:00:1781144457.583335  194048 compilation_cache.cc:344] Compilation cache evicted.
-I0000 00:00:1781144457.583381  194048 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=12948
-num_cache_hits=9230 {71.2%}
+= 13 failed, 566 passed, 1913 skipped, 71 xfailed, 390 warnings in 325.79s (0:05:25) =
+I0000 00:00:1781147974.176981  220934 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781147974.177047  220934 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=12963
+num_cache_hits=9232 {71.2%}
 peak_compilation_memory_bytes=unknown
 
 
