@@ -1,0 +1,135 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781566817.566999 1321009 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781566818.191183 1321009 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+I0000 00:00:1781566819.344929 1321009 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781566821.661937 1321009 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781566821.661982 1321009 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781566821.693267 1321792 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781566821.693288 1321792 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+Testing helion correctness...
+/home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+  warn_once(
+[0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3450358800
+[0s] Starting LFBOTreeSearch with initial_population=FROM_RANDOM, copies=5, max_generations=20, similarity_penalty=1.0
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+[0s] Running benchmark for helion.Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[0s] Running Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:23.842189
+[0s] result: 0.2992ms (took 0.0s + 0.1s)
+[0s] Running benchmark for helion.Config(block_sizes=[1, 128, 256], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[0s] Running Config(block_sizes=[1, 128, 256], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:23.974713
+[0s] result: 0.2850ms (took 0.1s + 0.1s)
+[0s] Running benchmark for helion.Config(block_sizes=[1, 128, 256], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[0s] Running Config(block_sizes=[1, 128, 256], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:24.136200
+[0s] result: 0.2811ms (took 0.0s + 0.1s)
+[0s] Running benchmark for helion.Config(block_sizes=[1, 128, 8192], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[0s] Running Config(block_sizes=[1, 128, 8192], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:24.232367
+[1s] result: 0.2964ms (took 0.2s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[1s] Running Config(block_sizes=[1, 128, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:24.539999
+[1s] result: 0.2886ms (took 0.0s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 128, 4096], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[1s] Running Config(block_sizes=[1, 128, 4096], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:24.641520
+[1s] result: 0.2769ms (took 0.1s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 128, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[1s] Running Config(block_sizes=[1, 128, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:24.882412
+[1s] result: 0.2748ms (took 0.1s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 128, 512], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[1s] Running Config(block_sizes=[1, 128, 512], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:25.086149
+[1s] result: 0.2728ms (took 0.1s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 128, 8192], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[1s] Running Config(block_sizes=[1, 128, 8192], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:25.266170
+[2s] result: 0.2995ms (took 0.0s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[2s] Running Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:25.366125
+[2s] result: 0.2791ms (took 0.1s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 128, 8], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[2s] Running Config(block_sizes=[1, 128, 8], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:25.536327
+[2s] result: 0.2898ms (took 0.1s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[2s] Running Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:25.720346
+[2s] result: 0.2748ms (took 0.0s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 128, 4], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[2s] Running Config(block_sizes=[1, 128, 4], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:25.827371
+[2s] result: 0.3239ms (took 0.1s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 128, 4096], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[2s] Running Config(block_sizes=[1, 128, 4096], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:26.010675
+[2s] result: 0.2880ms (took 0.0s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 128, 32], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[2s] Running Config(block_sizes=[1, 128, 32], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:26.122442
+[3s] result: 0.2895ms (took 0.1s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 8], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 128, 8], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:26.294622
+[3s] result: 0.2945ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 128], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 128, 128], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:26.385415
+[3s] result: 0.2734ms (took 0.1s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 128], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 128, 128], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:26.548639
+[3s] result: 0.2752ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 2], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 128, 2], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:26.629106
+[3s] result: 0.4219ms (took 0.1s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 128, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:26.812652
+[3s] result: 0.2824ms (took 0.1s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 2], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 128, 2], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:26.980507
+[3s] result: 0.4322ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 128, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 16:40:27.102386
+[3s] result: 0.2868ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 512], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 128, 512], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:27.194695
+[4s] result: 0.2795ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 128, 32], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[4s] Running Config(block_sizes=[1, 128, 32], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:27.289246
+[4s] result: 0.2854ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 128, 4], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[4s] Running Config(block_sizes=[1, 128, 4], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:27.387259
+[4s] result: 0.3232ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 128, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[4s] Running Config(block_sizes=[1, 128, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 16:40:27.499127
+[4s] result: 0.2964ms (took 0.0s + 0.1s)
+Initial population exploring neighbors 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 26/26   7.0 configs/s
+[4s] No valid compile times found, keeping default timeout
+Verifying initial results 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 733/733 129.5 configs/s
+[9s] Initial random population of 26, 5 starting points: 
+ok=26 | min=0.2835 mid=0.2918 max=0.4322
+best:
+  block_sizes          = [1, 128, 64]
+  pallas_loop_type     = 'fori_loop'
+  pallas_pre_broadcast = False
+[9s] Fitting surrogate: 26 points, 26 targets
+[10s] Copy 0 finish because of no candidates
+[10s] Copy 1 finish because of no candidates
+[10s] Copy 2 finish because of no candidates
+[10s] Copy 3 finish because of no candidates
+[10s] Copy 4 finish because of no candidates
+[10s] Autotuning stop at generation 1 because of no active search path
+Final-pick verification device_micros 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10/10   0.2 configs/s
+[53s] Final-pick re-picked Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) (delta -0.010µs, absolute 17.697µs) over Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[53s] Autotuning complete in 53.1s after searching 26 configs.
+One can hardcode the best config and skip autotuning with:
+    @helion.kernel(config=helion.Config(block_sizes=[1, 128, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True), static_shapes=True)
+
+[53s] Code of selected kernel: /tmp/torchinductor_ymu_google_com/jk/cjkjtsjtydsy5uxr7qz3diwnppzgfkqwxjkzfcpcqmp4xmmjztqw.py
+Benchmarking 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 413/413 146.7 configs/s
+
+=================================================================
+Benchmark Results
+=================================================================
+Implementation       Time (ms)    Speedup        
+-----------------------------------------------------------------
+helion               0.3244       19.00x         
+torch                6.1622       1.00x (ref)    
+=================================================================
+
+I0000 00:00:1781566880.318473 1321009 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781566880.318497 1321009 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=95646
+num_cache_hits=95571 {99.9%}
+peak_compilation_memory_bytes=unknown
+
