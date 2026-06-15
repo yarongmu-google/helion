@@ -1020,7 +1020,10 @@ class TestExamples(RefEagerTestBase, TestCase):
             fn_name="jagged_dense_add_2d",
         )
 
-    @xfailIfPallas("Pallas rejects int64 inputs (jagged offsets)")
+    @xfailIfPallas(
+        "jagged-flat path compiles; numerical mismatch under interpret mode — "
+        "needs TPU run to confirm"
+    )
     @skipIfXPU("Jagged tensor operations not fully supported on XPU")
     @skipIfRefEager("hl.jagged_tile does not support ref mode yet")
     def test_jagged_dense_bmm(self):

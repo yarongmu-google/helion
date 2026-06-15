@@ -60,11 +60,14 @@ def jagged_dense_bmm(
         seq_len = ends - starts
 
         for tile_len in hl.jagged_tile(seq_len):
-            jagged_indices = starts[:, None] + tile_len.index[None, :]
-
             for tile_k in hl.tile(0, K):
                 acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
                 for tile_d in hl.tile(0, D):
+                    # Inline jagged_indices at the load site so the Pallas
+                    # flat-jagged parser sees the full ``add(starts, tile_len.idx)``
+                    # chain inside this inner loop body (otherwise it's
+                    # lifted to a closure placeholder).
+                    jagged_indices = starts[:, None] + tile_len.index[None, :]
                     jagged_data = hl.load(
                         jagged,
                         [jagged_indices[:, :, None] * D + tile_d.index[None, None, :]],
@@ -80,6 +83,9 @@ def jagged_dense_bmm(
                     # [tile_b, tile_len, tile_k] + [tile_b, 1, tile_k] -> [tile_b, tile_len, tile_k]
                     acc = acc + bias_data.unsqueeze(1)
 
+                # Same inline as above so the store subscript also lands
+                # in the canonical flat-jagged form.
+                jagged_indices = starts[:, None] + tile_len.index[None, :]
                 hl.store(
                     output,
                     [jagged_indices[:, :, None] * K + tile_k.index[None, None, :]],
@@ -127,9 +133,11 @@ def random_input(
     max_seq_len: int = 3,
     dtype: torch.dtype = torch.float32,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    from helion._testing import LONG_INT_TYPE
+
     lengths = torch.randint(max_seq_len + 1, size=(batch_size,), device=DEVICE)
-    seq_offsets = torch.zeros((batch_size + 1,), dtype=torch.int64, device=DEVICE)
-    seq_offsets[1:] = torch.cumsum(lengths, dim=0)
+    seq_offsets = torch.zeros((batch_size + 1,), dtype=LONG_INT_TYPE, device=DEVICE)
+    seq_offsets[1:] = torch.cumsum(lengths, dim=0).to(LONG_INT_TYPE)
     jagged_size = int(seq_offsets[-1].item())
     jagged = (
         torch.empty((jagged_size, D), dtype=dtype, device=DEVICE)
