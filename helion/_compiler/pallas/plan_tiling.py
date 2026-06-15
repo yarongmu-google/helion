@@ -226,19 +226,6 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
     elif is_jagged_kernel and is_store and not is_all_scalar:
         if current != PallasMemorySpace.SMEM:
             device_fn.pallas_memory_space[tid] = PallasMemorySpace.HBM
-    elif is_jagged_kernel and any(
-        isinstance(p, TilePattern) and p.block_id in _jagged_parent_bids
-        for p in indexing_patterns
-    ):
-        # Read whose subscript indexes the jagged-pinned parent axis
-        # (e.g. ``dense[tile_b, tile_d, tile_k]`` in jagged_dense_bmm).
-        # Grid is collapsed to (1,) so a (1, ...)-shaped BlockSpec would
-        # carve out only the pid_0=0 slice of the per-item axis, making
-        # ``dense[pl.ds(pid_0, 1), ...]`` OOB for pid_0 > 0.  Mark HBM
-        # so the kernel sees the full B-axis and can slice it per fori
-        # iter via ``pl.ds(pid_0, 1)``.
-        if current is None or current == PallasMemorySpace.VMEM:
-            device_fn.pallas_memory_space[tid] = PallasMemorySpace.HBM
     elif is_all_scalar:
         # Only mark for SMEM if not already assigned to VMEM or HBM
         if current is None:
@@ -382,7 +369,19 @@ def _update_tiling_decision(
                 _disallow_tiling()
 
     if isinstance(pattern, TilePattern):
-        _try_set_tiling_block_id(pattern.block_id)
+        # Jagged-pinned parent (block_size=1, fori-driven): don't let
+        # BlockSpec carve this axis — the kernel needs the full tensor
+        # visible so each per-fori iter can slice ``pl.ds(pid_0, 1)``.
+        # Without this, 3+D tensors get block_shape=(1, ...) carving
+        # (the 2-D alignment rule below incidentally protects 2-D
+        # tensors like ``bias[tile_b, tile_k]``).
+        jagged_parent_bids = {
+            p for parents in env.jagged_tile_parent_ids.values() for p in parents
+        }
+        if pattern.block_id in jagged_parent_bids:
+            _disallow_tiling()
+        else:
+            _try_set_tiling_block_id(pattern.block_id)
 
     elif isinstance(pattern, TileIndexWithOffsetPattern):
         _disallow_tiling()
