@@ -1,17 +1,17 @@
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1781544389.526230 1150893 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1781544390.151864 1150893 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1781545099.676856 1153401 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781545100.306007 1153401 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
-I0000 00:00:1781544391.141294 1150893 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
-I0000 00:00:1781544393.460168 1150893 pjrt_c_api_client.cc:200] PjRtCApiClient created.
-W0000 00:00:1781544393.460198 1150893 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1781544393.490997 1151677 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1781544393.491018 1151677 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+I0000 00:00:1781545101.287098 1153401 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781545103.563776 1153401 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781545103.563809 1153401 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781545103.596755 1154186 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781545103.596778 1154186 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
   warn_once(
 Using implicit config: @helion.kernel(config=helion.Config(block_sizes=[1, 16, 8, 8], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
-# Output code written to: /tmp/torchinductor_ymu_google_com/si/csizgc724vaacjtoynjlbjdunmjpfv3b2prt2szvpowmubs5ogfs.py
+# Output code written to: /tmp/torchinductor_ymu_google_com/6p/c6pvbh5dosuomughccbmxufwvyugk4p2yb2rkwd6anklskg3aqqu.py
 from __future__ import annotations
 
 import torch
@@ -27,7 +27,7 @@ _BLOCK_SIZE_1 = int(16)
 _BLOCK_SIZE_2 = int(8)
 _BLOCK_SIZE_3 = int(8)
 
-def _helion_jagged_dense_bmm(seq_offsets, output, bias, jagged, dense, output_buf, output_sem, scratch_1, jagged_buf, jagged_sem):
+def _helion_jagged_dense_bmm(seq_offsets, bias, output, jagged, dense, bias_buf, bias_sem, output_buf, output_sem, scratch_1, jagged_buf, jagged_sem, dense_buf, dense_sem):
 
     def _kernel_body(pid_0, _):
         # src[jagged_dense_bmm.py:57]: for tile_b in hl.tile(B):
@@ -49,7 +49,7 @@ def _helion_jagged_dense_bmm(seq_offsets, output, bias, jagged, dense, output_bu
         amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
 
         def _fori_body_2(_j, _):
-            nonlocal output_buf, scratch_1, jagged_buf
+            nonlocal bias_buf, output_buf, scratch_1, jagged_buf, dense_buf
             offset_1 = 0 + _j * _BLOCK_SIZE_1
             indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
             offset_5 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
@@ -58,14 +58,16 @@ def _helion_jagged_dense_bmm(seq_offsets, output, bias, jagged, dense, output_bu
             starts_copy_0 = starts_copy
 
             def _fori_body_1(_j_1, _):
-                nonlocal output_buf, scratch_1, jagged_buf
+                nonlocal bias_buf, output_buf, scratch_1, jagged_buf, dense_buf
                 # src[jagged_dense_bmm.py:63]: for tile_k in hl.tile(0, K):
                 # src[jagged_dense_bmm.py:64]:     acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
                 # src[jagged_dense_bmm.py:65]:     for tile_d in hl.tile(0, D):
                 # src[jagged_dense_bmm.py:63-106]: ...
                 offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
                 indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
-                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                _copy = pltpu.make_async_copy(bias.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j_1 * _BLOCK_SIZE_2, _BLOCK_SIZE_2)], bias_buf, bias_sem)
+                _copy.start()
+                _copy.wait()
                 starts_copy_0_copy = starts_copy_0
                 starts_copy_0_copy_0 = starts_copy_0_copy
                 # src[jagged_dense_bmm.py:64]: acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
@@ -77,13 +79,15 @@ def _helion_jagged_dense_bmm(seq_offsets, output, bias, jagged, dense, output_bu
                 scratch_1[...] = acc[...]
 
                 def _fori_body_0(_j_2, _):
-                    nonlocal output_buf, scratch_1, jagged_buf
+                    nonlocal bias_buf, output_buf, scratch_1, jagged_buf, dense_buf
                     offset_3 = 0 + _j_2 * _BLOCK_SIZE_3
                     indices_3 = offset_3 + jnp.arange(0, _BLOCK_SIZE_3, dtype=jnp.int32)
-                    offset_3 = 0 + _j_2 * _BLOCK_SIZE_3
-                    _copy = pltpu.make_async_copy(jagged.at[pl.ds(starts_copy_0_copy_0[0] + offset_1, _BLOCK_SIZE_1), pl.ds(0 + _j_2 * _BLOCK_SIZE_3, _BLOCK_SIZE_3)], jagged_buf, jagged_sem)
-                    _copy.start()
-                    _copy.wait()
+                    _copy_1 = pltpu.make_async_copy(jagged.at[pl.ds(starts_copy_0_copy_0[0] + offset_1, _BLOCK_SIZE_1), pl.ds(0 + _j_2 * _BLOCK_SIZE_3, _BLOCK_SIZE_3)], jagged_buf, jagged_sem)
+                    _copy_1.start()
+                    _copy_1.wait()
+                    _copy_2 = pltpu.make_async_copy(dense.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j_2 * _BLOCK_SIZE_3, _BLOCK_SIZE_3), pl.ds(offset_2, _BLOCK_SIZE_2)], dense_buf, dense_sem)
+                    _copy_2.start()
+                    _copy_2.wait()
                     starts_copy_0_copy_0_copy = starts_copy_0_copy_0
                     v_3 = scratch_1[...]
                     starts_copy_0_copy_0_copy_0 = starts_copy_0_copy_0_copy
@@ -104,7 +108,7 @@ def _helion_jagged_dense_bmm(seq_offsets, output, bias, jagged, dense, output_bu
                     # src[jagged_dense_bmm.py:71-74]: ...
                     jagged_data = jnp.expand_dims(jagged_buf[:], axis=0)
                     # src[jagged_dense_bmm.py:88]: dense_data = dense[tile_b, tile_d, tile_k]
-                    dense_data = dense[pl.ds(pid_0, 1), pl.ds(pl.multiple_of(offset_3, _BLOCK_SIZE_3), _BLOCK_SIZE_3), pl.ds(offset_2, _BLOCK_SIZE_2)]
+                    dense_data = dense_buf[:, :, :]
                     # src[jagged_dense_bmm.py:90]: acc = acc + torch.matmul(
                     # src[jagged_dense_bmm.py:91]:     jagged_data, dense_data
                     # src[jagged_dense_bmm.py:92]: )  # [tile_b, tile_len, tile_k]
@@ -119,7 +123,7 @@ def _helion_jagged_dense_bmm(seq_offsets, output, bias, jagged, dense, output_bu
                 jax.lax.fori_loop(0, (8 - 0 + _BLOCK_SIZE_3 - 1) // _BLOCK_SIZE_3, _fori_body_0, None)
                 acc = scratch_1[...]
                 # src[jagged_dense_bmm.py:95]: bias_data = bias[tile_b, tile_k]  # [tile_b, tile_k]
-                bias_data = bias[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(offset_2, _BLOCK_SIZE_2)]
+                bias_data = bias_buf[:, :]
                 # src[jagged_dense_bmm.py:97]: acc = acc + bias_data.unsqueeze(1)
                 unsqueeze = bias_data[:, None, :]
                 v_9 = acc + unsqueeze
@@ -174,7 +178,7 @@ def jagged_dense_bmm(seq_offsets: torch.Tensor, jagged: torch.Tensor, dense: tor
     # src[jagged_dense_bmm.py:58]:     starts = seq_offsets[tile_b]
     # src[jagged_dense_bmm.py:59]:     ends = seq_offsets[tile_b.index + 1]
     # src[jagged_dense_bmm.py:57-106]: ...
-    _launcher(_helion_jagged_dense_bmm, (1,), seq_offsets, output, bias, jagged, dense, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None,), (None,)), ((None, None), (None, None)), ((None,), (None,)), ((1, None, None), (0, None, None))], _ds_pad_dims=[(1, 0, 16, 15), (1, 1, 8, 0), (2, 1, 8, 0), (3, 0, 16, 15), (3, 1, 8, 0), (4, 1, 8, 0), (4, 2, 8, 0)], _smem_arg_indices=[0], _scratch_shapes=[((16, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 16, 8), 'jnp.float32', 'vmem'), ((16, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 3], _reshape_2d_arg_indices=[(1, 8), (3, 8)])
+    _launcher(_helion_jagged_dense_bmm, (1,), seq_offsets, bias, output, jagged, dense, _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,)), ((None,), (None,)), ((1, None, None), (0, None, None))], _ds_pad_dims=[(1, 1, 8, 0), (2, 0, 16, 15), (2, 1, 8, 0), (3, 0, 16, 15), (3, 1, 8, 0), (4, 1, 8, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 16, 8), 'jnp.float32', 'vmem'), ((16, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 8, 8), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2, 3, 4], _reshape_2d_arg_indices=[(2, 8), (3, 8)])
     # src[jagged_dense_bmm.py:107]: return output.reshape(L, K)
     return output.reshape(L, K)
 
@@ -203,12 +207,12 @@ tensor([[-0.0720,  0.4579, -0.7250, -0.2750,  0.2448,  0.9907, -0.1237,  0.8487]
 tensor([[-0.0720,  0.4579, -0.7250, -0.2750,  0.2448,  0.9907, -0.1237,  0.8487],
         [-1.6406,  0.9023, -1.0072,  0.8371,  0.0153,  2.1517,  1.4560,  1.8773]],
        device='tpu:0')
-[dbg] abs-diff max: 1.8148174285888672 mean: 0.33133772015571594
+[dbg] abs-diff max: 0.0 mean: 0.0
 [dbg] per-item abs-diff max:
   item 0 (rows [0:2]): max=0
-  item 1 (rows [2:4]): max=1.815
-I0000 00:00:1781544396.995321 1150893 compilation_cache.cc:344] Compilation cache evicted.
-I0000 00:00:1781544396.995341 1150893 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=151
+  item 1 (rows [2:4]): max=0
+I0000 00:00:1781545107.107388 1153401 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781545107.107470 1153401 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=151
 num_cache_hits=72 {47.6%}
 peak_compilation_memory_bytes=unknown
 
