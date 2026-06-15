@@ -226,6 +226,19 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
     elif is_jagged_kernel and is_store and not is_all_scalar:
         if current != PallasMemorySpace.SMEM:
             device_fn.pallas_memory_space[tid] = PallasMemorySpace.HBM
+    elif is_jagged_kernel and any(
+        isinstance(p, TilePattern) and p.block_id in _jagged_parent_bids
+        for p in indexing_patterns
+    ):
+        # Read whose subscript indexes the jagged-pinned parent axis
+        # (e.g. ``dense[tile_b, tile_d, tile_k]`` in jagged_dense_bmm).
+        # Grid is collapsed to (1,) so a (1, ...)-shaped BlockSpec would
+        # carve out only the pid_0=0 slice of the per-item axis, making
+        # ``dense[pl.ds(pid_0, 1), ...]`` OOB for pid_0 > 0.  Mark HBM
+        # so the kernel sees the full B-axis and can slice it per fori
+        # iter via ``pl.ds(pid_0, 1)``.
+        if current is None or current == PallasMemorySpace.VMEM:
+            device_fn.pallas_memory_space[tid] = PallasMemorySpace.HBM
     elif is_all_scalar:
         # Only mark for SMEM if not already assigned to VMEM or HBM
         if current is None:

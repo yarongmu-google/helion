@@ -436,27 +436,6 @@ def _tile_pattern_code(
         for loop in loops
     ):
         return _ds_expr(state, block_id, tensor=tensor, tensor_dim=tensor_dim)
-
-    # Jagged-pinned parent on Pallas: grid is collapsed to (1,) and the
-    # fori_loop body's parameter (``pid_0``) is the per-item iteration
-    # variable, but the wrap is applied via ``JaggedProgramIDs.wrap_kernel_body``
-    # — there's no ``ForiLoopState`` registered in ``active_device_loops``
-    # for this bid.  Without this case ``tensor[tile_b, ...]`` would emit
-    # ``:`` for the parent axis (full B-axis), and dot_general silently
-    # broadcasts the rhs batch dim from 1 → every program uses dense[0].
-    from helion._compiler.compile_environment import CompileEnvironment
-    from helion._compiler.program_id import JaggedProgramIDs
-
-    env = CompileEnvironment.current()
-    jagged_parent_bids = {
-        p for parents in env.jagged_tile_parent_ids.values() for p in parents
-    }
-    if block_id in jagged_parent_bids and isinstance(
-        state.device_function.pid, JaggedProgramIDs
-    ):
-        pid_var = state.device_function.pid.pid_info[0].pid_var
-        return f"pl.ds({pid_var}, 1)"
-
     return ":"
 
 
