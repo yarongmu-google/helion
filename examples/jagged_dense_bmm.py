@@ -72,6 +72,19 @@ def jagged_dense_bmm(
                         jagged,
                         [jagged_indices[:, :, None] * D + tile_d.index[None, None, :]],
                     )  # [tile_b, tile_len, tile_d]
+                    # TODO(jagged-pinned-tile_b lowering): on Pallas with a
+                    # jagged-pinned parent (block_size=1, fori-loop driven),
+                    # ``dense[tile_b, ...]`` cannot use the usual BlockSpec
+                    # slice DMA — the grid is collapsed to (1,) and tile_b
+                    # is the fori variable, not a grid axis.  Today this
+                    # emits ``dense[:, pl.ds(...), pl.ds(...)]`` (i.e. full
+                    # B-axis), which silently uses dense[0] for every
+                    # program via JAX dot_general's batch-broadcast — item
+                    # 0 is correct, items 1..B-1 use the wrong weights and
+                    # the test reports ~90% mismatch.  Need a per-fori-iter
+                    # manual ``make_async_copy(dense.at[pid_0, ...], ...)``
+                    # in the dense codegen path when the parent is a
+                    # jagged-pinned tile.
                     dense_data = dense[tile_b, tile_d, tile_k]
 
                     acc = acc + torch.matmul(

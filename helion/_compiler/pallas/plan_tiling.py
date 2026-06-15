@@ -625,7 +625,37 @@ def _transparent_wrapper_targets() -> tuple[object, ...]:
 
 def _peel_wrappers(node: torch.fx.Node) -> torch.fx.Node:
     """Follow transparent wrappers (broadcast + ``_new_var``) to the
-    underlying FX node. Pure analysis — does not mutate the FX graph."""
+    underlying FX node. Pure analysis — does not mutate the FX graph.
+
+    TODO(jagged-flat closure walker): this stops at placeholders, which
+    means ``_parse_flat_jagged_subscript`` can't see the ``add(starts,
+    tile.idx)`` chain when the canonical subscript components are
+    computed in an outer loop and lifted into the inner subgraph as
+    closure inputs.  Today the workaround is to inline the computation
+    at the load/store site (see ``examples/jagged_dense_bmm.py``).
+
+    The compiler-side fix is to walk through placeholders into the outer
+    FX graph.  Precedent: ``helion/_compiler/node_masking.py:137
+    cached_masked_value`` does exactly this for masked-value analysis:
+
+      1. Detect ``node.op == "placeholder"``.
+      2. Look up the containing graph's ``NodeArgsGraphInfo`` in
+         ``DeviceIR.current().graphs`` (every Helion subgraph extends
+         this — ``ForLoopGraphInfo``, ``IfGraphInfo``,
+         ``WhileLoopGraphInfo``, ``HelperFunctionGraphInfo``).
+      3. Call ``graph_info.placeholder_to_outer_arg(node)`` to get the
+         outer FX node (the positional ``node_args`` mapping —
+         ``helion/_compiler/device_ir.py:281``).
+      4. Recurse if the outer node is itself a placeholder (handles
+         arbitrary nesting depth, just like ``cached_masked_value``).
+      5. Cache the result on ``node.meta["closure_target"]`` so each
+         placeholder pays the walk cost once per compile.
+
+    Once that helper exists, ``_parse_flat_jagged_subscript``,
+    ``_decompose_jagged_idx`` and ``_maybe_jagged_tile_bid`` all peel
+    through closures first, and the kernel-side inline workaround in
+    jagged_dense_bmm is no longer needed.
+    """
     wrappers = _transparent_wrapper_targets()
     while (
         isinstance(node, torch.fx.Node)
