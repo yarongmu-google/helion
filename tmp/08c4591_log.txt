@@ -1,0 +1,141 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781546384.223269 1174369 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781546384.847271 1174369 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+I0000 00:00:1781546385.866928 1174369 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781546388.207577 1174369 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781546388.207618 1174369 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781546388.241282 1175153 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781546388.241304 1175153 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+/home/ymu_google_com/helion/examples/jagged_dense_bmm.py:125: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  ref_output[seq_start:seq_end] = result
+/home/ymu_google_com/helion/helion/_testing.py:1109: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  return [result.clone()]
+Testing helion correctness...
+/home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+  warn_once(
+[0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3429925322
+/home/ymu_google_com/pytorch/torch/nn/functional.py:5823: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  return torch._C._nn.pad(input, pad, mode, value)
+[0s] Starting LFBOTreeSearch with initial_population=FROM_RANDOM, copies=5, max_generations=20, similarity_penalty=1.0
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+[0s] Running benchmark for helion.Config(block_sizes=[1, 16, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[0s] Running Config(block_sizes=[1, 16, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:51.884365
+[0s] result: 0.6700ms (took 0.0s + 0.1s)
+[0s] Running benchmark for helion.Config(block_sizes=[1, 256, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[0s] Running Config(block_sizes=[1, 256, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:51.988523
+[1s] result: 0.7853ms (took 0.1s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 32, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[1s] Running Config(block_sizes=[1, 32, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:52.185218
+[1s] result: 0.5961ms (took 0.1s + 0.1s)
+[1s] Running benchmark for helion.Config(block_sizes=[1, 8192, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[1s] Running Config(block_sizes=[1, 8192, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:52.383256
+[2s] result: 0.8839ms (took 0.9s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 4096, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[2s] Running Config(block_sizes=[1, 4096, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:53.390803
+[2s] result: 0.7591ms (took 0.4s + 0.1s)
+[2s] Running benchmark for helion.Config(block_sizes=[1, 2048, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[2s] Running Config(block_sizes=[1, 2048, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:53.876997
+[3s] result: 0.7312ms (took 0.2s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 2048, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 2048, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:54.199499
+[3s] result: 0.7284ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 4096, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 4096, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:54.289080
+[3s] result: 0.7937ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 32, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[3s] Running Config(block_sizes=[1, 32, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:54.381817
+[3s] result: 0.6437ms (took 0.0s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 128, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 128, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:54.463899
+[3s] result: 0.6479ms (took 0.1s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 1024, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 1024, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:54.656900
+[3s] result: 0.6765ms (took 0.2s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 64, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 64, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:54.890163
+[3s] result: 0.6555ms (took 0.1s + 0.1s)
+[3s] Running benchmark for helion.Config(block_sizes=[1, 8192, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 8192, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:55.088365
+[4s] result: 0.9151ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 8, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[4s] Running Config(block_sizes=[1, 8, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:55.192996
+[4s] result: 0.7458ms (took 0.1s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 16, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 16, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:55.393725
+[4s] result: 0.6850ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 1024, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 1024, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:55.479277
+[4s] result: 0.6990ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 8, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 8, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:55.567924
+[4s] result: 0.7569ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 512, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 512, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:55.657452
+[4s] result: 0.7442ms (took 0.1s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 256, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 256, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:55.874839
+[4s] result: 0.6878ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 64, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 64, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:55.960153
+[4s] result: 0.6638ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 128, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 128, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 10:59:56.045496
+[4s] result: 0.6632ms (took 0.0s + 0.1s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 512, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[4s] Running Config(block_sizes=[1, 512, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 10:59:56.128428
+[5s] result: 0.6712ms (took 0.0s + 0.1s)
+Initial population exploring neighbors 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 22/22   5.1 configs/s
+[5s] No valid compile times found, keeping default timeout
+Verifying initial results 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 335/335  60.9 configs/s
+[10s] Initial random population of 22, 5 starting points: 
+ok=22 | min=0.6728 mid=0.7098 max=0.9221
+best:
+  block_sizes          = [1, 32, 32, 64]
+  pallas_loop_type     = 'fori_loop'
+  pallas_pre_broadcast = False
+[10s] Fitting surrogate: 22 points, 22 targets
+[10s] Copy 0 finish because of no candidates
+[10s] Copy 1 finish because of no candidates
+[10s] Copy 2 finish because of no candidates
+[10s] Copy 3 finish because of no candidates
+[10s] Copy 4 finish because of no candidates
+[10s] Autotuning stop at generation 1 because of no active search path
+/home/ymu_google_com/pytorch/torch/nn/functional.py:5823: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  return torch._C._nn.pad(input, pad, mode, value)
+Final-pick verification device_micros 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10/10   0.2 configs/s
+[55s] Final-pick re-picked Config(block_sizes=[1, 64, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) (delta -2.608µs, absolute 82.381µs) over Config(block_sizes=[1, 32, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[55s] Autotuning complete in 56.0s after searching 22 configs.
+One can hardcode the best config and skip autotuning with:
+    @helion.kernel(config=helion.Config(block_sizes=[1, 64, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+
+[55s] Code of selected kernel: /tmp/torchinductor_ymu_google_com/c7/cc7zeo5akq75gs43nfdihdpfqfljpdjlnay4r7aw6wglnzqzrxjw.py
+/home/ymu_google_com/pytorch/torch/testing/_comparison.py:362: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  abs_diff=max_abs_diff.item(),
+/home/ymu_google_com/pytorch/torch/testing/_comparison.py:365: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  rel_diff=max_rel_diff.item(),
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/examples/jagged_dense_bmm.py", line 170, in <module>
+    main()
+  File "/home/ymu_google_com/helion/examples/jagged_dense_bmm.py", line 164, in main
+    run_example(
+  File "/home/ymu_google_com/helion/helion/_testing.py", line 1133, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_testing.py", line 1213, in run_example
+    torch.testing.assert_close(
+  File "/home/ymu_google_com/pytorch/torch/testing/_comparison.py", line 1631, in assert_close
+    raise error_metas[0].to_error(msg)
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 9928 / 11064 (89.7%)
+Greatest absolute difference: 11.36921215057373 at index (116, 6) (up to 0.1 allowed)
+Greatest relative difference: 9580.716796875 at index (396, 22) (up to 0.01 allowed)
+I0000 00:00:1781546448.372476 1174369 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781546448.372499 1174369 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=101945
+num_cache_hits=101764 {99.8%}
+peak_compilation_memory_bytes=unknown
+
