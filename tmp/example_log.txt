@@ -1,0 +1,285 @@
+$ HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1  HELION_AUTOTUNE_LOG_LEVEL=DEBUG TORCH_COMPILE_DEBUG=1 PYTHONPATH=. HELION_BACKEND=pallas HELION_SKIP_CACHE=1 python3 examples/jagged_dense_bmm.py | tee tmp/example_log.txtvi tmp/example_log.txt
+
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781545413.314937 1163097 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781545413.945701 1163097 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+I0000 00:00:1781545414.971849 1163097 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781545417.295631 1163097 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781545417.295669 1163097 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781545417.326779 1163882 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781545417.326800 1163882 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+/home/ymu_google_com/helion/examples/jagged_dense_bmm.py:138: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  ref_output[seq_start:seq_end] = result
+/home/ymu_google_com/helion/helion/_testing.py:1109: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  return [result.clone()]
+Testing helion correctness...
+/home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+  warn_once(
+[0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3428954427
+/home/ymu_google_com/pytorch/torch/nn/functional.py:5823: UserWarning: The .grad attribute of a Tensor that is not a leaf Tensor is being accessed. Its .grad attribute won't be populated during autograd.backward(). If you indeed want the .grad field to be populated for a non-leaf Tensor, use .retain_grad() on the non-leaf Tensor. If you access the non-leaf Tensor by mistake, make sure you access the leaf Tensor instead. See github.com/pytorch/pytorch/pull/30531 for more information. (Triggered internally at external/+_repo_rules+local_torch/site-packages/build/aten/src/ATen/core/TensorBody.h:498.)
+  return torch._C._nn.pad(input, pad, mode, value)
+E0000 00:00:1781545420.262858 1163883 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Not implemented: Source and target leading tiles have different trailing dimensions
+
+at location: loc("dma_start:"("dma_start"("_helion_jagged_dense_bmm.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/pa/cpaq2etisqypmuevrjc3waxpquiot34anzcrkqdjrikpxyeuea43.py":79:20 to :35))))
+
+The MLIR operation involved:
+  "tpu.enqueue_dma"(%182, %44, <<UNKNOWN SSA VALUE>>) <{operandSegmentSizes = array<i32: 1, 0, 1, 1, 0, 0>, priority = 0 : i32, strict_ordering = false}> : (memref<1x64x32xf32, #tpu.tiled<(1,32),[256,4,1]>, #tpu.memory_space<hbm>>, memref<1x64x32xf32, #tpu.tiled<(1,128),[64,1,1]>, #tpu.memory_space<vmem>>, memref<!tpu.dma_semaphore, #tpu.tiled<,[]>, #tpu.memory_space<semaphore_mem>>) -> ()
+... additional diagnostics were skipped.
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781545420.262914 1163883 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Not implemented: Source and target leading tiles have different trailing dimensions
+
+at location: loc("dma_start:"("dma_start"("_helion_jagged_dense_bmm.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/pa/cpaq2etisqypmuevrjc3waxpquiot34anzcrkqdjrikpxyeuea43.py":79:20 to :35))))
+
+The MLIR operation involved:
+  "tpu.enqueue_dma"(%182, %44, <<UNKNOWN SSA VALUE>>) <{operandSegmentSizes = array<i32: 1, 0, 1, 1, 0, 0>, priority = 0 : i32, strict_ordering = false}> : (memref<1x64x32xf32, #tpu.tiled<(1,32),[256,4,1]>, #tpu.memory_space<hbm>>, memref<1x64x32xf32, #tpu.tiled<(1,128),[64,1,1]>, #tpu.memory_space<vmem>>, memref<!tpu.dma_semaphore, #tpu.tiled<,[]>, #tpu.memory_space<semaphore_mem>>) -> ()
+... additional diagnostics were skipped.
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+[0s] Generated Triton code for @helion.kernel(config=helion.Config(block_sizes=[1, 16, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True):
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(16)
+_BLOCK_SIZE_2 = int(32)
+_BLOCK_SIZE_3 = int(64)
+
+def _helion_jagged_dense_bmm(seq_offsets, bias, output, jagged, dense, bias_buf, bias_sem, output_buf, output_sem, scratch_1, jagged_buf, jagged_sem, dense_buf, dense_sem):
+
+    def _kernel_body(pid_0, _):
+        # src[jagged_dense_bmm.py:57]: for tile_b in hl.tile(B):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[jagged_dense_bmm.py:58]: starts = seq_offsets[tile_b]
+        starts = jnp.array([seq_offsets[offset_0]])
+        # src[jagged_dense_bmm.py:59]: ends = seq_offsets[tile_b.index + 1]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        ends = jnp.array([seq_offsets[offset_0 + 1]])
+        # src[jagged_dense_bmm.py:60]: seq_len = ends - starts
+        v_2 = ends - starts
+        # src[jagged_dense_bmm.py:62]: for tile_len in hl.jagged_tile(seq_len):
+        # src[jagged_dense_bmm.py:63]:     for tile_k in hl.tile(0, K):
+        # src[jagged_dense_bmm.py:64]:         acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
+        # src[jagged_dense_bmm.py:62-106]: ...
+        view = jnp.reshape(v_2, [_BLOCK_SIZE_0])
+        amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+
+        def _fori_body_2(_j, _):
+            nonlocal bias_buf, output_buf, scratch_1, jagged_buf, dense_buf
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            offset_5 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
+            mask_1 = offset_5[None, :] < v_2[:, None]
+            starts_copy = starts
+            starts_copy_0 = starts_copy
+
+            def _fori_body_1(_j_1, _):
+                nonlocal bias_buf, output_buf, scratch_1, jagged_buf, dense_buf
+                # src[jagged_dense_bmm.py:63]: for tile_k in hl.tile(0, K):
+                # src[jagged_dense_bmm.py:64]:     acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
+                # src[jagged_dense_bmm.py:65]:     for tile_d in hl.tile(0, D):
+                # src[jagged_dense_bmm.py:63-106]: ...
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_6 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_6 < 24 - 0
+                _copy = pltpu.make_async_copy(bias.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j_1 * _BLOCK_SIZE_2, _BLOCK_SIZE_2)], bias_buf, bias_sem)
+                _copy.start()
+                _copy.wait()
+                starts_copy_0_copy = starts_copy_0
+                starts_copy_0_copy_0 = starts_copy_0_copy
+                # src[jagged_dense_bmm.py:64]: acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
+                acc = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1, _BLOCK_SIZE_2], 0.0, jnp.float32)
+                # src[jagged_dense_bmm.py:65]: for tile_d in hl.tile(0, D):
+                # src[jagged_dense_bmm.py:66]:     # Inline jagged_indices at the load site so the Pallas
+                # src[jagged_dense_bmm.py:67]:     # flat-jagged parser sees the full ``add(starts, tile_len.idx)``
+                # src[jagged_dense_bmm.py:65-92]: ...
+                scratch_1[...] = acc[...]
+
+                def _fori_body_0(_j_2, _):
+                    nonlocal bias_buf, output_buf, scratch_1, jagged_buf, dense_buf
+                    offset_3 = 0 + _j_2 * _BLOCK_SIZE_3
+                    indices_3 = offset_3 + jnp.arange(0, _BLOCK_SIZE_3, dtype=jnp.int32)
+                    offset_7 = _j_2 * _BLOCK_SIZE_3 + jnp.arange(_BLOCK_SIZE_3)
+                    mask_3 = offset_7 < 34 - 0
+                    _copy_1 = pltpu.make_async_copy(jagged.at[pl.ds(starts_copy_0_copy_0[0] + offset_1, _BLOCK_SIZE_1), pl.ds(0 + _j_2 * _BLOCK_SIZE_3, _BLOCK_SIZE_3)], jagged_buf, jagged_sem)
+                    _copy_1.start()
+                    _copy_1.wait()
+                    _copy_2 = pltpu.make_async_copy(dense.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j_2 * _BLOCK_SIZE_3, _BLOCK_SIZE_3), pl.ds(offset_2, _BLOCK_SIZE_2)], dense_buf, dense_sem)
+                    _copy_2.start()
+                    _copy_2.wait()
+                    starts_copy_0_copy_0_copy = starts_copy_0_copy_0
+                    v_3 = scratch_1[...]
+                    starts_copy_0_copy_0_copy_0 = starts_copy_0_copy_0_copy
+                    v_3_0 = v_3
+                    # src[jagged_dense_bmm.py:70]: jagged_indices = starts[:, None] + tile_len.index[None, :]
+                    subscript = starts_copy_0_copy_0_copy_0[:, None]
+                    subscript_1 = indices_1[None, :]
+                    v_4 = subscript + subscript_1
+                    # src[jagged_dense_bmm.py:73]: [jagged_indices[:, :, None] * D + tile_d.index[None, None, :]],
+                    subscript_2 = v_4[:, :, None]
+                    v_5 = jnp.array(34, dtype=jnp.int32)
+                    v_6 = subscript_2 * v_5
+                    subscript_3 = indices_3[None, None, :]
+                    v_7 = v_6 + subscript_3
+                    # src[jagged_dense_bmm.py:71]: jagged_data = hl.load(
+                    # src[jagged_dense_bmm.py:72]:     jagged,
+                    # src[jagged_dense_bmm.py:73]:     [jagged_indices[:, :, None] * D + tile_d.index[None, None, :]],
+                    # src[jagged_dense_bmm.py:71-74]: ...
+                    jagged_data = jnp.expand_dims(jagged_buf[:], axis=0)
+                    # src[jagged_dense_bmm.py:88]: dense_data = dense[tile_b, tile_d, tile_k]
+                    dense_data = dense_buf[:, :, :]
+                    # src[jagged_dense_bmm.py:90]: acc = acc + torch.matmul(
+                    # src[jagged_dense_bmm.py:91]:     jagged_data, dense_data
+                    # src[jagged_dense_bmm.py:92]: )  # [tile_b, tile_len, tile_k]
+                    _mask_to = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32)[:, :, None] * mask_3.astype(jnp.float32)[None, None, :], [_BLOCK_SIZE_0, _BLOCK_SIZE_1, _BLOCK_SIZE_3]), jagged_data, jnp.full([], 0, jnp.float32))
+                    bmm = lax.dot_general(_mask_to, dense_data, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                    v_8 = v_3_0 + bmm
+                    # src[jagged_dense_bmm.py:65]: for tile_d in hl.tile(0, D):
+                    # src[jagged_dense_bmm.py:66]:     # Inline jagged_indices at the load site so the Pallas
+                    # src[jagged_dense_bmm.py:67]:     # flat-jagged parser sees the full ``add(starts, tile_len.idx)``
+                    # src[jagged_dense_bmm.py:65-92]: ...
+                    scratch_1[...] = v_8[...]
+                jax.lax.fori_loop(0, (34 - 0 + _BLOCK_SIZE_3 - 1) // _BLOCK_SIZE_3, _fori_body_0, None)
+                acc = scratch_1[...]
+                # src[jagged_dense_bmm.py:95]: bias_data = bias[tile_b, tile_k]  # [tile_b, tile_k]
+                bias_data = bias_buf[:, :]
+                # src[jagged_dense_bmm.py:97]: acc = acc + bias_data.unsqueeze(1)
+                unsqueeze = bias_data[:, None, :]
+                v_9 = acc + unsqueeze
+                # src[jagged_dense_bmm.py:101]: jagged_indices = starts[:, None] + tile_len.index[None, :]
+                subscript_4 = starts_copy_0_copy_0[:, None]
+                subscript_5 = indices_1[None, :]
+                v_10 = subscript_4 + subscript_5
+                # src[jagged_dense_bmm.py:104]: [jagged_indices[:, :, None] * K + tile_k.index[None, None, :]],
+                subscript_6 = v_10[:, :, None]
+                v_11 = jnp.array(24, dtype=jnp.int32)
+                v_12 = subscript_6 * v_11
+                subscript_7 = indices_2[None, None, :]
+                v_13 = v_12 + subscript_7
+                # src[jagged_dense_bmm.py:102]: hl.store(
+                # src[jagged_dense_bmm.py:103]:     output,
+                # src[jagged_dense_bmm.py:104]:     [jagged_indices[:, :, None] * K + tile_k.index[None, None, :]],
+                # src[jagged_dense_bmm.py:102-106]: ...
+                output_buf[:] = jnp.squeeze(jnp.where((mask_1.astype(jnp.float32)[:, :, None] * mask_2.astype(jnp.float32)[None, None, :]).astype(jnp.bool_), v_9, jnp.zeros_like(v_9)), axis=0)
+                # src[jagged_dense_bmm.py:63]: for tile_k in hl.tile(0, K):
+                # src[jagged_dense_bmm.py:64]:     acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
+                # src[jagged_dense_bmm.py:65]:     for tile_d in hl.tile(0, D):
+                # src[jagged_dense_bmm.py:63-106]: ...
+                _copy_out = pltpu.make_async_copy(output_buf, output.at[pl.ds(starts_copy_0[0] + offset_1, _BLOCK_SIZE_1), pl.ds(0 + _j_1 * _BLOCK_SIZE_2, _BLOCK_SIZE_2)], output_sem)
+                _copy_out.start()
+                _copy_out.wait()
+            jax.lax.fori_loop(0, (24 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_1, None)
+        # src[jagged_dense_bmm.py:62]: for tile_len in hl.jagged_tile(seq_len):
+        # src[jagged_dense_bmm.py:63]:     for tile_k in hl.tile(0, K):
+        # src[jagged_dense_bmm.py:64]:         acc = hl.zeros([tile_b, tile_len, tile_k], dtype=dtype, device=device)
+        # src[jagged_dense_bmm.py:62-106]: ...
+        jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_2, None)
+    # src[jagged_dense_bmm.py:57]: for tile_b in hl.tile(B):
+    # src[jagged_dense_bmm.py:58]:     starts = seq_offsets[tile_b]
+    # src[jagged_dense_bmm.py:59]:     ends = seq_offsets[tile_b.index + 1]
+    # src[jagged_dense_bmm.py:57-106]: ...
+    jax.lax.fori_loop(0, 23, _kernel_body, None)
+
+def jagged_dense_bmm(seq_offsets: torch.Tensor, jagged: torch.Tensor, dense: torch.Tensor, bias: torch.Tensor | None, *, _launcher=_default_pallas_fori_launcher):
+    # src[jagged_dense_bmm.py:49]: L, D = jagged.shape
+    L, D = jagged.shape
+    # src[jagged_dense_bmm.py:50]: B, D, K = dense.shape
+    B, D, K = dense.shape
+    # src[jagged_dense_bmm.py:51]: dtype = torch.promote_types(jagged.dtype, dense.dtype)
+    dtype = torch.promote_types(jagged.dtype, dense.dtype)
+    # src[jagged_dense_bmm.py:52]: device = jagged.device
+    device = jagged.device
+    # src[jagged_dense_bmm.py:54]: jagged = jagged.view(-1)  # flattening to [L * D]
+    jagged = jagged.view(-1)
+    # src[jagged_dense_bmm.py:56]: output = torch.empty((L, K), dtype=dtype, device=device).view(-1)
+    output = torch.empty((L, K), dtype=dtype, device=device).view(-1)
+    # src[jagged_dense_bmm.py:57]: for tile_b in hl.tile(B):
+    # src[jagged_dense_bmm.py:58]:     starts = seq_offsets[tile_b]
+    # src[jagged_dense_bmm.py:59]:     ends = seq_offsets[tile_b.index + 1]
+    # src[jagged_dense_bmm.py:57-106]: ...
+    _launcher(_helion_jagged_dense_bmm, (1,), seq_offsets, bias, output, jagged, dense, _output_indices=[2], _inplace_indices=[2], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,)), ((None,), (None,)), ((1, None, None), (0, None, None))], _ds_pad_dims=[(1, 1, 32, 0), (2, 0, 16, 15), (2, 1, 32, 0), (3, 0, 16, 15), (3, 1, 64, 0), (4, 1, 64, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 32), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((16, 32), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 16, 32), 'jnp.float32', 'vmem'), ((16, 64), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 64, 32), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2, 3, 4], _reshape_2d_arg_indices=[(2, 24), (3, 34)])
+    # src[jagged_dense_bmm.py:107]: return output.reshape(L, K)
+    return output.reshape(L, K)
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/autotuner/benchmark_provider.py", line 379, in _compute_baseline
+    synchronize_device(baseline_output)
+  File "/home/ymu_google_com/helion/helion/autotuner/benchmarking.py", line 129, in synchronize_device
+    tpu_sync(tpu_tensors, wait=True)
+  File "/home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/sync/sync.py", line 51, in synchronize
+    _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
+RuntimeError: mosaic failed to compile TPU kernel: Not implemented: Source and target leading tiles have different trailing dimensions
+
+at location: loc("dma_start:"("dma_start"("_helion_jagged_dense_bmm.<locals>._kernel_body.<locals>._fori_body_2.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/torchinductor_ymu_google_com/pa/cpaq2etisqypmuevrjc3waxpquiot34anzcrkqdjrikpxyeuea43.py":79:20 to :35))))
+
+The MLIR operation involved:
+  "tpu.enqueue_dma"(%182, %44, <<UNKNOWN SSA VALUE>>) <{operandSegmentSizes = array<i32: 1, 0, 1, 1, 0, 0>, priority = 0 : i32, strict_ordering = false}> : (memref<1x64x32xf32, #tpu.tiled<(1,32),[256,4,1]>, #tpu.memory_space<hbm>>, memref<1x64x32xf32, #tpu.tiled<(1,128),[64,1,1]>, #tpu.memory_space<vmem>>, memref<!tpu.dma_semaphore, #tpu.tiled<,[]>, #tpu.memory_space<semaphore_mem>>) -> ()
+... additional diagnostics were skipped.
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/examples/jagged_dense_bmm.py", line 183, in <module>
+    main()
+  File "/home/ymu_google_com/helion/examples/jagged_dense_bmm.py", line 177, in main
+    run_example(
+  File "/home/ymu_google_com/helion/helion/_testing.py", line 1133, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_testing.py", line 1201, in run_example
+    result = _as_tensors(func(*cloned_args))
+                         ^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 480, in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1142, in __call__
+    self.ensure_config_exists(args)
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 1110, in ensure_config_exists
+    self.autotune(args, force=False)
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 913, in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/backend.py", line 927, in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/base_cache.py", line 313, in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/base_cache.py", line 400, in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/base_search.py", line 473, in autotune
+    self._prepare()
+  File "/home/ymu_google_com/helion/helion/autotuner/base_search.py", line 288, in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/benchmark_provider.py", line 330, in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/autotuner/benchmark_provider.py", line 391, in _compute_baseline
+    raise exc.InvalidConfig(
+helion.exc.InvalidConfig: Default config failed while computing baseline.
+Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 16, 32, 64], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+I0000 00:00:1781545421.334861 1163097 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781545421.334939 1163097 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=121
+num_cache_hits=28 {23.1%}
+peak_compilation_memory_bytes=unknown
+
