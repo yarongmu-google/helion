@@ -99,19 +99,21 @@ def jagged_hstu_attention(
 
         for tile_q in hl.jagged_tile(seq_lens):
             q_idx = start + tile_q.index                                # [tile_q]
-            q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
-            acc = hl.zeros([tile_q, H, D], dtype=torch.float32)
+            # Transpose at the load site so Helion hoists it outside
+            # the KV loop and lowers the load-mask as a multiply
+            # rather than a where+broadcast (matches v2 codegen).
+            q_blk = q[q_idx, :, :].transpose(0, 1)                       # [H, tile_q, D]
+            # Acc lives in dot-output orientation so the value-bmm
+            # update can be added directly with no per-iter transpose.
+            acc = hl.zeros([H, tile_q, D], dtype=torch.float32)
 
             for tile_kv in hl.jagged_tile(seq_lens):
                 kv_idx = start + tile_kv.index                           # [tile_kv]
-                k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
-                v_blk = v[kv_idx, :, :]                                  # [tile_kv, H, D]
+                k_blk = k[kv_idx, :, :].transpose(0, 1)                  # [H, tile_kv, D]
+                v_blk = v[kv_idx, :, :].transpose(0, 1)                  # [H, tile_kv, D]
 
-                # 3-D bmm, H is the batch dim.
-                scores = torch.bmm(
-                    q_blk.transpose(0, 1),                               # [H, tile_q, D]
-                    k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
-                ) * alpha                                                 # [H, tile_q, tile_kv]
+                # [H, tile_q, D] @ [H, D, tile_kv] -> [H, tile_q, tile_kv]
+                scores = torch.bmm(q_blk, k_blk.transpose(-2, -1)) * alpha
                 scores = F.silu(scores) * attn_scale
 
                 causal_mask = (
@@ -119,13 +121,11 @@ def jagged_hstu_attention(
                 )                                                         # [tile_q, tile_kv]
                 scores = torch.where(causal_mask[None, :, :], scores, 0.0)
 
-                update = torch.bmm(
-                    scores.to(v.dtype),
-                    v_blk.transpose(0, 1),                               # [H, tile_kv, D]
-                )                                                         # [H, tile_q, D]
-                acc = acc + update.transpose(0, 1)                       # [tile_q, H, D]
+                # [H, tile_q, tile_kv] @ [H, tile_kv, D] -> [H, tile_q, D]
+                acc = acc + torch.bmm(scores.to(v.dtype), v_blk)
 
-            out[q_idx, :, :] = acc.to(out.dtype)
+            # [H, tile_q, D] -> [tile_q, H, D] for the jagged write.
+            out[q_idx, :, :] = acc.transpose(0, 1).to(out.dtype)
 
     return out
 
