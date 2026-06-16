@@ -44,11 +44,11 @@ def load_expr(
         result = expr_from_string(f"jnp.array([{name}[{idx_str}]])")
     else:
         result = expr_from_string(f"{name}[{idx_str}]")
-    # Jagged-flat: 2-D VMEM scratch but rank-expanded ``flat`` index makes
-    # the user-source load result 3-D (BB=1, BK, BM).
-    from helion._compiler.pallas.plan_tiling import TensorIndexPattern as _TIP
+    # Per-item jagged DMA: scratch is 2-D (BK, BM), but the rank-expanded
+    # ``flat`` index makes the user-source load 3-D (BB=1, BK, BM).
+    from helion._compiler.pallas.plan_tiling import JaggedFlatIndexPattern
 
-    if any(isinstance(p, _TIP) and p.is_jagged_flat for p in patterns):
+    if any(isinstance(p, JaggedFlatIndexPattern) for p in patterns):
         result = expr_from_string("jnp.expand_dims({result}, axis=0)", result=result)
     for dim in none_dims:
         result = expr_from_string(
@@ -75,6 +75,9 @@ def _load_mask_expr(
     cause a shape mismatch against the smaller ref.
     """
     from helion._compiler.compile_environment import CompileEnvironment
+    from helion._compiler.pallas.plan_tiling import ArbitraryIndexPattern
+    from helion._compiler.pallas.plan_tiling import TileBeginWithOffsetPattern
+    from helion._compiler.pallas.plan_tiling import TileIndexWithOffsetPattern
     from helion._compiler.pallas.plan_tiling import TilePattern
 
     assert state.fx_node is not None
@@ -89,6 +92,12 @@ def _load_mask_expr(
     dtype_str: str | None = None
     out_dim = 0
     tensor_dim = 0
+
+    squeezing_patterns = (
+        ArbitraryIndexPattern,
+        TileIndexWithOffsetPattern,
+        TileBeginWithOffsetPattern,
+    )
 
     for idx, pattern in zip(subscript, indexing_patterns, strict=True):
         if idx is None:
@@ -114,7 +123,8 @@ def _load_mask_expr(
 
         # TODO(dunfanlu): Do other patterns beside TilePattern require masking?
 
-        out_dim += 1
+        if not isinstance(pattern, squeezing_patterns):
+            out_dim += 1
         tensor_dim += 1
 
     if not mask_exprs:
@@ -382,14 +392,15 @@ def _generated_index_code(
         # resident target axis instead of indexing it a second time.
         return ":"
 
-    from helion._compiler.pallas.plan_tiling import TensorIndexPattern
+    from helion._compiler.pallas.plan_tiling import JaggedFlatIndexPattern
+    from helion._compiler.pallas.plan_tiling import JaggedOuterIndexPattern
 
-    if isinstance(pattern, TensorIndexPattern) and pattern.is_jagged_flat:
+    if isinstance(pattern, JaggedFlatIndexPattern):
         # Per-item base offset is injected at the DMA slice (see
         # ``_build_hbm_dma_slice``); body reads the full VMEM scratch.
         return ":"
 
-    if isinstance(pattern, TensorIndexPattern) and pattern.is_jagged_outer:
+    if isinstance(pattern, JaggedOuterIndexPattern):
         # Same as jagged_flat: the per-program slice was emitted via
         # ``_build_hbm_dma_slice``'s outer-jagged branch.  The body
         # reads the full VMEM scratch (which already contains just

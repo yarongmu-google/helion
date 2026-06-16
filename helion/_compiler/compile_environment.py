@@ -269,9 +269,9 @@ class CompileEnvironment:
         self._tensor_descriptor_layout_guard_source_cache: dict[int, Source | None] = {}
         self.jagged_tile_parent_ids: dict[int, list[int]] = {}
         self.jagged_tile_mask_shapes: dict[int, list[torch.SymInt]] = {}
-        # Sublane / lane bids of registered jagged-flat TensorIndexPatterns.
-        # Populated by plan_tiling; on env (not DeviceFunction) because
-        # some readers run outside the device function scope.
+        # Bids consumed by the per-item jagged DMA emit (Mosaic can't slice
+        # by ``starts[pid]``). Set by plan_tiling; on env so non-device-
+        # scope readers can consult them.
         self.pallas_jagged_flat_sublane_bids: set[int] = set()
         self.pallas_jagged_flat_lane_bids: set[int] = set()
         self._symint_cache: dict[object, torch.SymInt] = {}
@@ -1099,7 +1099,7 @@ class CompileEnvironment:
                 BlockSizeOrigin,
             ):
                 return origin_info.origin.block_id
-            if origin_info is not None and type(origin_info.origin) is GridOrigin:
+            if origin_info is not None and isinstance(origin_info.origin, GridOrigin):
                 return origin_info.origin.block_id
         return None
 

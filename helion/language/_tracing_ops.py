@@ -29,7 +29,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from .._compiler.inductor_lowering import CodegenState
-    from .._compiler.pallas.plan_tiling import TensorIndexPattern
+    from .._compiler.pallas.plan_tiling import JaggedFlatIndexPattern
+    from .._compiler.pallas.plan_tiling import JaggedOuterIndexPattern
     from .._compiler.tile_strategy import TileStrategy
     from ..runtime.config import Config
 
@@ -397,8 +398,10 @@ def _compute_grid_and_block_sizes(
     state: CodegenState,
     block_ids: list[int],
     env: CompileEnvironment,
+    aligned_dim: dict[int, int] | None = None,
 ) -> tuple[list[str], list[str]]:
     """Compute grid dimensions and block size vars for the given block_ids."""
+    aligned_dim = aligned_dim or {}
     grid_parts: list[str] = []
     block_size_vars: list[str] = []
     for i, block_id in enumerate(block_ids):
@@ -408,7 +411,15 @@ def _compute_grid_and_block_sizes(
         block_value = state.device_function.resolved_block_size(block_id)
         if block_value is not None:
             state.device_function.constexpr_arg(block_size_var, block_value)
-        numel_expr = _get_loop_numel(state, i)
+        if block_id in aligned_dim:
+            # Aligned-enclosing span: ceil(end/S)*S - floor(begin/S)*S.
+            begin, end = _get_loop_begin_and_end(state, i)
+            sublane = aligned_dim[block_id]
+            a_start = f"(({begin}) - ({begin}) % {sublane})"
+            a_end = f"((({end}) + {sublane} - 1) // {sublane} * {sublane})"
+            numel_expr = f"({a_end} - {a_start})"
+        else:
+            numel_expr = _get_loop_numel(state, i)
         grid_parts.append(
             env.backend.cdiv_expr(numel_expr, block_size_var, is_device=True)
         )
@@ -419,8 +430,10 @@ def _pallas_loop_begin_and_step_exprs(
     state: CodegenState,
     block_ids: list[int],
     block_size_vars: list[str],
+    aligned_dim: dict[int, int] | None = None,
 ) -> tuple[list[str], list[str], list[str]]:
     """Return begin, per-iteration step, and slice-size expressions for loop dims."""
+    aligned_dim = aligned_dim or {}
     steps = state.proxy_arg(4) if len(state.proxy_args) > 4 else None
 
     if not isinstance(steps, (list, tuple)):
@@ -433,6 +446,10 @@ def _pallas_loop_begin_and_step_exprs(
     for i in range(len(block_ids)):
         step = steps[i]
         begin_expr, _ = _get_loop_begin_and_end(state, i)
+        if block_ids[i] in aligned_dim:
+            # Align the tile begin DOWN to the sublane (aligned-enclosing).
+            sublane = aligned_dim[block_ids[i]]
+            begin_expr = f"(({begin_expr}) - ({begin_expr}) % {sublane})"
         if step is None or sympy.sympify(step) in (
             sympy.Integer(0),
             sympy.Integer(1),
@@ -705,6 +722,7 @@ def _setup_inner_loop_masks(
     env: CompileEnvironment,
     body_stmts: list[ast.AST],
     offset_expr_fn: Callable[[int, str], str],
+    aligned_dim: dict[int, int] | None = None,
 ) -> bool:
     """Set up mask variables for inner-loop block_ids.
 
@@ -714,13 +732,37 @@ def _setup_inner_loop_masks(
 
     Returns True if any mask requires explicit indices.
     """
+    aligned_dim = aligned_dim or {}
     needs_explicit = False
     if hasattr(strategy, "_setup_mask"):
         for i, bid in enumerate(block_ids):
+            offset_var = state.device_function.new_var(f"offset_{bid}")
+            if bid in aligned_dim:
+                # Two-sided validity mask for an aligned-enclosing dynamic row
+                # tile: the load over-reads [a_start, begin) and [end, a_end), so
+                # mask both ends.  The relative offset is measured from a_start.
+                sublane = aligned_dim[bid]
+                begin, end = _get_loop_begin_and_end(state, i)
+                a_start = f"(({begin}) - ({begin}) % {sublane})"
+                mask_var = strategy.fn.new_var(f"mask_{bid}", dce=True)  # pyrefly: ignore[missing-attribute]
+                strategy.mask_vars[bid] = mask_var  # pyrefly: ignore[missing-attribute]
+                needs_explicit = True
+                body_stmts.extend(
+                    [
+                        statement_from_string(
+                            f"{offset_var} = {offset_expr_fn(i, block_size_vars[i])}"
+                        ),
+                        statement_from_string(
+                            f"{mask_var} = (({a_start}) + ({offset_var}) "
+                            f">= ({begin})) & (({a_start}) + ({offset_var}) "
+                            f"< ({end}))"
+                        ),
+                    ]
+                )
+                continue
             block_value = state.device_function.resolved_block_size(bid)
             assert isinstance(block_value, int)
             numel_expr = _get_loop_numel(state, i)
-            offset_var = state.device_function.new_var(f"offset_{bid}")
             mask_stmt = strategy._setup_mask(
                 state, bid, block_value, offset_var, numel_expr
             )
@@ -1437,6 +1479,107 @@ def _(state: CodegenState) -> ast.AST:
     )
 
 
+def _lane_tile(
+    state: CodegenState, fake: torch.Tensor, dim_to_bid: dict[int, int]
+) -> int | None:
+    """Access extent on ``fake``'s last dim: its block size if tiled, else width."""
+    lane_bid = dim_to_bid.get(fake.ndim - 1)
+    if lane_bid is not None:
+        rb = state.device_function.resolved_block_size(lane_bid)
+        if isinstance(rb, int):
+            return rb
+    last = fake.shape[fake.ndim - 1]
+    return last if isinstance(last, int) else None
+
+
+def _loop_dim_is_dynamic(state: CodegenState, i: int) -> bool:
+    """Whether loop dim ``i`` has a runtime begin and end (a fully-dynamic jagged
+    tile).  The tracing-time form of is_dynamic_bound_tile, used here because the
+    device loops are not registered yet.
+    """
+    begins, ends = state.proxy_args[1], state.proxy_args[2]
+    if not isinstance(begins, (list, tuple)) or not isinstance(ends, (list, tuple)):
+        return False
+    begin = begins[i] if i < len(begins) else 0
+    end = ends[i] if i < len(ends) else 0
+    return not isinstance(begin, (int, torch.SymInt)) and not isinstance(
+        end, (int, torch.SymInt)
+    )
+
+
+def _aligned_dim(
+    state: CodegenState,
+    env: CompileEnvironment,
+    block_ids: list[int],
+    loaded_tensors: dict[int, tuple[torch.Tensor, torch.fx.Node, list[object]]],
+    stored_tensors: dict[int, tuple[torch.Tensor, torch.fx.Node, list[object]]],
+) -> dict[int, int]:
+    """Jagged row tiles (runtime end) that read an aligned-enclosing window.
+
+    Maps each to the sublane S its range rounds down to.  A row aligns when a
+    tensor it slices must land on a sublane tile (bf16, or f32 spanning more than
+    one lane tile), or when a per-row map store carries its shared boundary.
+    A DIRECT row that does not carry is omitted: it reads at the exact offset.  S
+    is the largest float-tensor sublane (bf16 forces 16); tiles that carry are
+    also registered for the store fold/save.
+    """
+    from helion._compiler.backend import SliceAddressing
+    from helion._compiler.backend import _slice_addressing
+    from helion._compiler.pallas.ordered_carry import CarryBoundaryTile
+    from helion._compiler.pallas.ordered_carry import is_row_map_axis
+    from helion._compiler.pallas.ordered_carry import needs_ordered_carry
+
+    sublanes = [
+        env.backend.sublane_tiling(t.dtype)  # pyrefly: ignore[missing-attribute]
+        for t in HostFunction.current().tensor_to_origin
+        if isinstance(t, torch.Tensor) and t.is_floating_point()
+    ]
+    if not sublanes:
+        return {}
+
+    # Strictest addressing each row needs over the tensors it slices.
+    addressing: dict[int, SliceAddressing] = {}
+    for fake, _node, sub_meta in (*loaded_tensors.values(), *stored_tensors.values()):
+        if not (isinstance(fake, torch.Tensor) and fake.is_floating_point()):
+            continue
+        dim_to_bid = _get_dim_block_ids(sub_meta, env)
+        lane_block = _lane_tile(state, fake, dim_to_bid)
+        for dim, dim_bid in dim_to_bid.items():
+            if _slice_addressing(fake, dim, lane_block) is SliceAddressing.ALIGNED:
+                addressing[dim_bid] = SliceAddressing.ALIGNED
+            else:
+                addressing.setdefault(dim_bid, SliceAddressing.DIRECT)
+
+    sublane = max(sublanes)
+    aligned_dim: dict[int, int] = {}
+    for i, bid in enumerate(block_ids):
+        if not _loop_dim_is_dynamic(state, i):
+            continue  # static begin or end: not a fully-dynamic jagged tile
+        carry = needs_ordered_carry(state, bid)
+        direct = addressing.get(bid, SliceAddressing.ALIGNED) is SliceAddressing.DIRECT
+        if direct and not carry:
+            continue  # reads any offset; a plain clamped slice suffices
+        if not carry and not is_row_map_axis(state, bid):
+            # ALIGNED but not a map axis: a bf16 reduction over the row.  Its
+            # dense bf16 output store can't be proven aligned for Mosaic (E2003),
+            # so reject it cleanly here instead.  f32 reductions are DIRECT and
+            # already skipped above.
+            raise NotImplementedError(
+                "Pallas: bf16 reduction over a jagged row is not supported yet "
+                "(its dense bf16 output store cannot be proven sublane-aligned)."
+            )
+        aligned_dim[bid] = sublane
+        if carry:
+            begin, end = _get_loop_begin_and_end(state, i)
+            state.device_function.carry_tiles[bid] = CarryBoundaryTile(
+                block_id=bid,
+                begin_var=begin,
+                end_var=end,
+                sublane=sublane,
+            )
+    return aligned_dim
+
+
 def _codegen_emit_pipeline(state: CodegenState) -> object:
     """Emit inner device loops using pltpu.emit_pipeline.
 
@@ -1466,11 +1609,15 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
     assert isinstance(proxy_args, list)
     has_loop_state = len(args) > 0
 
-    grid_parts, block_size_vars = _compute_grid_and_block_sizes(state, block_ids, env)
-
     loaded_tensors, stored_tensors = _classify_loop_tensors(graph_info, state)
+
+    aligned_dim = _aligned_dim(state, env, block_ids, loaded_tensors, stored_tensors)
+
+    grid_parts, block_size_vars = _compute_grid_and_block_sizes(
+        state, block_ids, env, aligned_dim
+    )
     begin_exprs, iter_step_exprs, slice_size_exprs = _pallas_loop_begin_and_step_exprs(
-        state, block_ids, block_size_vars
+        state, block_ids, block_size_vars, aligned_dim
     )
     # Loop end expressions (used to clamp store extents for data-dependent begins).
     end_exprs = [_get_loop_begin_and_end(state, i)[1] for i in range(len(block_ids))]
@@ -1518,6 +1665,8 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
         dims into the BlockSpec lambda, so the full HBM tensor can be passed
         without pre-slicing.
         """
+        from helion._compiler.pallas.ordered_carry import is_dynamic_bound_tile
+
         dim_to_bid = _get_dim_block_ids(subscript_meta, env)
         shape = fake.shape
         block_shape_parts: list[str] = []
@@ -1608,6 +1757,20 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
                 else:
                     block_shape_parts.append(str(int(shape[dim_idx])))
                 lambda_parts.append(pid_var)
+            elif bid is not None and is_dynamic_bound_tile(state, bid):
+                # Jagged row tile from an inner pipeline.  pl.multiple_of is
+                # assume_multiple: it suppresses the tiled-row alignment check.
+                # Safe because the begin is rounded to the sublane in the dim's
+                # own loop, and a DIRECT f32 single-lane-tile row reads
+                # contiguously.  Always emitted, as sibling loops reference the
+                # same jagged dim.  Must precede the outer-non-grid branch.
+                block_m = state.device_function.block_size_var(bid)
+                offset_v = state.codegen.offset_var(bid)
+                sublane = env.backend.sublane_tiling(fake.dtype)  # pyrefly: ignore[missing-attribute]
+                block_shape_parts.append(f"pl.BoundedSlice({block_m})")
+                lambda_parts.append(
+                    f"pl.ds(pl.multiple_of({offset_v}, {sublane}), {block_m})"
+                )
             elif bid is not None and state.codegen.active_device_loops.get(bid):
                 # Outer non-grid device loop -- the HBM ref is pre-sliced via
                 # ``.at[pl.ds(offset, bs)]`` (see _make_hbm_slice), so the
@@ -1666,7 +1829,14 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
         and inner pipeline dims are handled by BlockSpec via the iteration
         lambda — so this only adds ``pl.ds(offset, bs)`` slices for outer
         device loops whose offset is a closure variable in this scope.
+
+        Dynamic (jagged) row tiles are skipped here: they are addressed by an
+        aligned-enclosing BoundedSlice in the BlockSpec (their group start is
+        not block-aligned, so a plain ``pl.ds`` pre-slice would be unaddressable
+        for bf16).
         """
+        from helion._compiler.pallas.ordered_carry import is_dynamic_bound_tile
+
         dim_to_bid = _get_dim_block_ids(subscript_meta, env)
         shape = fake.shape
         parts: list[str] = []
@@ -1678,6 +1848,7 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
                 and bid not in block_ids
                 and bid not in _bid_to_pid_var
                 and state.codegen.active_device_loops.get(bid)
+                and not is_dynamic_bound_tile(state, bid)
             ):
                 offset = state.codegen.offset_var(bid)
                 bs_var = state.device_function.block_size_var(bid)
@@ -1790,6 +1961,7 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
         offset_expr_fn=lambda i, bs: (
             f"_pipeline_indices[{i}] * {bs} + jnp.arange({bs})"
         ),
+        aligned_dim=aligned_dim,
     )
 
     # Emit absolute offset assignments inside the pipeline body so any
@@ -1893,20 +2065,18 @@ def _codegen_emit_pipeline(state: CodegenState) -> object:
 
 def _build_jagged_flat_pattern_map(
     graph_info: object,
-) -> dict[int, TensorIndexPattern]:
-    """Map ``id(fake_tensor)`` to its ``TensorIndexPattern`` (the one with
-    ``is_jagged_flat=True``) by walking the loop body's load/store nodes.
-
-    Used by ``_compute_vmem_shapes`` and ``_build_hbm_dma_slice`` to swap
-    the default 1-D scratch/whole-tensor slice for the canonical 2-D
-    jagged DMA path on tensors whose subscript matches the
-    ``x_flat[(starts + tile_k.idx) * M + tile_m.idx]`` form.
+) -> dict[int, JaggedFlatIndexPattern]:
+    """Map ``id(fake_tensor)`` to its ``JaggedFlatIndexPattern`` by walking
+    the loop body's load/store nodes. Drives ``_compute_vmem_shapes``
+    (size the (BK, BM) scratch) and ``_build_hbm_dma_slice`` (emit
+    ``pl.ds(starts[0] + offset, BK)`` instead of the default slice).
     """
-    from .._compiler.pallas.plan_tiling import TensorIndexPattern
+    from .._compiler.pallas.plan_tiling import JaggedFlatIndexPattern
+    from .._compiler.pallas.plan_tiling import JaggedOuterIndexPattern
     from .memory_ops import load as _load_op
     from .memory_ops import store as _store_op
 
-    result: dict[int, TensorIndexPattern] = {}
+    result: dict[int, JaggedFlatIndexPattern] = {}
     graph = getattr(graph_info, "graph", None)
     if graph is None:
         return result
@@ -1920,9 +2090,7 @@ def _build_jagged_flat_pattern_map(
         if not isinstance(val, torch.Tensor):
             continue
         for p in node.meta.get("indexing_patterns", []) or []:
-            if isinstance(p, TensorIndexPattern) and (
-                p.is_jagged_flat or p.is_jagged_outer
-            ):
+            if isinstance(p, (JaggedFlatIndexPattern, JaggedOuterIndexPattern)):
                 result[id(val)] = p
                 break
     return result
@@ -1954,29 +2122,30 @@ def _compute_vmem_shapes(
     slice_size_exprs: list[str],
     env: CompileEnvironment,
     state: CodegenState,
-    jagged_flat_patterns: dict[int, TensorIndexPattern] | None = None,
+    jagged_flat_patterns: dict[int, JaggedFlatIndexPattern] | None = None,
 ) -> list[tuple[int, ...]]:
     """Compute VMEM buffer shapes for each tensor in the fori_loop body."""
+    from .._compiler.pallas.plan_tiling import JaggedFlatIndexPattern
+    from .._compiler.pallas.plan_tiling import JaggedOuterIndexPattern
+
     vmem_shapes: list[tuple[int, ...]] = []
     for fake, sub_meta, _direction in all_tensor_info:
         # Jagged-flat: 1-D at FX, but launcher reshapes to 2-D (total_K, M)
         # and the per-iter DMA chunk is (BK, BM).
         jpat = (jagged_flat_patterns or {}).get(id(fake))
-        if jpat is not None and jpat.is_jagged_flat:
-            # V1 flat: 2-D VMEM ``(sublane_bs, lane_bs)``.
-            assert jpat.sublane_bid is not None and jpat.lane_bid is not None
+        if isinstance(jpat, JaggedFlatIndexPattern):
+            # Flat: 2-D VMEM ``(sublane_bs, lane_bs)``.
             sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
             lane_bs = state.device_function.resolved_block_size(jpat.lane_bid)
             assert isinstance(sublane_bs, int) and isinstance(lane_bs, int)
             vmem_shapes.append((sublane_bs, lane_bs))
             continue
-        if jpat is not None and jpat.is_jagged_outer:
+        if isinstance(jpat, JaggedOuterIndexPattern):
             # Outer-jagged: VMEM matches the per-program DMA slice
             # ``(BK, *trailing)`` — same shape as the slice into HBM.
             # When the kernel uses ``tile_b.begin`` scalar starts,
             # Helion's load result rank = VMEM rank; no expand_dims
             # rank-bump is needed.
-            assert jpat.sublane_bid is not None
             sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
             assert isinstance(sublane_bs, int)
             trailing = tuple(int(fake.shape[i]) for i in range(1, fake.ndim))
@@ -2022,7 +2191,7 @@ def _classify_pipelined_tensors(
     slice_size_exprs: list[str],
     env: CompileEnvironment,
     state: CodegenState,
-    jagged_flat_patterns: dict[int, TensorIndexPattern] | None = None,
+    jagged_flat_patterns: dict[int, JaggedFlatIndexPattern] | None = None,
 ) -> tuple[
     list[tuple[torch.Tensor, list[object], str]], list[tuple[int, ...]], set[int]
 ]:
@@ -2105,6 +2274,8 @@ def _codegen_fori_loop(state: CodegenState) -> object:
     from .._compiler.device_ir import ForLoopGraphInfo
     from .._compiler.generate_ast import GenerateAST
     from .._compiler.inductor_lowering import codegen_call_with_graph
+    from .._compiler.pallas.plan_tiling import JaggedFlatIndexPattern
+    from .._compiler.pallas.plan_tiling import JaggedOuterIndexPattern
     from .._compiler.tile_strategy import ForiLoopState
     from .._compiler.tile_strategy import LoopDimInfo
 
@@ -2257,106 +2428,108 @@ def _codegen_fori_loop(state: CodegenState) -> object:
         _tensor_to_sem=tensor_to_sem,
     )
 
+    def _build_jagged_flat_hbm_dma_slice(
+        jpat: JaggedFlatIndexPattern, fake: torch.Tensor, hbm_name: str
+    ) -> str:
+        """Emit ``x_flat.at[pl.ds(starts[0] + k_offset, BK), pl.ds(m_offset, BM)]``
+        — the per-item jagged DMA slice (Mosaic's auto-pipeline can't do
+        this). Resolves the sublane base by positional placeholder match
+        from ``jpat.sublane_base_fx`` back to its outer-scope ``starts``.
+        """
+        slice_parts: list[str] = []
+        for axis_bid in (jpat.sublane_bid, jpat.lane_bid):
+            bs_var = state.device_function.block_size_var(axis_bid)
+            assert bs_var is not None
+            if axis_bid in block_ids:
+                ax_idx = block_ids.index(axis_bid)
+                begin_expr = begin_exprs[ax_idx]
+                iter_step_expr = iter_step_exprs[ax_idx]
+                dim_idx_expr = dim_idx_exprs[ax_idx]
+                axis_offset = f"({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr})"
+            else:
+                axis_offset = state.codegen.offset_var(axis_bid)
+            if axis_bid == jpat.sublane_bid:
+                # Resolve the inner-graph placeholder back to its
+                # outer-scope emit-time name via positional match.
+                sublane_base_fx = jpat.sublane_base_fx
+                assert sublane_base_fx is not None
+                placeholders = [
+                    n for n in graph_info.graph.nodes if n.op == "placeholder"
+                ]
+                assert isinstance(args, list)
+                if sublane_base_fx in placeholders:
+                    outer_ast = args[placeholders.index(sublane_base_fx)]
+                    starts_name = ast.unparse(outer_ast)
+                else:
+                    starts_name = sublane_base_fx.name
+                axis_offset = f"{starts_name}[0] + ({axis_offset})"
+            slice_parts.append(f"pl.ds({axis_offset}, {bs_var})")
+        # Sublane DMA over-reads by up to ``BK-1`` past the row's valid
+        # data on the last tile_k iter; without host pad, a near-tail
+        # row can read past ``x_flat`` end and fault the TPU.  The
+        # compute mask zeros the over-read so pad-to-0 is sufficient.
+        from .memory_ops import _record_pad_info
+
+        sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
+        if isinstance(sublane_bs, int):
+            _record_pad_info(state, fake, 0, jpat.sublane_bid, sublane_bs - 1)
+        _record_pad_info(state, fake, 1, jpat.lane_bid, 0)
+        return f"{hbm_name}.at[{', '.join(slice_parts)}]"
+
+    def _build_jagged_outer_hbm_dma_slice(
+        jpat: JaggedOuterIndexPattern, fake: torch.Tensor, hbm_name: str
+    ) -> str:
+        """Emit the per-program sublane-only DMA slice for the outer-jagged
+        form: ``tensor.at[pl.ds(starts[0] + offset, BK), :, :, ...]``.
+
+        Sibling of ``_build_jagged_flat_hbm_dma_slice`` — same sublane
+        offset construction, trailing dims emit as ``:`` (Mosaic handles
+        them natively via standard BlockSpec carving).  Handles both
+        scalar ``starts`` (``tile_b.begin`` idiom) and 1-D ``starts``
+        (V1 ``starts = seq_offsets[tile_b]`` idiom).
+        """
+        sublane_base_fx = jpat.sublane_base_fx
+        assert sublane_base_fx is not None
+        bs_var = state.device_function.block_size_var(jpat.sublane_bid)
+        assert bs_var is not None
+        if jpat.sublane_bid in block_ids:
+            ax_idx = block_ids.index(jpat.sublane_bid)
+            begin_expr = begin_exprs[ax_idx]
+            iter_step_expr = iter_step_exprs[ax_idx]
+            dim_idx_expr = dim_idx_exprs[ax_idx]
+            axis_offset = f"({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr})"
+        else:
+            axis_offset = state.codegen.offset_var(jpat.sublane_bid)
+        placeholders = [n for n in graph_info.graph.nodes if n.op == "placeholder"]
+        assert isinstance(args, list)
+        if sublane_base_fx in placeholders:
+            outer_ast = args[placeholders.index(sublane_base_fx)]
+            starts_name = ast.unparse(outer_ast)
+        else:
+            starts_name = sublane_base_fx.name
+        starts_val = sublane_base_fx.meta.get("val")
+        starts_is_scalar = isinstance(starts_val, torch.Tensor) and starts_val.ndim == 0
+        starts_ref = starts_name if starts_is_scalar else f"{starts_name}[0]"
+        axis_offset = f"{starts_ref} + ({axis_offset})"
+        slice_parts = [f"pl.ds({axis_offset}, {bs_var})"]
+        slice_parts.extend(":" for _ in range(fake.ndim - 1))
+
+        from .memory_ops import _record_pad_info
+
+        sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
+        if isinstance(sublane_bs, int):
+            _record_pad_info(state, fake, 0, jpat.sublane_bid, sublane_bs - 1)
+        return f"{hbm_name}.at[{', '.join(slice_parts)}]"
+
     def _build_hbm_dma_slice(
         fake: torch.Tensor, hbm_name: str, subscript_meta: list[object]
     ) -> str:
         """Build an HBM ref slicing expression for DMA with loop variable."""
-        # Jagged-flat: emit 2-D slice
-        # ``x_flat.at[pl.ds(starts[0] + k_offset, BK), pl.ds(m_offset, BM)]``.
         jpat = jagged_flat_patterns.get(id(fake))
-        if jpat is not None and jpat.is_jagged_flat:
-            assert (
-                jpat.sublane_bid is not None
-                and jpat.lane_bid is not None
-                and jpat.sublane_base_fx is not None
-            )
-            slice_parts: list[str] = []
-            for axis_bid in (jpat.sublane_bid, jpat.lane_bid):
-                bs_var = state.device_function.block_size_var(axis_bid)
-                assert bs_var is not None
-                if axis_bid in block_ids:
-                    ax_idx = block_ids.index(axis_bid)
-                    begin_expr = begin_exprs[ax_idx]
-                    iter_step_expr = iter_step_exprs[ax_idx]
-                    dim_idx_expr = dim_idx_exprs[ax_idx]
-                    axis_offset = (
-                        f"({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr})"
-                    )
-                else:
-                    axis_offset = state.codegen.offset_var(axis_bid)
-                if axis_bid == jpat.sublane_bid:
-                    # Resolve the inner-graph placeholder back to its
-                    # outer-scope emit-time name via positional match.
-                    placeholders = [
-                        n for n in graph_info.graph.nodes if n.op == "placeholder"
-                    ]
-                    assert isinstance(args, list)
-                    if jpat.sublane_base_fx in placeholders:
-                        outer_ast = args[placeholders.index(jpat.sublane_base_fx)]
-                        starts_name = ast.unparse(outer_ast)
-                    else:
-                        starts_name = jpat.sublane_base_fx.name
-                    axis_offset = f"{starts_name}[0] + ({axis_offset})"
-                slice_parts.append(f"pl.ds({axis_offset}, {bs_var})")
-            # Sublane DMA over-reads by up to ``BK-1`` past the row's valid
-            # data on the last tile_k iter; without host pad, a near-tail
-            # row can read past ``x_flat`` end and fault the TPU.  The
-            # compute mask zeros the over-read so pad-to-0 is sufficient.
-            from .memory_ops import _record_pad_info
-
-            sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
-            if isinstance(sublane_bs, int):
-                _record_pad_info(state, fake, 0, jpat.sublane_bid, sublane_bs - 1)
-            _record_pad_info(state, fake, 1, jpat.lane_bid, 0)
-            return f"{hbm_name}.at[{', '.join(slice_parts)}]"
-        if jpat is not None and jpat.is_jagged_outer:
-            # Outer-jagged: ND slice ``tensor.at[pl.ds(starts[0] +
-            # sublane_offset, BK), :, :, ...]``.  Reuses the same
-            # sublane-offset construction as the flat branch; trailing
-            # dims are dense and emit as ``:`` (Mosaic handles them
-            # natively via standard BlockSpec carving).
-            assert (
-                jpat.sublane_bid is not None
-                and jpat.sublane_base_fx is not None
-            )
-            bs_var = state.device_function.block_size_var(jpat.sublane_bid)
-            assert bs_var is not None
-            if jpat.sublane_bid in block_ids:
-                ax_idx = block_ids.index(jpat.sublane_bid)
-                begin_expr = begin_exprs[ax_idx]
-                iter_step_expr = iter_step_exprs[ax_idx]
-                dim_idx_expr = dim_idx_exprs[ax_idx]
-                axis_offset = (
-                    f"({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr})"
-                )
-            else:
-                axis_offset = state.codegen.offset_var(jpat.sublane_bid)
-            placeholders = [
-                n for n in graph_info.graph.nodes if n.op == "placeholder"
-            ]
-            assert isinstance(args, list)
-            if jpat.sublane_base_fx in placeholders:
-                outer_ast = args[placeholders.index(jpat.sublane_base_fx)]
-                starts_name = ast.unparse(outer_ast)
-            else:
-                starts_name = jpat.sublane_base_fx.name
-            # ``starts`` may be scalar (kernel used ``tile_b.begin``) or
-            # 1-D (V1 idiom ``starts = seq_offsets[tile_b]``).  Only
-            # index ``[0]`` in the 1-D case.
-            starts_val = jpat.sublane_base_fx.meta.get("val")
-            starts_is_scalar = (
-                isinstance(starts_val, torch.Tensor) and starts_val.ndim == 0
-            )
-            starts_ref = starts_name if starts_is_scalar else f"{starts_name}[0]"
-            axis_offset = f"{starts_ref} + ({axis_offset})"
-            outer_slice_parts = [f"pl.ds({axis_offset}, {bs_var})"]
-            outer_slice_parts.extend(":" for _ in range(fake.ndim - 1))
-            from .memory_ops import _record_pad_info
-
-            sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
-            if isinstance(sublane_bs, int):
-                _record_pad_info(state, fake, 0, jpat.sublane_bid, sublane_bs - 1)
-            return f"{hbm_name}.at[{', '.join(outer_slice_parts)}]"
+        if isinstance(jpat, JaggedFlatIndexPattern):
+            return _build_jagged_flat_hbm_dma_slice(jpat, fake, hbm_name)
+        if isinstance(jpat, JaggedOuterIndexPattern):
+            return _build_jagged_outer_hbm_dma_slice(jpat, fake, hbm_name)
 
         dim_to_bid = _get_dim_block_ids(subscript_meta, env)
         shape = fake.shape
@@ -2783,7 +2956,7 @@ def _(state: CodegenState) -> ast.Name:
     return lhs
 
 
-@_decorators.get_masked_value(_phi)
+@_decorators.get_masked_value(_phi, "common")
 def _(node: torch.fx.Node) -> float | bool | None:
     lhs, rhs = node.args
     assert isinstance(lhs, torch.fx.Node)
@@ -3098,7 +3271,7 @@ def _(state: CodegenState) -> ast.AST:
     )
 
 
-@_decorators.get_masked_value(_mask_to)
+@_decorators.get_masked_value(_mask_to, "common")
 def _(node: torch.fx.Node) -> float | bool:
     value = node.args[1]
     assert isinstance(value, (int, float, bool))
@@ -3143,7 +3316,7 @@ def _(state: CodegenState) -> ast.AST:
     return create(ast.Name, id=varname, ctx=ast.Load())
 
 
-@_decorators.get_masked_value(_new_var)
+@_decorators.get_masked_value(_new_var, "common")
 def _(node: torch.fx.Node) -> float | bool | None:
     from .._compiler.node_masking import cached_masked_value
 

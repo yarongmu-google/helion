@@ -69,27 +69,41 @@ class NonePattern(IndexingPattern):
 
 @dataclass
 class TensorIndexPattern(IndexingPattern):
-    """Tensor-valued index.
+    """Tensor-valued index - no tiling. Resolved for indirect load/store codegen."""
 
-    ``is_jagged_flat=False`` and ``is_jagged_outer=False`` → indirect
-    gather/scatter.
 
-    ``is_jagged_flat=True`` → canonical flat-1D form
-    ``x_flat[(starts + tile_k.idx) * M + tile_m.idx]`` with cached
-    sublane/lane axes; launcher reshapes flat tensor by ``lane_size``.
+@dataclass
+class JaggedFlatIndexPattern(IndexingPattern):
+    """Entry point into the per-item sublane/lane jagged DMA emit.
 
-    ``is_jagged_outer=True`` → degenerate form ``add(starts, tile_k.idx)``
-    used as a 1-D index into a 3+D source with the trailing axes
-    addressed by ``:`` slices (the outer-jagged case at dim_from_end >=
-    2). No lane bid / lane size — Mosaic handles trailing axes natively.
+    Mosaic's auto-pipeline can't slice by a per-program scalar
+    ``starts[pid]``; Helion emits ``pl.ds(starts[0] + offset, BK)``
+    manually inside a fori_loop instead.  This class names one entry
+    point — the canonical ``x_flat[(starts + tile_k.idx) * M +
+    tile_m.idx]`` form — and caches the sublane / lane bids the DMA
+    emit consumes.  Other entry points can populate the same bids.
     """
 
-    is_jagged_flat: bool = False
-    is_jagged_outer: bool = False
-    sublane_bid: int | None = None
-    sublane_base_fx: torch.fx.Node | None = None
-    lane_bid: int | None = None
-    lane_size: int | torch.SymInt | None = None
+    sublane_bid: int
+    sublane_base_fx: torch.fx.Node | None
+    lane_bid: int
+    lane_size: int | torch.SymInt
+
+
+@dataclass
+class JaggedOuterIndexPattern(IndexingPattern):
+    """Per-item sublane DMA for the outer-jagged form (lane handled by Mosaic).
+
+    Sibling of ``JaggedFlatIndexPattern``: same per-program ``pl.ds(starts[0]
+    + offset, BK)`` workaround, but for the degenerate ``add(starts,
+    tile_k.idx)`` form used as a 1-D index into a 3+D source with the
+    trailing axes addressed by ``:`` slices (dim_from_end >= 2).  Mosaic
+    handles the trailing dense axes natively, so only the sublane base is
+    cached — no lane bid / lane size.
+    """
+
+    sublane_bid: int
+    sublane_base_fx: torch.fx.Node | None
 
 
 @dataclass
@@ -164,12 +178,10 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
     # Must capture before ``_resolve_tensor_index_patterns`` rewrites
     # TensorIndexPattern into IndirectGather/ScatterPattern.
     is_jagged_flat = any(
-        isinstance(p, TensorIndexPattern) and p.is_jagged_flat
-        for p in indexing_patterns
+        isinstance(p, JaggedFlatIndexPattern) for p in indexing_patterns
     )
     is_jagged_outer = any(
-        isinstance(p, TensorIndexPattern) and p.is_jagged_outer
-        for p in indexing_patterns
+        isinstance(p, JaggedOuterIndexPattern) for p in indexing_patterns
     )
     _resolve_tensor_index_patterns(
         node, tensor_val, list(subscript), indexing_patterns, config
@@ -218,17 +230,12 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
     tid = id(tensor_val)
     current = device_fn.pallas_memory_space.get(tid)
     if is_jagged_flat:
-        # Flat tensor too large for VMEM; access via per-iter DMA from HBM.
+        # Per-item DMA path: HBM-resident, sliced per fori_loop iter.
         device_fn.pallas_memory_space[tid] = PallasMemorySpace.HBM
-        # ``has_jagged_flat_dma`` bridges per-axis bids into ConfigSpec
-        # (no live env access there).
+        # Cache the bids the DMA emit will consume; mirror into
+        # ConfigSpec (no live env access at config-spec time).
         for p in indexing_patterns:
-            if isinstance(p, TensorIndexPattern) and p.is_jagged_flat:
-                assert (
-                    p.sublane_bid is not None
-                    and p.lane_bid is not None
-                    and p.lane_size is not None
-                )
+            if isinstance(p, JaggedFlatIndexPattern):
                 device_fn.pallas_jagged_flat_lane_size[tid] = p.lane_size
                 _env.pallas_jagged_flat_sublane_bids.add(p.sublane_bid)
                 _env.pallas_jagged_flat_lane_bids.add(p.lane_bid)
@@ -342,8 +349,7 @@ def _detect_indexing_pattern(
                 parsed = _parse_flat_jagged_subscript(idx, env)
                 if parsed is not None:
                     sublane_bid, sublane_base_fx, lane_bid, lane_size = parsed
-                    return TensorIndexPattern(
-                        is_jagged_flat=True,
+                    return JaggedFlatIndexPattern(
                         sublane_bid=sublane_bid,
                         sublane_base_fx=sublane_base_fx,
                         lane_bid=lane_bid,
@@ -352,8 +358,7 @@ def _detect_indexing_pattern(
                 outer = _decompose_jagged_idx(_peel_wrappers(idx), env)
                 if outer is not None:
                     sublane_bid, sublane_base_fx = outer
-                    return TensorIndexPattern(
-                        is_jagged_outer=True,
+                    return JaggedOuterIndexPattern(
                         sublane_bid=sublane_bid,
                         sublane_base_fx=sublane_base_fx,
                     )
@@ -517,13 +522,7 @@ def _resolve_tensor_index_patterns(
     ``_build_hbm_dma_slice``) and must NOT be lowered through the
     one-hot indirect gather/scatter codegen.
     """
-    positions = [
-        i
-        for i, p in enumerate(patterns)
-        if isinstance(p, TensorIndexPattern)
-        and not p.is_jagged_flat
-        and not p.is_jagged_outer
-    ]
+    positions = [i for i, p in enumerate(patterns) if isinstance(p, TensorIndexPattern)]
     if not positions:
         return
 
@@ -647,9 +646,11 @@ def _maybe_get_tile_begin_with_offset_info(
     return TileBeginWithOffsetPattern(block_id=block_id, offset=offset)
 
 
-# Jagged 1-D flat-form subscript parser:
-# ``x_flat[(starts + tile_k.idx) * M + tile_m.idx]`` →
-# (sublane_bid, sublane_base_fx, lane_bid, lane_size=M).
+# Per-item sublane/lane jagged DMA — pattern recognisers.
+# Mosaic can't slice by per-program ``starts[pid]``; the recogniser below
+# detects one indexing form that needs the manual DMA emit and returns
+# ``(sublane_bid, sublane_base_fx, lane_bid, lane_size=M)`` for it.
+# Additional forms can populate the same bids without touching the emit.
 
 
 _ADD_TARGETS = (operator.add, torch.ops.aten.add.Tensor)
@@ -811,15 +812,9 @@ def _decompose_jagged_idx(
 def _parse_flat_jagged_subscript(
     idx_fx: torch.fx.Node, env: CompileEnvironment
 ) -> tuple[int, torch.fx.Node | None, int, int | torch.SymInt] | None:
-    """Recognise the canonical flat-1D form:
-
-        add(broadcast(mul(broadcast(add(starts, tile_k.idx)), M)),
-            broadcast(tile_m.idx))
-
-    Returns ``(sublane_bid, sublane_base_fx, lane_bid, M)`` or ``None``.
-
-    Tries both arms of each ``add``/``mul`` (commutative). Peels broadcast
-    wrappers (``aten.unsqueeze``, ``hl.subscript``, ``_new_var``).
+    """Recognise ``add(mul(add(starts, tile_k.idx), M), tile_m.idx)`` modulo
+    broadcast wrappers; return ``(sublane_bid, sublane_base_fx, lane_bid, M)``
+    or ``None``. Tries both arms of each ``add``/``mul`` (commutative).
     """
     if not (
         idx_fx.op == "call_function"

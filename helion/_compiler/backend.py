@@ -4,6 +4,7 @@ import abc
 import ast
 import base64
 import contextlib
+import enum
 import functools
 import hashlib
 from itertools import starmap
@@ -34,6 +35,7 @@ if TYPE_CHECKING:
 
     from ..autotuner.config_fragment import ConfigSpecFragment
     from ..autotuner.config_priors import ValuePrior
+    from ..autotuner.config_spec import BlockSizeSpec
     from ..autotuner.config_spec import ConfigSpec
     from ..runtime.config import Config
     from ..runtime.kernel import BoundKernel
@@ -1455,6 +1457,40 @@ _TORCH_TO_JAX_DTYPE: dict[str, str] = {
 _PALLAS_UNSUPPORTED_DTYPES = frozenset({torch.int64, torch.uint64, torch.float64})
 
 
+class SliceAddressing(enum.Enum):
+    """How a dynamic-offset slice on a tensor dim must be emitted on TPU."""
+
+    DIRECT = enum.auto()  # offset used as-is -> plain pl.ds
+    ALIGNED = enum.auto()  # offset rounded to a sublane tile -> aligned-enclosing
+
+
+def _slice_addressing(
+    tensor: torch.Tensor, dim: int, lane_block: int | None = None
+) -> SliceAddressing:
+    """Whether a dynamic slice on ``dim`` can take any offset.
+
+    TPU only tiles the last two dims into (8, 128) blocks, so a slice on an
+    earlier row-major dim reads any offset (DIRECT).  A sublane-dim slice must
+    align to a tile boundary (ALIGNED), except f32 over a single lane tile
+    (``lane_block`` <= 128) stays contiguous and reads any offset too (DIRECT).
+    ``lane_block`` is the last-dim extent (block size, or full width if untiled);
+    None stays conservative (ALIGNED).
+    """
+    if dim < tensor.ndim - 2:
+        return SliceAddressing.DIRECT  # major dim: row-major, any offset
+    if dim == tensor.ndim - 2:  # 2nd-minor (sublane) dim
+        # f32 fills a lane, so a single lane tile is contiguous and reads any
+        # offset; bf16 packs two rows per sublane and always needs alignment.
+        if (
+            tensor.dtype == torch.float32
+            and isinstance(lane_block, int)
+            and lane_block <= 128
+        ):
+            return SliceAddressing.DIRECT
+        return SliceAddressing.ALIGNED
+    return SliceAddressing.ALIGNED  # TODO(tcombes): align lane dim to 128, not sublane
+
+
 class PallasBackend(Backend):
     """Pallas (JAX) code generation backend for TPU."""
 
@@ -1781,6 +1817,18 @@ class PallasBackend(Backend):
             return 8
         return 1  # No requirements for other dimensions
 
+    def sublane_tiling(self, dtype: torch.dtype) -> int:
+        """Native sublane (2nd-minor) tile for ``dtype``: f32->8, bf16->16, i8->32.
+
+        The jagged carry slices its emit_pipeline VMEM refs at this
+        granularity, and such a ref must be accessed as a *whole* native tile:
+        a smaller slice (e.g. 8 rows of a bf16 ref, whose tile is 16) is
+        rejected by Mosaic ("E2003: unproven memory access alignment"),
+        independent of offset.
+        """
+        bitwidth = min(dtype.itemsize * 8, 32)
+        return 8 * (32 // bitwidth)
+
     fake_tensor_loads: list[tuple[torch.Tensor, list[object]]]
 
     def process_fake_tensor_load(
@@ -1941,8 +1989,6 @@ class PallasBackend(Backend):
         for stmt in host_func.body:
             analyzer.visit(stmt)
 
-        from torch._inductor.runtime.runtime_utils import next_power_of_2
-
         if block_sizes is not None and kernel_tensor_sizes is not None:
             for shape in kernel_tensor_sizes:
                 for bid, info in enumerate(block_sizes):
@@ -1966,9 +2012,9 @@ class PallasBackend(Backend):
         }
         jagged_tile_bids: set[int] = set(_env_for_jagged.jagged_tile_parent_ids.keys())
 
-        # ``visit_Subscript`` only sees direct subscripts; jagged-flat
-        # tensors use a constructed FX index that hides the lane indexer,
-        # so force lane=128 alignment for every non-parent non-child bid.
+        # ``visit_Subscript`` only sees direct subscripts; the per-item
+        # jagged DMA path's constructed FX index hides the lane indexer,
+        # so force lane=128 for every non-parent non-child bid.
         if jagged_parent_bids:
             for spec in block_specs:
                 if not isinstance(spec, BlockSizeSpec):
@@ -1987,25 +2033,20 @@ class PallasBackend(Backend):
             if bid in jagged_parent_bids:
                 continue
             requirement_alignment = analyzer.required_alignments[bid]
-            # Jagged_tile size_hint defaults to 8192 (parent.numel is
-            # data-dependent); cap to observed tensor dim when smaller so
-            # autotune picks reasonable block sizes (e.g. jagged_mean M=8).
-            # Skip when this bid is also a jagged-flat lane bid (req=128
-            # in a jagged kernel) — HBM DMA needs >=128 regardless.
-            apply_observed_cap = bid in jagged_tile_bids and not (
-                bool(jagged_parent_bids) and requirement_alignment == 128
+            dim_size = self._update_dim_size_for_jagged_flat(
+                spec,
+                bid,
+                requirement_alignment,
+                analyzer.observed_dim_sizes,
+                jagged_tile_bids,
+                jagged_parent_bids,
             )
-            if apply_observed_cap:
-                size_hint_dim = next_power_of_2(max(spec.size_hint, 1))
-                observed = analyzer.observed_dim_sizes.get(bid)
-                if observed is not None:
-                    dim_size = min(size_hint_dim, next_power_of_2(max(observed, 1)))
-                    if observed < spec.size_hint:
-                        spec.update_hint(observed)
-                else:
-                    dim_size = size_hint_dim
-            else:
-                dim_size = next_power_of_2(max(spec.size_hint, 1))
+            # Cap the alignment requirement by the tensor lane dim: when
+            # the dim is smaller than the requirement, the full-dim access
+            # is always aligned at offset 0 so block_size = dim_size is
+            # safe.  When the dim is at least as big as the requirement,
+            # ``min`` returns ``requirement_alignment`` and the strict
+            # floor still applies (used by aot_example.sum_aot, n=256).
             spec.update_min(min(requirement_alignment, dim_size))
 
         # Propagate alignment minimums from inner tiles to their bounding outer tiles.
@@ -2021,6 +2062,40 @@ class PallasBackend(Backend):
             outer_spec = block_specs_by_id.get(bounded_by)
             if outer_spec is not None:
                 outer_spec.update_min(spec.min_size)
+
+    @staticmethod
+    def _update_dim_size_for_jagged_flat(
+        spec: BlockSizeSpec,
+        bid: int,
+        requirement_alignment: int,
+        observed_dim_sizes: dict[int, int],
+        jagged_tile_bids: set[int],
+        jagged_parent_bids: set[int],
+    ) -> int:
+        """Pick ``dim_size`` for ``spec.update_min(min(req, dim_size))``.
+
+        Jagged_tile ``size_hint`` defaults to 8192 (parent ``numel`` is
+        data-dependent at trace); cap to observed tensor dim when smaller
+        so autotune picks reasonable block sizes on small jagged kernels.
+        Bypassed on lane bids (req==128) — the DMA needs full 128 there.
+        """
+        from torch._inductor.runtime.runtime_utils import next_power_of_2
+
+        apply_observed_cap = bid in jagged_tile_bids and not (
+            bool(jagged_parent_bids) and requirement_alignment == 128
+        )
+        if not apply_observed_cap:
+            return next_power_of_2(max(spec.size_hint, 1))
+
+        size_hint_dim = next_power_of_2(max(spec.size_hint, 1))
+        observed = observed_dim_sizes.get(bid)
+        if observed is None:
+            return size_hint_dim
+
+        if observed < spec.size_hint:
+            spec.update_hint(observed)
+
+        return min(size_hint_dim, next_power_of_2(max(observed, 1)))
 
     def tunable_fragments(self) -> dict[str, ConfigSpecFragment]:
         return {}
@@ -2149,7 +2224,10 @@ class PallasBackend(Backend):
             if isinstance(arg, (SymbolArgument, TensorSizeArg, TensorStrideArg)):
                 result.append(None)  # scalars wrapped as 1-D tensors
                 continue
-            if not isinstance(arg, TensorArg) or arg.fake_value.ndim == 0:
+            if not isinstance(arg, TensorArg):
+                continue
+            if arg.fake_value.ndim == 0:
+                result.append(None)
                 continue
             tensor = arg.fake_value
             dim_tilings = device_fn.pallas_tensor_dim_tilings.get(id(tensor))
@@ -3549,6 +3627,7 @@ class CuteBackend(Backend):
             "_cute_issue_clc_query_nomulticast": "from helion._compiler.cute.clc_helpers import issue_clc_query_nomulticast as _cute_issue_clc_query_nomulticast",
             "_cute_inline_asm_elementwise": "from helion._compiler.cute.inline_asm_helpers import inline_asm_elementwise as _cute_inline_asm_elementwise",
             "_cute_fp8e4m3fn_to_float32": "from helion._compiler.cute.quantized_helpers import fp8e4m3fn_to_float32 as _cute_fp8e4m3fn_to_float32",
+            "_cute_fp8e4m3fn_x2_to_float32": "from helion._compiler.cute.quantized_helpers import fp8e4m3fn_x2_to_float32 as _cute_fp8e4m3fn_x2_to_float32",
             "_cute_float4_e2m1fn_x2_to_float32": "from helion._compiler.cute.quantized_helpers import float4_e2m1fn_x2_to_float32 as _cute_float4_e2m1fn_x2_to_float32",
             "_cute_grid_barrier": "from helion._compiler.cute.grid_barrier import grid_barrier as _cute_grid_barrier",
             "_cute_atomic_max_float32": "from helion._compiler.cute.atomic_helpers import atomic_max_float32 as _cute_atomic_max_float32",
