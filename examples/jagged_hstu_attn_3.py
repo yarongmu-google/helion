@@ -71,7 +71,10 @@ def reference_jagged_hstu_attention(
     return output
 
 
-@helion.kernel(autotune_baseline_fn=reference_jagged_hstu_attention)
+@helion.kernel(
+    static_shapes=True,
+    autotune_baseline_fn=reference_jagged_hstu_attention,
+)
 def jagged_hstu_attention(
     max_seq_len: int,
     alpha: float,
