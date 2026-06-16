@@ -1,0 +1,128 @@
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(128)
+_BLOCK_SIZE_2 = int(64)
+
+def _helion_jagged_sum_kernel(x_offsets, out, x_flat, out_buf, out_sem, scratch_2, x_flat_buf, x_flat_sem):
+
+    def _kernel_body(pid_0, _):
+        # src[jagged_sum.py:56]: for tile_b in hl.tile(num_rows):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[jagged_sum.py:57]: starts = x_offsets[tile_b]
+        starts = jnp.array([x_offsets[offset_0]])
+        # src[jagged_sum.py:58]: ends = x_offsets[tile_b.index + 1]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        ends = jnp.array([x_offsets[offset_0 + 1]])
+        # src[jagged_sum.py:59]: nnz = ends - starts
+        v_2 = ends - starts
+
+        def _fori_body_1(_j, _):
+            nonlocal out_buf, scratch_2, x_flat_buf
+            # src[jagged_sum.py:61]: for tile_m in hl.tile(M):
+            # src[jagged_sum.py:62]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[jagged_sum.py:61-72]: ...
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            v_2_copy = v_2
+            starts_copy = starts
+            v_2_copy_0 = v_2_copy
+            starts_copy_0 = starts_copy
+            # src[jagged_sum.py:62]: row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            row_sums = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
+            # src[jagged_sum.py:64]: for tile_k in hl.jagged_tile(nnz):
+            # src[jagged_sum.py:65]:     base_indices = starts[:, None] + tile_k.index[None, :]
+            # src[jagged_sum.py:66]:     flat_indices = (
+            # src[jagged_sum.py:64-70]: ...
+            view = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+            scratch_2[...] = row_sums[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal out_buf, scratch_2, x_flat_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_5 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_5[None, :] < v_2_copy_0[:, None]
+                _copy = pltpu.make_async_copy(x_flat.at[pl.ds(starts_copy_0[0] + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), pl.ds(offset_1, _BLOCK_SIZE_1)], x_flat_buf, x_flat_sem)
+                _copy.start()
+                _copy.wait()
+                starts_copy_0_copy = starts_copy_0
+                v_3 = scratch_2[...]
+                starts_copy_0_copy_0 = starts_copy_0_copy
+                v_3_0 = v_3
+                # src[jagged_sum.py:65]: base_indices = starts[:, None] + tile_k.index[None, :]
+                subscript = starts_copy_0_copy_0[:, None]
+                subscript_1 = indices_2[None, :]
+                v_4 = subscript + subscript_1
+                # src[jagged_sum.py:67]: base_indices[:, :, None] * M + tile_m.index[None, None, :]
+                subscript_2 = v_4[:, :, None]
+                v_5 = jnp.array(128, dtype=jnp.int32)
+                v_6 = subscript_2 * v_5
+                subscript_3 = indices_1[None, None, :]
+                v_7 = v_6 + subscript_3
+                # src[jagged_sum.py:69]: x_slice = hl.load(x_flat, [flat_indices])
+                x_slice = jnp.expand_dims(x_flat_buf[:], axis=0)
+                # src[jagged_sum.py:70]: row_sums = row_sums + x_slice.sum(dim=1)
+                _mask_to = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), x_slice, jnp.full([], 0, jnp.float32))
+                sum_1 = lax.convert_element_type(jnp.sum(_mask_to, axis=1), jnp.float32)
+                v_8 = v_3_0 + sum_1
+                # src[jagged_sum.py:64]: for tile_k in hl.jagged_tile(nnz):
+                # src[jagged_sum.py:65]:     base_indices = starts[:, None] + tile_k.index[None, :]
+                # src[jagged_sum.py:66]:     flat_indices = (
+                # src[jagged_sum.py:64-70]: ...
+                scratch_2[...] = v_8[...]
+            jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            row_sums = scratch_2[...]
+            # src[jagged_sum.py:72]: out[tile_b, tile_m] = row_sums
+            out_buf[:, :] = row_sums
+            # src[jagged_sum.py:61]: for tile_m in hl.tile(M):
+            # src[jagged_sum.py:62]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[jagged_sum.py:61-72]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j * _BLOCK_SIZE_1, _BLOCK_SIZE_1)], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (128 - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[jagged_sum.py:56]: for tile_b in hl.tile(num_rows):
+    # src[jagged_sum.py:57]:     starts = x_offsets[tile_b]
+    # src[jagged_sum.py:58]:     ends = x_offsets[tile_b.index + 1]
+    # src[jagged_sum.py:56-72]: ...
+    jax.lax.fori_loop(0, 8, _kernel_body, None)
+
+def jagged_sum_kernel(x_data: torch.Tensor, x_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    """
+    Compute the mean of each row in a jagged tensor with variable features per row.
+
+    Args:
+        x_data: 2-D tensor of shape (total_elements, M) holding all elements
+        x_offsets: (num_rows + 1) tensor. Row i is the slice
+                   x_data[x_offsets[i] : x_offsets[i+1], :]
+
+    Returns:
+        2-D tensor of shape (num_rows, M) containing the sum of jagged dimension.
+    """
+    # src[jagged_sum.py:47]: M = x_data.shape[1]
+    M = x_data.shape[1]
+    # src[jagged_sum.py:48]: num_rows = x_offsets.size(0) - 1
+    num_rows = x_offsets.size(0) - 1
+    # src[jagged_sum.py:50]: out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    # src[jagged_sum.py:53]: x_flat = x_data.view(-1)
+    x_flat = x_data.view(-1)
+    # src[jagged_sum.py:56]: for tile_b in hl.tile(num_rows):
+    # src[jagged_sum.py:57]:     starts = x_offsets[tile_b]
+    # src[jagged_sum.py:58]:     ends = x_offsets[tile_b.index + 1]
+    # src[jagged_sum.py:56-72]: ...
+    _launcher(_helion_jagged_sum_kernel, (1,), x_offsets, out, x_flat, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(1, 1, 128, 0), (2, 0, 64, 63), (2, 1, 128, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1, 128), 'jnp.float32', 'vmem'), ((64, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(2, 128)])
+    # src[jagged_sum.py:74]: return out
+    return out
