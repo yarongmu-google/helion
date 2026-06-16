@@ -420,10 +420,23 @@ class TypePropagation(ast.NodeVisitor):
                 shape_id = [
                     env.resolve_block_id(size) for size in list(rhs.fake_value.shape)
                 ]
+                # Parent context is satisfied if the parent is either in
+                # the result shape OR an active enclosing tile loop
+                # variable.  The latter covers patterns where the kernel
+                # uses ``tile_b.begin`` (scalar) so tile_b doesn't appear
+                # in shapes — yet tile_b is in scope and program identity.
+                active_tile_block_ids = {
+                    ti.block_id
+                    for ti in self.scope.extract_locals().values()
+                    if isinstance(ti, TileIndexType)
+                }
                 jagged_tile_info = env.jagged_tile_parent_ids
                 for jagged_tile_id, parent_block_ids in jagged_tile_info.items():
                     include_jagged = jagged_tile_id in shape_id
-                    include_parents = all(p in shape_id for p in parent_block_ids)
+                    include_parents = all(
+                        (p in shape_id) or (p in active_tile_block_ids)
+                        for p in parent_block_ids
+                    )
                     if include_jagged and not include_parents:
                         raise exc.InvalidJaggedTileUsage(
                             f"jagged_tile alone cannot be used without its parent in assignment {lhs.id}"

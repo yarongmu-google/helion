@@ -69,13 +69,23 @@ class NonePattern(IndexingPattern):
 
 @dataclass
 class TensorIndexPattern(IndexingPattern):
-    """Tensor-valued index.  ``is_jagged_flat=False`` → indirect
-    gather/scatter.  ``is_jagged_flat=True`` → canonical flat-1D form
+    """Tensor-valued index.
+
+    ``is_jagged_flat=False`` and ``is_jagged_outer=False`` → indirect
+    gather/scatter.
+
+    ``is_jagged_flat=True`` → canonical flat-1D form
     ``x_flat[(starts + tile_k.idx) * M + tile_m.idx]`` with cached
     sublane/lane axes; launcher reshapes flat tensor by ``lane_size``.
+
+    ``is_jagged_outer=True`` → degenerate form ``add(starts, tile_k.idx)``
+    used as a 1-D index into a 3+D source with the trailing axes
+    addressed by ``:`` slices (the outer-jagged case at dim_from_end >=
+    2). No lane bid / lane size — Mosaic handles trailing axes natively.
     """
 
     is_jagged_flat: bool = False
+    is_jagged_outer: bool = False
     sublane_bid: int | None = None
     sublane_base_fx: torch.fx.Node | None = None
     lane_bid: int | None = None
@@ -157,6 +167,10 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
         isinstance(p, TensorIndexPattern) and p.is_jagged_flat
         for p in indexing_patterns
     )
+    is_jagged_outer = any(
+        isinstance(p, TensorIndexPattern) and p.is_jagged_outer
+        for p in indexing_patterns
+    )
     _resolve_tensor_index_patterns(
         node, tensor_val, list(subscript), indexing_patterns, config
     )
@@ -220,6 +234,15 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
                 _env.pallas_jagged_flat_lane_bids.add(p.lane_bid)
                 _env.config_spec.has_jagged_flat_dma = True
                 break
+    elif is_jagged_outer:
+        # Outer-jagged: source has the jagged dim at dim_from_end >= 2.
+        # Trailing axes are dense and statically-sized.  Per-iter DMA
+        # is built by ``_build_hbm_dma_slice`` (extended with the
+        # outer-jagged branch).  No launcher unsqueeze needed when
+        # the kernel author uses ``tile_b.begin`` so Helion shapes
+        # stay rank-aligned with HBM.
+        if current != PallasMemorySpace.SMEM:
+            device_fn.pallas_memory_space[tid] = PallasMemorySpace.HBM
     elif is_jagged_pinned_only:
         if current != PallasMemorySpace.HBM:
             device_fn.pallas_memory_space[tid] = PallasMemorySpace.SMEM
@@ -325,6 +348,14 @@ def _detect_indexing_pattern(
                         sublane_base_fx=sublane_base_fx,
                         lane_bid=lane_bid,
                         lane_size=lane_size,
+                    )
+                outer = _decompose_jagged_idx(_peel_wrappers(idx), env)
+                if outer is not None:
+                    sublane_bid, sublane_base_fx = outer
+                    return TensorIndexPattern(
+                        is_jagged_outer=True,
+                        sublane_bid=sublane_bid,
+                        sublane_base_fx=sublane_base_fx,
                     )
             return TensorIndexPattern()
         # Indices produced by other FX nodes, such as indices[tile] used in
@@ -481,13 +512,17 @@ def _resolve_tensor_index_patterns(
 ) -> None:
     """Replace TensorIndexPattern with Pallas indirect load/store patterns.
 
-    Jagged-flat patterns are skipped — they have their own DMA emit path
-    that needs the cached sublane/lane metadata.
+    Jagged-flat AND jagged-outer patterns are skipped — they have their
+    own manual DMA emit path (per-fori HBM↔VMEM make_async_copy via
+    ``_build_hbm_dma_slice``) and must NOT be lowered through the
+    one-hot indirect gather/scatter codegen.
     """
     positions = [
         i
         for i, p in enumerate(patterns)
-        if isinstance(p, TensorIndexPattern) and not p.is_jagged_flat
+        if isinstance(p, TensorIndexPattern)
+        and not p.is_jagged_flat
+        and not p.is_jagged_outer
     ]
     if not positions:
         return

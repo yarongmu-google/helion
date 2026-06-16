@@ -1920,7 +1920,9 @@ def _build_jagged_flat_pattern_map(
         if not isinstance(val, torch.Tensor):
             continue
         for p in node.meta.get("indexing_patterns", []) or []:
-            if isinstance(p, TensorIndexPattern) and p.is_jagged_flat:
+            if isinstance(p, TensorIndexPattern) and (
+                p.is_jagged_flat or p.is_jagged_outer
+            ):
                 result[id(val)] = p
                 break
     return result
@@ -1960,12 +1962,25 @@ def _compute_vmem_shapes(
         # Jagged-flat: 1-D at FX, but launcher reshapes to 2-D (total_K, M)
         # and the per-iter DMA chunk is (BK, BM).
         jpat = (jagged_flat_patterns or {}).get(id(fake))
-        if jpat is not None:
+        if jpat is not None and jpat.is_jagged_flat:
+            # V1 flat: 2-D VMEM ``(sublane_bs, lane_bs)``.
             assert jpat.sublane_bid is not None and jpat.lane_bid is not None
             sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
             lane_bs = state.device_function.resolved_block_size(jpat.lane_bid)
             assert isinstance(sublane_bs, int) and isinstance(lane_bs, int)
             vmem_shapes.append((sublane_bs, lane_bs))
+            continue
+        if jpat is not None and jpat.is_jagged_outer:
+            # Outer-jagged: VMEM matches the per-program DMA slice
+            # ``(BK, *trailing)`` — same shape as the slice into HBM.
+            # When the kernel uses ``tile_b.begin`` scalar starts,
+            # Helion's load result rank = VMEM rank; no expand_dims
+            # rank-bump is needed.
+            assert jpat.sublane_bid is not None
+            sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
+            assert isinstance(sublane_bs, int)
+            trailing = tuple(int(fake.shape[i]) for i in range(1, fake.ndim))
+            vmem_shapes.append((sublane_bs, *trailing))
             continue
         dim_to_bid = _get_dim_block_ids(sub_meta, env)
         parts: list[int] = []
@@ -2249,7 +2264,7 @@ def _codegen_fori_loop(state: CodegenState) -> object:
         # Jagged-flat: emit 2-D slice
         # ``x_flat.at[pl.ds(starts[0] + k_offset, BK), pl.ds(m_offset, BM)]``.
         jpat = jagged_flat_patterns.get(id(fake))
-        if jpat is not None:
+        if jpat is not None and jpat.is_jagged_flat:
             assert (
                 jpat.sublane_bid is not None
                 and jpat.lane_bid is not None
@@ -2294,6 +2309,54 @@ def _codegen_fori_loop(state: CodegenState) -> object:
                 _record_pad_info(state, fake, 0, jpat.sublane_bid, sublane_bs - 1)
             _record_pad_info(state, fake, 1, jpat.lane_bid, 0)
             return f"{hbm_name}.at[{', '.join(slice_parts)}]"
+        if jpat is not None and jpat.is_jagged_outer:
+            # Outer-jagged: ND slice ``tensor.at[pl.ds(starts[0] +
+            # sublane_offset, BK), :, :, ...]``.  Reuses the same
+            # sublane-offset construction as the flat branch; trailing
+            # dims are dense and emit as ``:`` (Mosaic handles them
+            # natively via standard BlockSpec carving).
+            assert (
+                jpat.sublane_bid is not None
+                and jpat.sublane_base_fx is not None
+            )
+            bs_var = state.device_function.block_size_var(jpat.sublane_bid)
+            assert bs_var is not None
+            if jpat.sublane_bid in block_ids:
+                ax_idx = block_ids.index(jpat.sublane_bid)
+                begin_expr = begin_exprs[ax_idx]
+                iter_step_expr = iter_step_exprs[ax_idx]
+                dim_idx_expr = dim_idx_exprs[ax_idx]
+                axis_offset = (
+                    f"({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr})"
+                )
+            else:
+                axis_offset = state.codegen.offset_var(jpat.sublane_bid)
+            placeholders = [
+                n for n in graph_info.graph.nodes if n.op == "placeholder"
+            ]
+            assert isinstance(args, list)
+            if jpat.sublane_base_fx in placeholders:
+                outer_ast = args[placeholders.index(jpat.sublane_base_fx)]
+                starts_name = ast.unparse(outer_ast)
+            else:
+                starts_name = jpat.sublane_base_fx.name
+            # ``starts`` may be scalar (kernel used ``tile_b.begin``) or
+            # 1-D (V1 idiom ``starts = seq_offsets[tile_b]``).  Only
+            # index ``[0]`` in the 1-D case.
+            starts_val = jpat.sublane_base_fx.meta.get("val")
+            starts_is_scalar = (
+                isinstance(starts_val, torch.Tensor) and starts_val.ndim == 0
+            )
+            starts_ref = starts_name if starts_is_scalar else f"{starts_name}[0]"
+            axis_offset = f"{starts_ref} + ({axis_offset})"
+            outer_slice_parts = [f"pl.ds({axis_offset}, {bs_var})"]
+            outer_slice_parts.extend(":" for _ in range(fake.ndim - 1))
+            from .memory_ops import _record_pad_info
+
+            sublane_bs = state.device_function.resolved_block_size(jpat.sublane_bid)
+            if isinstance(sublane_bs, int):
+                _record_pad_info(state, fake, 0, jpat.sublane_bid, sublane_bs - 1)
+            return f"{hbm_name}.at[{', '.join(outer_slice_parts)}]"
 
         dim_to_bid = _get_dim_block_ids(subscript_meta, env)
         shape = fake.shape

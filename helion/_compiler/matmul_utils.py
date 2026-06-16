@@ -32,6 +32,20 @@ def torch_matmul_replacement(
         return original_matmul(a, b)
     if a.dim() == 3 and b.dim() == 3:
         return torch.bmm(a, b)
+    if a.dim() == 4 and b.dim() == 4:
+        env = CompileEnvironment.current()
+        jagged_parent_bids = {
+            p for parents in env.jagged_tile_parent_ids.values() for p in parents
+        }
+        leading_bid_a = env.resolve_block_id(a.shape[0])
+        leading_bid_b = env.resolve_block_id(b.shape[0])
+        if (
+            leading_bid_a is not None
+            and leading_bid_a in jagged_parent_bids
+            and leading_bid_b is not None
+            and leading_bid_b in jagged_parent_bids
+        ):
+            return original_matmul(a, b)
     raise NotImplementedError(
         "torch.matmul with input tensor dim <2 or >3 is not supported in Helion kernel"
     )

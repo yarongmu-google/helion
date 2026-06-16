@@ -389,6 +389,13 @@ def _generated_index_code(
         # ``_build_hbm_dma_slice``); body reads the full VMEM scratch.
         return ":"
 
+    if isinstance(pattern, TensorIndexPattern) and pattern.is_jagged_outer:
+        # Same as jagged_flat: the per-program slice was emitted via
+        # ``_build_hbm_dma_slice``'s outer-jagged branch.  The body
+        # reads the full VMEM scratch (which already contains just
+        # this program's slice).
+        return ":"
+
     raise RuntimeError(
         f"Unhandled indexing pattern type: {type(pattern).__name__}. "
         f"Pattern: {pattern}, idx: {idx}, subscript_index: {subscript_index}. "

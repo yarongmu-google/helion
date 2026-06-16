@@ -592,14 +592,17 @@ class TileStrategyDispatch:
             return ""
         if len(src_shape) == 0:
             return ""
-        assert len(src_shape) <= len(dst_shape), (src_shape, dst_shape)
-
         env = CompileEnvironment.current()
 
         # Map each source dim to a unique destination dim with equal symbolic size.
-        src_to_dst: list[int] = []
+        jagged_parent_bids = {
+            p for parents in env.jagged_tile_parent_ids.values() for p in parents
+        }
+        squeezed_src_idx: list[int] = []
+        kept_src_to_dst: list[int] = []
+        kept_src_count = 0
         used_dst: set[int] = set()
-        for src_dim in src_shape:
+        for src_orig_i, src_dim in enumerate(src_shape):
             match: int | None = None
             for dst_i, dst_dim in enumerate(dst_shape):
                 if dst_i in used_dst:
@@ -616,19 +619,35 @@ class TileStrategyDispatch:
                     if env.known_equal(dst_dim, 1):
                         match = dst_i
                         break
+            if match is None:
+                # Fallback 2: outer-jagged case — src has a parent-pinned
+                # tile_b dim (block_size=1) collapsed away on dst.
+                # Squeeze it out. V1 sublane/lane masks always have a
+                # matching dst entry so this never fires for them.
+                bid = env.resolve_block_id(src_dim)
+                if bid is not None and bid in jagged_parent_bids:
+                    squeezed_src_idx.append(src_orig_i)
+                    continue
             assert match is not None, (
                 f"Cannot map src dim {src_dim} into dst shape {dst_shape} "
                 f"from src shape {src_shape}"
             )
-            src_to_dst.append(match)
+            kept_src_to_dst.append(match)
+            kept_src_count += 1
             used_dst.add(match)
+        assert kept_src_count <= len(dst_shape), (src_shape, dst_shape, squeezed_src_idx)
 
         # Reorder source axes so they match destination axis order.
-        perm = sorted(range(len(src_shape)), key=lambda src_i: src_to_dst[src_i])
+        perm = sorted(range(kept_src_count), key=lambda i: kept_src_to_dst[i])
 
         parts: list[str] = []
-        if perm != list(range(len(src_shape))):
+        # Squeeze out parent-pinned src dims first (rightmost first to
+        # keep earlier indices valid).
+        for sq_idx in sorted(squeezed_src_idx, reverse=True):
+            parts.append(f".squeeze({sq_idx})")
+        if perm != list(range(kept_src_count)):
             parts.append(f".permute({', '.join(str(i) for i in perm)})")
+        src_to_dst = kept_src_to_dst
 
         # Add singleton dimensions where destination has extra axes.
         keep = set(src_to_dst)

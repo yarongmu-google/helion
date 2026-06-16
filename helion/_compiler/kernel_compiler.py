@@ -75,6 +75,8 @@ class KernelCompiler:
         with hf, self._compilation_context():
             self.unroll(hf)
             self.customize_ast(hf)
+            if self.backend.name == "pallas":
+                self.maybe_classify_jagged_patterns(hf)
             self.propagate_types(hf)
             self.finalize_config()
             self.lower(hf)
@@ -133,6 +135,18 @@ class KernelCompiler:
         """
         with measure("HostFunction.customize_ast"):
             self.backend.customize_ast(hf)
+
+    def maybe_classify_jagged_patterns(self, hf: HostFunction) -> None:
+        """Pre-type-prop AST walk that tags outer ``hl.tile`` for-nodes
+        with ``_jagged_outer`` / ``_jagged_flat`` based on the form of
+        accesses inside nested ``hl.jagged_tile`` bodies.  Consumed by
+        type propagation to drive the parent-pin auto-collapse for the
+        outer-jagged case while leaving the flat case unchanged.
+        """
+        from .jagged_classifier import classify
+
+        with measure("HostFunction.classify_jagged_patterns"):
+            classify(hf)
 
     def propagate_types(self, hf: HostFunction) -> None:
         from .type_propagation import propagate_types
