@@ -1,0 +1,778 @@
+$ HELION_AUTOTUNE_BENCHMARK_SUBPROCESS=1  HELION_AUTOTUNE_LOG_LEVEL=DEBUG TORCH_COMPILE_DEBUG=1 PYTHONPATH=. HELION_BACKEND=pallas HELION_SKIP_CACHE=1 python3 examples/jagged_hstu_attn_3.py  2>&1 | tee tmp/hstu_log.txt
+
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781585120.413940   56679 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781585121.048369   56679 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+I0000 00:00:1781585122.062708   56679 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781585124.390731   56679 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781585124.390773   56679 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781585124.423307   57528 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781585124.423329   57528 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+Testing helion correctness...
+/home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+  warn_once(
+[0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3468661517
+[0s] Starting LFBOTreeSearch with initial_population=FROM_RANDOM, copies=5, max_generations=20, similarity_penalty=1.0
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+[3s] Running benchmark for helion.Config(block_sizes=[1, 16, 128], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[3s] Running Config(block_sizes=[1, 16, 128], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 21:45:36.292606
+[4s] result: 14.9770ms (took 1.4s + 0.2s)
+[4s] Running benchmark for helion.Config(block_sizes=[1, 64, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[4s] Running Config(block_sizes=[1, 64, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 21:45:37.871814
+[18s] Generated Triton code for @helion.kernel(config=helion.Config(block_sizes=[1, 64, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True), static_shapes=True):
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+import __main__ as _source_module
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(64)
+_BLOCK_SIZE_2 = int(2048)
+
+def _helion_jagged_hstu_attention(seq_offsets, q, out, k, v, alpha, attn_scale, q_buf, q_sem, out_buf, out_sem, scratch_3, k_buf, k_sem, v_buf, v_sem):
+    # src[jagged_hstu_attn_3.py:75]: def jagged_hstu_attention(
+    # src[jagged_hstu_attn_3.py:76]:     max_seq_len: int,
+    # src[jagged_hstu_attn_3.py:77]:     alpha: float,
+    # src[jagged_hstu_attn_3.py:75-127]: ...
+    alpha = alpha[0]
+    attn_scale = attn_scale[0]
+
+    def _kernel_body(pid_0, _):
+        # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[jagged_hstu_attn_3.py:94]: start = seq_offsets[tile_b.begin]                              # scalar
+        start = seq_offsets[offset_0]
+        # src[jagged_hstu_attn_3.py:95]: seq_lens = seq_offsets[tile_b.index + 1] - seq_offsets[tile_b]  # [tile_b]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        load_1 = jnp.array([seq_offsets[offset_0 + 1]])
+        load_2 = jnp.array([seq_offsets[offset_0]])
+        v_2 = load_1 - load_2
+        # src[jagged_hstu_attn_3.py:97]: for tile_q in hl.jagged_tile(seq_lens):
+        # src[jagged_hstu_attn_3.py:98]:     q_idx = start + tile_q.index                                # [tile_q]
+        # src[jagged_hstu_attn_3.py:99]:     q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+        # src[jagged_hstu_attn_3.py:97-125]: ...
+        view = jnp.reshape(v_2, [_BLOCK_SIZE_0])
+        amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+
+        def _fori_body_1(_j, _):
+            nonlocal q_buf, out_buf, scratch_3, k_buf, v_buf
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            offset_4 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
+            mask_1 = offset_4[None, :] < v_2[:, None]
+            _copy = pltpu.make_async_copy(q.at[pl.ds(start + (0 + _j * _BLOCK_SIZE_1), _BLOCK_SIZE_1), :, :], q_buf, q_sem)
+            _copy.start()
+            _copy.wait()
+            v_2_copy = v_2
+            start_copy = start
+            v_2_copy_0 = v_2_copy
+            start_copy_0 = start_copy
+            # src[jagged_hstu_attn_3.py:98]: q_idx = start + tile_q.index                                # [tile_q]
+            v_3 = start_copy_0 + indices_1
+            # src[jagged_hstu_attn_3.py:99]: q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+            q_blk = q_buf[:, :, :]
+            # src[jagged_hstu_attn_3.py:100]: acc = hl.zeros([tile_q, H, D], dtype=torch.float32)
+            acc = jnp.full([_BLOCK_SIZE_1, 32, 128], 0.0, jnp.float32)
+            # src[jagged_hstu_attn_3.py:102]: for tile_kv in hl.jagged_tile(seq_lens):
+            # src[jagged_hstu_attn_3.py:103]:     kv_idx = start + tile_kv.index                           # [tile_kv]
+            # src[jagged_hstu_attn_3.py:104]:     k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+            # src[jagged_hstu_attn_3.py:102-123]: ...
+            view_1 = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax_1 = lax.convert_element_type(jnp.max(view_1, axis=0), jnp.int32)
+            scratch_3[...] = acc[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal q_buf, out_buf, scratch_3, k_buf, v_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_6 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_6[None, :] < v_2_copy_0[:, None]
+                _copy_1 = pltpu.make_async_copy(k.at[pl.ds(start_copy_0 + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), :, :], k_buf, k_sem)
+                _copy_1.start()
+                _copy_1.wait()
+                _copy_2 = pltpu.make_async_copy(v.at[pl.ds(start_copy_0 + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), :, :], v_buf, v_sem)
+                _copy_2.start()
+                _copy_2.wait()
+                start_copy_0_copy = start_copy_0
+                q_blk_copy = q_blk
+                v_4 = scratch_3[...]
+                start_copy_0_copy_0 = start_copy_0_copy
+                q_blk_copy_0 = q_blk_copy
+                v_4_0 = v_4
+                # src[jagged_hstu_attn_3.py:103]: kv_idx = start + tile_kv.index                           # [tile_kv]
+                v_5 = start_copy_0_copy_0 + indices_2
+                # src[jagged_hstu_attn_3.py:104]: k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+                k_blk = k_buf[:, :, :]
+                # src[jagged_hstu_attn_3.py:105]: v_blk = v[kv_idx, :, :]                                  # [tile_kv, H, D]
+                v_blk = v_buf[:, :, :]
+                # src[jagged_hstu_attn_3.py:109]: q_blk.transpose(0, 1),                               # [H, tile_q, D]
+                permute = jnp.transpose(q_blk_copy_0, [1, 0, 2])
+                # src[jagged_hstu_attn_3.py:110]: k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
+                permute_1 = jnp.transpose(k_blk, [1, 2, 0])
+                # src[jagged_hstu_attn_3.py:108]: scores = torch.bmm(
+                # src[jagged_hstu_attn_3.py:109]:     q_blk.transpose(0, 1),                               # [H, tile_q, D]
+                # src[jagged_hstu_attn_3.py:110]:     k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
+                # src[jagged_hstu_attn_3.py:108-111]: ...
+                _mask_to = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32).squeeze(0)[None, :, None], [32, _BLOCK_SIZE_1, 128]), permute, jnp.full([], 0, jnp.float32))
+                _mask_to_1 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32).squeeze(0)[None, None, :], [32, 128, _BLOCK_SIZE_2]), permute_1, jnp.full([], 0, jnp.float32))
+                bmm = lax.dot_general(_mask_to, _mask_to_1, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                v_6 = bmm * alpha
+                # src[jagged_hstu_attn_3.py:112]: scores = F.silu(scores) * attn_scale
+                v_7 = -v_6
+                v_8 = jnp.exp(v_7)
+                v_9 = jnp.array(1, dtype=jnp.float32)
+                v_10 = v_8 + v_9
+                v_11 = v_6 / v_10
+                v_12 = v_11 * attn_scale
+                # src[jagged_hstu_attn_3.py:115]: tile_q.index.unsqueeze(1) >= tile_kv.index.unsqueeze(0)
+                unsqueeze = indices_1[:, None]
+                unsqueeze_1 = indices_2[None, :]
+                v_13 = unsqueeze >= unsqueeze_1
+                # src[jagged_hstu_attn_3.py:117]: scores = torch.where(causal_mask[None, :, :], scores, 0.0)
+                subscript = v_13[None, :, :]
+                scalar_tensor = jnp.full([], 0.0, jnp.float32)
+                scores_2 = jnp.where(subscript, v_12, scalar_tensor)
+                # src[jagged_hstu_attn_3.py:121]: v_blk.transpose(0, 1),                               # [H, tile_kv, D]
+                permute_2 = jnp.transpose(v_blk, [1, 0, 2])
+                # src[jagged_hstu_attn_3.py:119]: update = torch.bmm(
+                # src[jagged_hstu_attn_3.py:120]:     scores.to(v.dtype),
+                # src[jagged_hstu_attn_3.py:121]:     v_blk.transpose(0, 1),                               # [H, tile_kv, D]
+                # src[jagged_hstu_attn_3.py:119-122]: ...
+                _mask_to_2 = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32).squeeze(0)[None, :, None] * mask_2.astype(jnp.float32).squeeze(0)[None, None, :], [32, _BLOCK_SIZE_1, _BLOCK_SIZE_2]), scores_2, jnp.full([], 0, jnp.float32))
+                _mask_to_3 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32).squeeze(0)[None, :, None], [32, _BLOCK_SIZE_2, 128]), permute_2, jnp.full([], 0, jnp.float32))
+                update = lax.dot_general(_mask_to_2, _mask_to_3, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                # src[jagged_hstu_attn_3.py:123]: acc = acc + update.transpose(0, 1)                       # [tile_q, H, D]
+                permute_3 = jnp.transpose(update, [1, 0, 2])
+                v_14 = v_4_0 + permute_3
+                # src[jagged_hstu_attn_3.py:102]: for tile_kv in hl.jagged_tile(seq_lens):
+                # src[jagged_hstu_attn_3.py:103]:     kv_idx = start + tile_kv.index                           # [tile_kv]
+                # src[jagged_hstu_attn_3.py:104]:     k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+                # src[jagged_hstu_attn_3.py:102-123]: ...
+                scratch_3[...] = v_14[...]
+            jax.lax.fori_loop(0, (amax_1 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            acc = scratch_3[...]
+            # src[jagged_hstu_attn_3.py:125]: out[q_idx, :, :] = acc.to(out.dtype)
+            out_buf[:, :, :] = acc
+            # src[jagged_hstu_attn_3.py:97]: for tile_q in hl.jagged_tile(seq_lens):
+            # src[jagged_hstu_attn_3.py:98]:     q_idx = start + tile_q.index                                # [tile_q]
+            # src[jagged_hstu_attn_3.py:99]:     q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+            # src[jagged_hstu_attn_3.py:97-125]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(start + (0 + _j * _BLOCK_SIZE_1), _BLOCK_SIZE_1), :, :], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+    # src[jagged_hstu_attn_3.py:90]:     # ``tile_b.begin`` gives a scalar program index (same idiom as
+    # src[jagged_hstu_attn_3.py:91]:     # v1's ``jagged_hstu_attn.py:114``). With scalar ``start``,
+    # src[jagged_hstu_attn_3.py:89-125]: ...
+    jax.lax.fori_loop(0, 16, _kernel_body, None)
+
+def jagged_hstu_attention(max_seq_len: int, alpha: float, attn_scale: float, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, seq_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    # src[jagged_hstu_attn_3.py:86]: num_sequences = seq_offsets.size(0) - 1
+    num_sequences = seq_offsets.size(0) - 1
+    # src[jagged_hstu_attn_3.py:75]: def jagged_hstu_attention(
+    # src[jagged_hstu_attn_3.py:76]:     max_seq_len: int,
+    # src[jagged_hstu_attn_3.py:77]:     alpha: float,
+    # src[jagged_hstu_attn_3.py:75-127]: ...
+    out = getattr(_helion_jagged_hstu_attention, '_helion_output_meta_cache_0', None)
+    if out is None:
+        out = _helion_jagged_hstu_attention._helion_output_meta_cache_0 = torch.empty_like(v, device='meta')
+    # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+    # src[jagged_hstu_attn_3.py:90]:     # ``tile_b.begin`` gives a scalar program index (same idiom as
+    # src[jagged_hstu_attn_3.py:91]:     # v1's ``jagged_hstu_attn.py:114``). With scalar ``start``,
+    # src[jagged_hstu_attn_3.py:89-125]: ...
+    out = _launcher(_helion_jagged_hstu_attention, (1,), seq_offsets, q, out, k, v, torch.tensor([alpha], dtype=torch.float32 if isinstance(alpha, float) else torch.int32, device=seq_offsets.device), torch.tensor([attn_scale], dtype=torch.float32 if isinstance(attn_scale, float) else torch.int32, device=seq_offsets.device), _output_indices=[2], _inplace_indices=[], _block_spec_info=[((None,), (None,)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), None, None], _ds_pad_dims=[(1, 0, 64, 63), (2, 0, 64, 63), (3, 0, 2048, 2047), (4, 0, 2048, 2047)], _smem_arg_indices=[0], _scratch_shapes=[((64, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((64, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((64, 32, 128), 'jnp.float32', 'vmem'), ((2048, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((2048, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2, 3, 4])
+    # src[jagged_hstu_attn_3.py:127]: return out
+    return out
+[18s] Benchmarking failed: RuntimeError: XLA:TPU compile permanent error. Ran out of memory in memory space vmem. Used 195.98M of 64.00M vmem. Exceeded vmem capacity by 131.98M.
+
+Program vmem requirement 195.98M:
+    scoped          195.98M
+
+  Largest program allocations in vmem:
+
+  1. Size: 128.98M
+     XLA label: register allocator spill slots in HLO :: custom_kernel.1
+     Allocation type: scoped
+     ==========================
+
+  2. Size: 32.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[2048,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 32.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  3. Size: 32.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[2048,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 32.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  4. Size: 1.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[64,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 1.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  5. Size: 1.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[64,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 1.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  6. Size: 1.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[64,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 1.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  7. Size: 512B
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1]{0:T(128)S(1)}
+     Unpadded size: 4B
+     Extra memory due to padding: 508B (128.0x expansion)
+     Tag: scoped memory for custom_kernel.1
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  8. Size: 512B
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1]{0:T(128)S(1)}
+     Unpadded size: 4B
+     Extra memory due to padding: 508B (128.0x expansion)
+     Tag: scoped memory for custom_kernel.1
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6143,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+[18s] Running benchmark for helion.Config(block_sizes=[1, 256, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=False)
+[18s] Running Config(block_sizes=[1, 256, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=False) at 2026-06-15 21:45:51.827373
+[42s] Generated Triton code for @helion.kernel(config=helion.Config(block_sizes=[1, 256, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True):
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+import __main__ as _source_module
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(256)
+_BLOCK_SIZE_2 = int(2048)
+
+def _helion_jagged_hstu_attention(seq_offsets, q, out, k, v, alpha, attn_scale, q_buf, q_sem, out_buf, out_sem, scratch_3, k_buf, k_sem, v_buf, v_sem):
+    # src[jagged_hstu_attn_3.py:75]: def jagged_hstu_attention(
+    # src[jagged_hstu_attn_3.py:76]:     max_seq_len: int,
+    # src[jagged_hstu_attn_3.py:77]:     alpha: float,
+    # src[jagged_hstu_attn_3.py:75-127]: ...
+    alpha = alpha[0]
+    attn_scale = attn_scale[0]
+
+    def _kernel_body(pid_0, _):
+        # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[jagged_hstu_attn_3.py:94]: start = seq_offsets[tile_b.begin]                              # scalar
+        start = seq_offsets[offset_0]
+        # src[jagged_hstu_attn_3.py:95]: seq_lens = seq_offsets[tile_b.index + 1] - seq_offsets[tile_b]  # [tile_b]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        load_1 = jnp.array([seq_offsets[offset_0 + 1]])
+        load_2 = jnp.array([seq_offsets[offset_0]])
+        v_2 = load_1 - load_2
+        # src[jagged_hstu_attn_3.py:97]: for tile_q in hl.jagged_tile(seq_lens):
+        # src[jagged_hstu_attn_3.py:98]:     q_idx = start + tile_q.index                                # [tile_q]
+        # src[jagged_hstu_attn_3.py:99]:     q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+        # src[jagged_hstu_attn_3.py:97-125]: ...
+        view = jnp.reshape(v_2, [_BLOCK_SIZE_0])
+        amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+
+        def _fori_body_1(_j, _):
+            nonlocal q_buf, out_buf, scratch_3, k_buf, v_buf
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            offset_4 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
+            mask_1 = offset_4[None, :] < v_2[:, None]
+            _copy = pltpu.make_async_copy(q.at[pl.ds(start + (0 + _j * _BLOCK_SIZE_1), _BLOCK_SIZE_1), :, :], q_buf, q_sem)
+            _copy.start()
+            _copy.wait()
+            v_2_copy = v_2
+            start_copy = start
+            v_2_copy_0 = v_2_copy
+            start_copy_0 = start_copy
+            # src[jagged_hstu_attn_3.py:98]: q_idx = start + tile_q.index                                # [tile_q]
+            v_3 = start_copy_0 + indices_1
+            # src[jagged_hstu_attn_3.py:99]: q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+            q_blk = q_buf[:, :, :]
+            # src[jagged_hstu_attn_3.py:100]: acc = hl.zeros([tile_q, H, D], dtype=torch.float32)
+            acc = jnp.full([_BLOCK_SIZE_1, 32, 128], 0.0, jnp.float32)
+            # src[jagged_hstu_attn_3.py:102]: for tile_kv in hl.jagged_tile(seq_lens):
+            # src[jagged_hstu_attn_3.py:103]:     kv_idx = start + tile_kv.index                           # [tile_kv]
+            # src[jagged_hstu_attn_3.py:104]:     k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+            # src[jagged_hstu_attn_3.py:102-123]: ...
+            view_1 = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax_1 = lax.convert_element_type(jnp.max(view_1, axis=0), jnp.int32)
+            scratch_3[...] = acc[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal q_buf, out_buf, scratch_3, k_buf, v_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_6 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_6[None, :] < v_2_copy_0[:, None]
+                _copy_1 = pltpu.make_async_copy(k.at[pl.ds(start_copy_0 + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), :, :], k_buf, k_sem)
+                _copy_1.start()
+                _copy_1.wait()
+                _copy_2 = pltpu.make_async_copy(v.at[pl.ds(start_copy_0 + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), :, :], v_buf, v_sem)
+                _copy_2.start()
+                _copy_2.wait()
+                start_copy_0_copy = start_copy_0
+                q_blk_copy = q_blk
+                v_4 = scratch_3[...]
+                start_copy_0_copy_0 = start_copy_0_copy
+                q_blk_copy_0 = q_blk_copy
+                v_4_0 = v_4
+                # src[jagged_hstu_attn_3.py:103]: kv_idx = start + tile_kv.index                           # [tile_kv]
+                v_5 = start_copy_0_copy_0 + indices_2
+                # src[jagged_hstu_attn_3.py:104]: k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+                k_blk = k_buf[:, :, :]
+                # src[jagged_hstu_attn_3.py:105]: v_blk = v[kv_idx, :, :]                                  # [tile_kv, H, D]
+                v_blk = v_buf[:, :, :]
+                # src[jagged_hstu_attn_3.py:109]: q_blk.transpose(0, 1),                               # [H, tile_q, D]
+                permute = jnp.transpose(q_blk_copy_0, [1, 0, 2])
+                # src[jagged_hstu_attn_3.py:110]: k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
+                permute_1 = jnp.transpose(k_blk, [1, 2, 0])
+                # src[jagged_hstu_attn_3.py:108]: scores = torch.bmm(
+                # src[jagged_hstu_attn_3.py:109]:     q_blk.transpose(0, 1),                               # [H, tile_q, D]
+                # src[jagged_hstu_attn_3.py:110]:     k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
+                # src[jagged_hstu_attn_3.py:108-111]: ...
+                _mask_to = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32).squeeze(0)[None, :, None], [32, _BLOCK_SIZE_1, 128]), permute, jnp.full([], 0, jnp.float32))
+                _mask_to_1 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32).squeeze(0)[None, None, :], [32, 128, _BLOCK_SIZE_2]), permute_1, jnp.full([], 0, jnp.float32))
+                bmm = lax.dot_general(_mask_to, _mask_to_1, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                v_6 = bmm * alpha
+                # src[jagged_hstu_attn_3.py:112]: scores = F.silu(scores) * attn_scale
+                v_7 = -v_6
+                v_8 = jnp.exp(v_7)
+                v_9 = jnp.array(1, dtype=jnp.float32)
+                v_10 = v_8 + v_9
+                v_11 = v_6 / v_10
+                v_12 = v_11 * attn_scale
+                # src[jagged_hstu_attn_3.py:115]: tile_q.index.unsqueeze(1) >= tile_kv.index.unsqueeze(0)
+                unsqueeze = indices_1[:, None]
+                unsqueeze_1 = indices_2[None, :]
+                v_13 = unsqueeze >= unsqueeze_1
+                # src[jagged_hstu_attn_3.py:117]: scores = torch.where(causal_mask[None, :, :], scores, 0.0)
+                subscript = v_13[None, :, :]
+                scalar_tensor = jnp.full([], 0.0, jnp.float32)
+                scores_2 = jnp.where(subscript, v_12, scalar_tensor)
+                # src[jagged_hstu_attn_3.py:121]: v_blk.transpose(0, 1),                               # [H, tile_kv, D]
+                permute_2 = jnp.transpose(v_blk, [1, 0, 2])
+                # src[jagged_hstu_attn_3.py:119]: update = torch.bmm(
+                # src[jagged_hstu_attn_3.py:120]:     scores.to(v.dtype),
+                # src[jagged_hstu_attn_3.py:121]:     v_blk.transpose(0, 1),                               # [H, tile_kv, D]
+                # src[jagged_hstu_attn_3.py:119-122]: ...
+                _mask_to_2 = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32).squeeze(0)[None, :, None] * mask_2.astype(jnp.float32).squeeze(0)[None, None, :], [32, _BLOCK_SIZE_1, _BLOCK_SIZE_2]), scores_2, jnp.full([], 0, jnp.float32))
+                _mask_to_3 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32).squeeze(0)[None, :, None], [32, _BLOCK_SIZE_2, 128]), permute_2, jnp.full([], 0, jnp.float32))
+                update = lax.dot_general(_mask_to_2, _mask_to_3, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                # src[jagged_hstu_attn_3.py:123]: acc = acc + update.transpose(0, 1)                       # [tile_q, H, D]
+                permute_3 = jnp.transpose(update, [1, 0, 2])
+                v_14 = v_4_0 + permute_3
+                # src[jagged_hstu_attn_3.py:102]: for tile_kv in hl.jagged_tile(seq_lens):
+                # src[jagged_hstu_attn_3.py:103]:     kv_idx = start + tile_kv.index                           # [tile_kv]
+                # src[jagged_hstu_attn_3.py:104]:     k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+                # src[jagged_hstu_attn_3.py:102-123]: ...
+                scratch_3[...] = v_14[...]
+            jax.lax.fori_loop(0, (amax_1 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            acc = scratch_3[...]
+            # src[jagged_hstu_attn_3.py:125]: out[q_idx, :, :] = acc.to(out.dtype)
+            out_buf[:, :, :] = acc
+            # src[jagged_hstu_attn_3.py:97]: for tile_q in hl.jagged_tile(seq_lens):
+            # src[jagged_hstu_attn_3.py:98]:     q_idx = start + tile_q.index                                # [tile_q]
+            # src[jagged_hstu_attn_3.py:99]:     q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+            # src[jagged_hstu_attn_3.py:97-125]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(start + (0 + _j * _BLOCK_SIZE_1), _BLOCK_SIZE_1), :, :], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+    # src[jagged_hstu_attn_3.py:90]:     # ``tile_b.begin`` gives a scalar program index (same idiom as
+    # src[jagged_hstu_attn_3.py:91]:     # v1's ``jagged_hstu_attn.py:114``). With scalar ``start``,
+    # src[jagged_hstu_attn_3.py:89-125]: ...
+    jax.lax.fori_loop(0, 16, _kernel_body, None)
+
+def jagged_hstu_attention(max_seq_len: int, alpha: float, attn_scale: float, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, seq_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    # src[jagged_hstu_attn_3.py:86]: num_sequences = seq_offsets.size(0) - 1
+    num_sequences = seq_offsets.size(0) - 1
+    # src[jagged_hstu_attn_3.py:75]: def jagged_hstu_attention(
+    # src[jagged_hstu_attn_3.py:76]:     max_seq_len: int,
+    # src[jagged_hstu_attn_3.py:77]:     alpha: float,
+    # src[jagged_hstu_attn_3.py:75-127]: ...
+    out = getattr(_helion_jagged_hstu_attention, '_helion_output_meta_cache_0', None)
+    if out is None:
+        out = _helion_jagged_hstu_attention._helion_output_meta_cache_0 = torch.empty_like(v, device='meta')
+    # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+    # src[jagged_hstu_attn_3.py:90]:     # ``tile_b.begin`` gives a scalar program index (same idiom as
+    # src[jagged_hstu_attn_3.py:91]:     # v1's ``jagged_hstu_attn.py:114``). With scalar ``start``,
+    # src[jagged_hstu_attn_3.py:89-125]: ...
+    out = _launcher(_helion_jagged_hstu_attention, (1,), seq_offsets, q, out, k, v, torch.tensor([alpha], dtype=torch.float32 if isinstance(alpha, float) else torch.int32, device=seq_offsets.device), torch.tensor([attn_scale], dtype=torch.float32 if isinstance(attn_scale, float) else torch.int32, device=seq_offsets.device), _output_indices=[2], _inplace_indices=[], _block_spec_info=[((None,), (None,)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), None, None], _ds_pad_dims=[(1, 0, 256, 255), (2, 0, 256, 255), (3, 0, 2048, 2047), (4, 0, 2048, 2047)], _smem_arg_indices=[0], _scratch_shapes=[((256, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((256, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((256, 32, 128), 'jnp.float32', 'vmem'), ((2048, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((2048, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2, 3, 4])
+    # src[jagged_hstu_attn_3.py:127]: return out
+    return out
+[42s] Benchmarking failed: RuntimeError: XLA:TPU compile permanent error. Ran out of memory in memory space vmem. Used 208.04M of 64.00M vmem. Exceeded vmem capacity by 144.04M.
+
+Program vmem requirement 208.04M:
+    scoped          208.04M
+
+  Largest program allocations in vmem:
+
+  1. Size: 132.04M
+     XLA label: register allocator spill slots in HLO :: custom_kernel.1
+     Allocation type: scoped
+     ==========================
+
+  2. Size: 32.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[2048,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 32.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  3. Size: 32.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[2048,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 32.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  4. Size: 4.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[256,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 4.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  5. Size: 4.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[256,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 4.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  6. Size: 4.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[256,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 4.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  7. Size: 512B
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1]{0:T(128)S(1)}
+     Unpadded size: 4B
+     Extra memory due to padding: 508B (128.0x expansion)
+     Tag: scoped memory for custom_kernel.1
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  8. Size: 512B
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1]{0:T(128)S(1)}
+     Unpadded size: 4B
+     Extra memory due to padding: 508B (128.0x expansion)
+     Tag: scoped memory for custom_kernel.1
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6399,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[8191,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+[42s] Running benchmark for helion.Config(block_sizes=[1, 512, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[42s] Running Config(block_sizes=[1, 512, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 21:46:15.758059
+[57s] Generated Triton code for @helion.kernel(config=helion.Config(block_sizes=[1, 512, 1024], pallas_loop_type='fori_loop', pallas_pre_broadcast=True), static_shapes=True):
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+import __main__ as _source_module
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(512)
+_BLOCK_SIZE_2 = int(1024)
+
+def _helion_jagged_hstu_attention(seq_offsets, q, out, k, v, alpha, attn_scale, q_buf, q_sem, out_buf, out_sem, scratch_3, k_buf, k_sem, v_buf, v_sem):
+    # src[jagged_hstu_attn_3.py:75]: def jagged_hstu_attention(
+    # src[jagged_hstu_attn_3.py:76]:     max_seq_len: int,
+    # src[jagged_hstu_attn_3.py:77]:     alpha: float,
+    # src[jagged_hstu_attn_3.py:75-127]: ...
+    alpha = alpha[0]
+    attn_scale = attn_scale[0]
+
+    def _kernel_body(pid_0, _):
+        # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[jagged_hstu_attn_3.py:94]: start = seq_offsets[tile_b.begin]                              # scalar
+        start = seq_offsets[offset_0]
+        # src[jagged_hstu_attn_3.py:95]: seq_lens = seq_offsets[tile_b.index + 1] - seq_offsets[tile_b]  # [tile_b]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        load_1 = jnp.array([seq_offsets[offset_0 + 1]])
+        load_2 = jnp.array([seq_offsets[offset_0]])
+        v_2 = load_1 - load_2
+        # src[jagged_hstu_attn_3.py:97]: for tile_q in hl.jagged_tile(seq_lens):
+        # src[jagged_hstu_attn_3.py:98]:     q_idx = start + tile_q.index                                # [tile_q]
+        # src[jagged_hstu_attn_3.py:99]:     q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+        # src[jagged_hstu_attn_3.py:97-125]: ...
+        view = jnp.reshape(v_2, [_BLOCK_SIZE_0])
+        amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+
+        def _fori_body_1(_j, _):
+            nonlocal q_buf, out_buf, scratch_3, k_buf, v_buf
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            offset_4 = _j * _BLOCK_SIZE_1 + jnp.arange(_BLOCK_SIZE_1)
+            mask_1 = offset_4[None, :] < v_2[:, None]
+            _copy = pltpu.make_async_copy(q.at[pl.ds(start + (0 + _j * _BLOCK_SIZE_1), _BLOCK_SIZE_1), :, :], q_buf, q_sem)
+            _copy.start()
+            _copy.wait()
+            v_2_copy = v_2
+            start_copy = start
+            v_2_copy_0 = v_2_copy
+            start_copy_0 = start_copy
+            # src[jagged_hstu_attn_3.py:98]: q_idx = start + tile_q.index                                # [tile_q]
+            v_3 = start_copy_0 + indices_1
+            # src[jagged_hstu_attn_3.py:99]: q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+            q_blk = q_buf[:, :, :]
+            # src[jagged_hstu_attn_3.py:100]: acc = hl.zeros([tile_q, H, D], dtype=torch.float32)
+            acc = jnp.full([_BLOCK_SIZE_1, 32, 128], 0.0, jnp.float32)
+            # src[jagged_hstu_attn_3.py:102]: for tile_kv in hl.jagged_tile(seq_lens):
+            # src[jagged_hstu_attn_3.py:103]:     kv_idx = start + tile_kv.index                           # [tile_kv]
+            # src[jagged_hstu_attn_3.py:104]:     k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+            # src[jagged_hstu_attn_3.py:102-123]: ...
+            view_1 = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax_1 = lax.convert_element_type(jnp.max(view_1, axis=0), jnp.int32)
+            scratch_3[...] = acc[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal q_buf, out_buf, scratch_3, k_buf, v_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_6 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_6[None, :] < v_2_copy_0[:, None]
+                _copy_1 = pltpu.make_async_copy(k.at[pl.ds(start_copy_0 + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), :, :], k_buf, k_sem)
+                _copy_1.start()
+                _copy_1.wait()
+                _copy_2 = pltpu.make_async_copy(v.at[pl.ds(start_copy_0 + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), :, :], v_buf, v_sem)
+                _copy_2.start()
+                _copy_2.wait()
+                start_copy_0_copy = start_copy_0
+                q_blk_copy = q_blk
+                v_4 = scratch_3[...]
+                start_copy_0_copy_0 = start_copy_0_copy
+                q_blk_copy_0 = q_blk_copy
+                v_4_0 = v_4
+                # src[jagged_hstu_attn_3.py:103]: kv_idx = start + tile_kv.index                           # [tile_kv]
+                v_5 = start_copy_0_copy_0 + indices_2
+                # src[jagged_hstu_attn_3.py:104]: k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+                k_blk = k_buf[:, :, :]
+                # src[jagged_hstu_attn_3.py:105]: v_blk = v[kv_idx, :, :]                                  # [tile_kv, H, D]
+                v_blk = v_buf[:, :, :]
+                # src[jagged_hstu_attn_3.py:109]: q_blk.transpose(0, 1),                               # [H, tile_q, D]
+                permute = jnp.transpose(q_blk_copy_0, [1, 0, 2])
+                # src[jagged_hstu_attn_3.py:110]: k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
+                permute_1 = jnp.transpose(k_blk, [1, 2, 0])
+                # src[jagged_hstu_attn_3.py:108]: scores = torch.bmm(
+                # src[jagged_hstu_attn_3.py:109]:     q_blk.transpose(0, 1),                               # [H, tile_q, D]
+                # src[jagged_hstu_attn_3.py:110]:     k_blk.permute(1, 2, 0),                              # [H, D, tile_kv]
+                # src[jagged_hstu_attn_3.py:108-111]: ...
+                _mask_to = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32).squeeze(0)[None, :, None], [32, _BLOCK_SIZE_1, 128]), permute, jnp.full([], 0, jnp.float32))
+                _mask_to_1 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32).squeeze(0)[None, None, :], [32, 128, _BLOCK_SIZE_2]), permute_1, jnp.full([], 0, jnp.float32))
+                bmm = lax.dot_general(_mask_to, _mask_to_1, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                v_6 = bmm * alpha
+                # src[jagged_hstu_attn_3.py:112]: scores = F.silu(scores) * attn_scale
+                v_7 = -v_6
+                v_8 = jnp.exp(v_7)
+                v_9 = jnp.array(1, dtype=jnp.float32)
+                v_10 = v_8 + v_9
+                v_11 = v_6 / v_10
+                v_12 = v_11 * attn_scale
+                # src[jagged_hstu_attn_3.py:115]: tile_q.index.unsqueeze(1) >= tile_kv.index.unsqueeze(0)
+                unsqueeze = indices_1[:, None]
+                unsqueeze_1 = indices_2[None, :]
+                v_13 = unsqueeze >= unsqueeze_1
+                # src[jagged_hstu_attn_3.py:117]: scores = torch.where(causal_mask[None, :, :], scores, 0.0)
+                subscript = v_13[None, :, :]
+                scalar_tensor = jnp.full([], 0.0, jnp.float32)
+                scores_2 = jnp.where(subscript, v_12, scalar_tensor)
+                # src[jagged_hstu_attn_3.py:121]: v_blk.transpose(0, 1),                               # [H, tile_kv, D]
+                permute_2 = jnp.transpose(v_blk, [1, 0, 2])
+                # src[jagged_hstu_attn_3.py:119]: update = torch.bmm(
+                # src[jagged_hstu_attn_3.py:120]:     scores.to(v.dtype),
+                # src[jagged_hstu_attn_3.py:121]:     v_blk.transpose(0, 1),                               # [H, tile_kv, D]
+                # src[jagged_hstu_attn_3.py:119-122]: ...
+                _mask_to_2 = jnp.where(jnp.broadcast_to(mask_1.astype(jnp.float32).squeeze(0)[None, :, None] * mask_2.astype(jnp.float32).squeeze(0)[None, None, :], [32, _BLOCK_SIZE_1, _BLOCK_SIZE_2]), scores_2, jnp.full([], 0, jnp.float32))
+                _mask_to_3 = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32).squeeze(0)[None, :, None], [32, _BLOCK_SIZE_2, 128]), permute_2, jnp.full([], 0, jnp.float32))
+                update = lax.dot_general(_mask_to_2, _mask_to_3, dimension_numbers=(((2,), (1,)), ((0,), (0,))), precision='default')
+                # src[jagged_hstu_attn_3.py:123]: acc = acc + update.transpose(0, 1)                       # [tile_q, H, D]
+                permute_3 = jnp.transpose(update, [1, 0, 2])
+                v_14 = v_4_0 + permute_3
+                # src[jagged_hstu_attn_3.py:102]: for tile_kv in hl.jagged_tile(seq_lens):
+                # src[jagged_hstu_attn_3.py:103]:     kv_idx = start + tile_kv.index                           # [tile_kv]
+                # src[jagged_hstu_attn_3.py:104]:     k_blk = k[kv_idx, :, :]                                  # [tile_kv, H, D]
+                # src[jagged_hstu_attn_3.py:102-123]: ...
+                scratch_3[...] = v_14[...]
+            jax.lax.fori_loop(0, (amax_1 - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            acc = scratch_3[...]
+            # src[jagged_hstu_attn_3.py:125]: out[q_idx, :, :] = acc.to(out.dtype)
+            out_buf[:, :, :] = acc
+            # src[jagged_hstu_attn_3.py:97]: for tile_q in hl.jagged_tile(seq_lens):
+            # src[jagged_hstu_attn_3.py:98]:     q_idx = start + tile_q.index                                # [tile_q]
+            # src[jagged_hstu_attn_3.py:99]:     q_blk = q[q_idx, :, :]                                       # [tile_q, H, D]
+            # src[jagged_hstu_attn_3.py:97-125]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(start + (0 + _j * _BLOCK_SIZE_1), _BLOCK_SIZE_1), :, :], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+    # src[jagged_hstu_attn_3.py:90]:     # ``tile_b.begin`` gives a scalar program index (same idiom as
+    # src[jagged_hstu_attn_3.py:91]:     # v1's ``jagged_hstu_attn.py:114``). With scalar ``start``,
+    # src[jagged_hstu_attn_3.py:89-125]: ...
+    jax.lax.fori_loop(0, 16, _kernel_body, None)
+
+def jagged_hstu_attention(max_seq_len: int, alpha: float, attn_scale: float, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, seq_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    # src[jagged_hstu_attn_3.py:86]: num_sequences = seq_offsets.size(0) - 1
+    num_sequences = seq_offsets.size(0) - 1
+    # src[jagged_hstu_attn_3.py:75]: def jagged_hstu_attention(
+    # src[jagged_hstu_attn_3.py:76]:     max_seq_len: int,
+    # src[jagged_hstu_attn_3.py:77]:     alpha: float,
+    # src[jagged_hstu_attn_3.py:75-127]: ...
+    out = getattr(_helion_jagged_hstu_attention, '_helion_output_meta_cache_0', None)
+    if out is None:
+        out = _helion_jagged_hstu_attention._helion_output_meta_cache_0 = torch.empty_like(v, device='meta')
+    # src[jagged_hstu_attn_3.py:89]: for tile_b in hl.tile(num_sequences):
+    # src[jagged_hstu_attn_3.py:90]:     # ``tile_b.begin`` gives a scalar program index (same idiom as
+    # src[jagged_hstu_attn_3.py:91]:     # v1's ``jagged_hstu_attn.py:114``). With scalar ``start``,
+    # src[jagged_hstu_attn_3.py:89-125]: ...
+    out = _launcher(_helion_jagged_hstu_attention, (1,), seq_offsets, q, out, k, v, torch.tensor([alpha], dtype=torch.float32 if isinstance(alpha, float) else torch.int32, device=seq_offsets.device), torch.tensor([attn_scale], dtype=torch.float32 if isinstance(attn_scale, float) else torch.int32, device=seq_offsets.device), _output_indices=[2], _inplace_indices=[], _block_spec_info=[((None,), (None,)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), ((None, None, None), (None, None, None)), None, None], _ds_pad_dims=[(1, 0, 512, 511), (2, 0, 512, 511), (3, 0, 1024, 1023), (4, 0, 1024, 1023)], _smem_arg_indices=[0], _scratch_shapes=[((512, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((512, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((512, 32, 128), 'jnp.float32', 'vmem'), ((1024, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore'), ((1024, 32, 128), 'jnp.float32', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2, 3, 4])
+    # src[jagged_hstu_attn_3.py:127]: return out
+    return out
+[57s] Benchmarking failed: RuntimeError: XLA:TPU compile permanent error. Ran out of memory in memory space vmem. Used 131.51M of 64.00M vmem. Exceeded vmem capacity by 67.51M.
+
+Program vmem requirement 131.51M:
+    scoped          131.51M
+
+  Largest program allocations in vmem:
+
+  1. Size: 75.51M
+     XLA label: register allocator spill slots in HLO :: custom_kernel.1
+     Allocation type: scoped
+     ==========================
+
+  2. Size: 16.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1024,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 16.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  3. Size: 16.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1024,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 16.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  4. Size: 8.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[512,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 8.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  5. Size: 8.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[512,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 8.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  6. Size: 8.00M
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[512,32,128]{2,1,0:T(8,128)}
+     Unpadded size: 8.00M
+     Tag: scratch operand
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  7. Size: 512B
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1]{0:T(128)S(1)}
+     Unpadded size: 4B
+     Extra memory due to padding: 508B (128.0x expansion)
+     Tag: scoped memory for custom_kernel.1
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+
+  8. Size: 512B
+     Operator: op_name="custom_kernel/custom_kernel/jit(wrapped)/pallas_call"
+     Shape: f32[1]{0:T(128)S(1)}
+     Unpadded size: 4B
+     Extra memory due to padding: 508B (128.0x expansion)
+     Tag: scoped memory for custom_kernel.1
+     XLA label: custom_kernel.1 = custom-call(Arg_0.1, constant_dynamic-update-slice_fusion.2, get-tuple-element.1, get-tuple-element, ...(+2)), custom_call_target="tpu_custom_call", operand_layout_constraints={s32[17]{0}, f32[6655,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[7167,32,128]{2,1,0}, f32[1]{0}, f32[1]{0}}, frontend_attributes={kernel_metadata={}}
+     Allocation type: scoped
+     ==========================
+[57s] Running benchmark for helion.Config(block_sizes=[1, 32, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True)
+[57s] Running Config(block_sizes=[1, 32, 2048], pallas_loop_type='fori_loop', pallas_pre_broadcast=True) at 2026-06-15 21:46:30.758468
