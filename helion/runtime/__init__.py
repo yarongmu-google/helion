@@ -365,14 +365,20 @@ def _estimate_pallas_vmem_bytes(
     total_bytes += sum(out_spec_bytes) * multiplier
 
     if scratch_shapes:
+        # ``pltpu.VMEM(...)`` and ``pltpu.SemaphoreType.DMA(...)`` both
+        # return ``MemoryRef`` objects; distinguish by ``memory_space``
+        # (the class name is identical so a ``type(...).__name__`` check
+        # silently treats every scratch as 0 bytes).
+        vmem_space = getattr(pltpu, "VMEM", None)
         for scratch in scratch_shapes:
-            if type(scratch).__name__ == "VMEM":
-                numel = 1
-                shape = getattr(scratch, "shape", ())
-                for d in shape:
-                    numel *= int(d)
-                dtype_size = getattr(getattr(scratch, "dtype", None), "itemsize", 4)
-                total_bytes += numel * dtype_size
+            if getattr(scratch, "memory_space", None) is not vmem_space:
+                continue
+            numel = 1
+            shape = getattr(scratch, "shape", ())
+            for d in shape:
+                numel *= int(d)
+            dtype_size = getattr(getattr(scratch, "dtype", None), "itemsize", 4)
+            total_bytes += numel * dtype_size
 
     return total_bytes
 
