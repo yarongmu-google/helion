@@ -2519,7 +2519,18 @@ def _codegen_fori_loop(state: CodegenState) -> object:
     # ``vmem_name`` Python name unchanged.  Only applied for single-dim
     # fori_loops (``len(block_ids) == 1``, equivalently single ``loop_var``);
     # multi-dim falls back to single-buffer below.
-    use_double_buffer = len(block_ids) == 1
+    #
+    # Also fall back to single-buffer when any tensor is read-modify-write
+    # (appears in both ``loaded_tensors`` and ``stored_tensors``): DB's
+    # trailing prefetch at iter ``_j`` would load iter ``_j+1`` from HBM
+    # before iter ``_j``'s store has flushed, so iter ``_j+1`` would read
+    # the pre-update value and lose every prior iter's contribution.
+    # Single-buffer's blocking copy-in / wait / compute / copy-out is safe
+    # for RMW.
+    rmw_tensor_ids = {id(fake) for fake, _node, _meta in loaded_tensors.values()} & {
+        id(fake) for fake, _node, _meta in stored_tensors.values()
+    }
+    use_double_buffer = len(block_ids) == 1 and not rmw_tensor_ids
     tensor_to_dma_scratch: dict[str, str] = {}
     tensor_to_sem: dict[str, str] = {}
     tensor_to_underlying_scratch: dict[str, str] = {}
