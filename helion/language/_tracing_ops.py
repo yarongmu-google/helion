@@ -2429,12 +2429,22 @@ def _codegen_fori_loop(state: CodegenState) -> object:
     )
 
     def _build_jagged_flat_hbm_dma_slice(
-        jpat: JaggedFlatIndexPattern, fake: torch.Tensor, hbm_name: str
+        jpat: JaggedFlatIndexPattern,
+        fake: torch.Tensor,
+        hbm_name: str,
+        *,
+        dim_idx_overrides: list[str] | None = None,
     ) -> str:
         """Emit ``x_flat.at[pl.ds(starts[0] + k_offset, BK), pl.ds(m_offset, BM)]``
         — the per-item jagged DMA slice (Mosaic's auto-pipeline can't do
         this). Resolves the sublane base by positional placeholder match
         from ``jpat.sublane_base_fx`` back to its outer-scope ``starts``.
+
+        ``dim_idx_overrides``: if provided, override the per-axis iter
+        index expression (``dim_idx_exprs[ax_idx]``) with the supplied
+        value.  Used by the double-buffer emit to build the iter-0
+        bootstrap slice and the iter-(_j+1) prefetch slice without
+        re-walking the dispatcher.  Length must match ``dim_idx_exprs``.
         """
         slice_parts: list[str] = []
         for axis_bid in (jpat.sublane_bid, jpat.lane_bid):
@@ -2444,7 +2454,11 @@ def _codegen_fori_loop(state: CodegenState) -> object:
                 ax_idx = block_ids.index(axis_bid)
                 begin_expr = begin_exprs[ax_idx]
                 iter_step_expr = iter_step_exprs[ax_idx]
-                dim_idx_expr = dim_idx_exprs[ax_idx]
+                dim_idx_expr = (
+                    dim_idx_overrides[ax_idx]
+                    if dim_idx_overrides is not None
+                    else dim_idx_exprs[ax_idx]
+                )
                 axis_offset = f"({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr})"
             else:
                 axis_offset = state.codegen.offset_var(axis_bid)
@@ -2522,12 +2536,24 @@ def _codegen_fori_loop(state: CodegenState) -> object:
         return f"{hbm_name}.at[{', '.join(slice_parts)}]"
 
     def _build_hbm_dma_slice(
-        fake: torch.Tensor, hbm_name: str, subscript_meta: list[object]
+        fake: torch.Tensor,
+        hbm_name: str,
+        subscript_meta: list[object],
+        *,
+        dim_idx_overrides: list[str] | None = None,
     ) -> str:
-        """Build an HBM ref slicing expression for DMA with loop variable."""
+        """Build an HBM ref slicing expression for DMA with loop variable.
+
+        ``dim_idx_overrides``: see ``_build_jagged_flat_hbm_dma_slice`` —
+        when supplied, the per-axis iter-index expression is replaced so
+        the double-buffer emit can build iter-0 bootstrap and iter-(_j+1)
+        prefetch slices without re-walking the dispatcher.
+        """
         jpat = jagged_flat_patterns.get(id(fake))
         if isinstance(jpat, JaggedFlatIndexPattern):
-            return _build_jagged_flat_hbm_dma_slice(jpat, fake, hbm_name)
+            return _build_jagged_flat_hbm_dma_slice(
+                jpat, fake, hbm_name, dim_idx_overrides=dim_idx_overrides
+            )
         if isinstance(jpat, JaggedOuterIndexPattern):
             return _build_jagged_outer_hbm_dma_slice(jpat, fake, hbm_name)
 
@@ -2542,7 +2568,11 @@ def _codegen_fori_loop(state: CodegenState) -> object:
                 begin_expr = begin_exprs[bid_idx]
                 iter_step_expr = iter_step_exprs[bid_idx]
                 slice_size_expr = slice_size_exprs[bid_idx]
-                dim_idx_expr = dim_idx_exprs[bid_idx]
+                dim_idx_expr = (
+                    dim_idx_overrides[bid_idx]
+                    if dim_idx_overrides is not None
+                    else dim_idx_exprs[bid_idx]
+                )
                 parts.append(
                     f"pl.ds(({begin_expr}) + ({dim_idx_expr}) * ({iter_step_expr}), {slice_size_expr})"
                 )
