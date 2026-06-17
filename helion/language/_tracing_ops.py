@@ -2511,7 +2511,55 @@ def _codegen_fori_loop(state: CodegenState) -> object:
     rmw_tensor_ids = {id(fake) for fake, _node, _meta in loaded_tensors.values()} & {
         id(fake) for fake, _node, _meta in stored_tensors.values()
     }
-    use_double_buffer = len(block_ids) == 1 and not rmw_tensor_ids
+
+    # Fall back to single-buffer when any pipelined tensor's VMEM scratch
+    # would create a Mosaic layout conflict at the ``ring.at[_j%2]`` slice.
+    # Mosaic tiles sub-fp32 dtypes by ``4 / itemsize`` rows on the sublane
+    # axis (bf16/fp16 = 2, int8 = 4).  After wrapping the scratch with a
+    # leading ``2`` ring dim, ``.at[slot]`` slices the leading dim from 2
+    # to 1 -- so the result's sublane-equivalent extent depends on
+    # ``vmem_shape``'s rank:
+    #
+    # * 0D / 1D scratch: the leading ring dim *becomes* the sublane in
+    #   Mosaic's 2D view (sublane=2, lane=N).  Slice 1-of-2 leaves
+    #   sublane=1, sub-tile -> conflict.
+    # * 2D scratch ``(S, L)``: wrap to ``(2, S, L)``, Mosaic 3D view treats
+    #   leading 2 as a batch dim; sublane stays S.  Conflict iff
+    #   ``S < sublane_tile`` or ``S % sublane_tile != 0``.
+    # * 3D+ scratch: leading dims are batch-like; sublane is preserved by
+    #   the slice and matches the unwrapped layout -- no conflict from DB
+    #   itself.
+    #
+    # Surfaced by ``test_rms_norm_bwd_bfloat16``: ``weight`` is 1D
+    # ``(2048,) bf16``, wrap creates ``memref<2x2048>``, slice rejected with
+    # "Slice sizes along tiled dimensions must be aligned to tiles" in
+    # ``_db_bootstrap`` on real TPU.
+    def _has_db_layout_conflict(
+        fake: torch.Tensor, vmem_shape: tuple[object, ...]
+    ) -> bool:
+        itemsize = fake.dtype.itemsize
+        if itemsize >= 4:
+            return False
+        sublane_tile = 4 // itemsize
+        rank = len(vmem_shape)
+        if rank <= 1:
+            return True
+        if rank >= 3:
+            return False
+        first_dim = vmem_shape[0]
+        if not isinstance(first_dim, int):
+            return False
+        return first_dim < sublane_tile or first_dim % sublane_tile != 0
+
+    has_layout_conflict = any(
+        id(fake) in pipelined_tensor_ids and _has_db_layout_conflict(fake, vmem_shape)
+        for (fake, _sub_meta, _direction), vmem_shape in zip(
+            all_tensor_info, vmem_shapes, strict=True
+        )
+    )
+    use_double_buffer = (
+        len(block_ids) == 1 and not rmw_tensor_ids and not has_layout_conflict
+    )
     tensor_to_dma_scratch: dict[str, str] = {}
     tensor_to_sem: dict[str, str] = {}
     tensor_to_underlying_scratch: dict[str, str] = {}
