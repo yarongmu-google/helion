@@ -1,11 +1,11 @@
 ================================================
 Environment
 ================================================
-Tue Jun 16 22:15:31 PDT 2026
+Wed Jun 17 13:59:31 PDT 2026
 Linux t1v-n-7822eeda-w-0 6.17.0-1018-gcp #19~24.04.1-Ubuntu SMP Tue May 26 23:20:44 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.12.12
 jax: 0.9.2
-Git HEAD: 4881d68d
+Git HEAD: cae94aa8
 
 ================================================
 Full test/ suite under HELION_BACKEND=pallas
@@ -94,7 +94,7 @@ test/test_metal.py sssssssssssssssssssssssssssssssssssssssssssssssssssss [ 68%]
 ssssssssss                                                               [ 68%]
 test/test_metal_mpp_graph_transform.py ........                          [ 68%]
 test/test_misc.py ssssssssssssssssssssssssssssssssssssssssssss           [ 70%]
-test/test_pallas.py ...............x.F.....F............................ [ 72%]
+test/test_pallas.py ...............x.F.................................. [ 72%]
 ..........x.............................x............................... [ 75%]
 .................xx......................................                [ 77%]
 test/test_persistent_kernels.py ssssssssssssssssssssssssssssssss         [ 78%]
@@ -324,33 +324,33 @@ def matmul_bias_residual_gelu_cast(x: torch.Tensor, w: torch.Tensor, bias: torch
 /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py:1332: TypeError: _erf_lowering_rule() missing 1 required positional argument: 'accuracy'
 E   RuntimeError: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
     
-    at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmp7bdwi4s0/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
+    at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmpte62ms6k/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
     
     The MLIR operation involved:
       %160 = "tpu.memref_slice"(%arg12, %6, %6) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<2x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>, i32, i32) -> memref<1x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>
     
     Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 ----------------------------- Captured stderr call -----------------------------
-E0000 00:00:1781673448.704254 1062647 device_buffer.cc:698] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
-E0000 00:00:1781673448.704290 1062647 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781730091.854736 1510904 device_buffer.cc:698] [SetAsError] Failed to set materialization error: FAILED_PRECONDITION: attempted to set materialization error after materialization was already started [type.googleapis.com/torch_tpu.root_op_name='']
+E0000 00:00:1781730091.854764 1510904 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmp7bdwi4s0/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
-
-The MLIR operation involved:
-  %160 = "tpu.memref_slice"(%arg12, %6, %6) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<2x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>, i32, i32) -> memref<1x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>
-
-Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781673448.704297 1062647 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
-
-at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmp7bdwi4s0/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
+at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmpte62ms6k/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
 
 The MLIR operation involved:
   %160 = "tpu.memref_slice"(%arg12, %6, %6) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<2x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>, i32, i32) -> memref<1x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781673448.704299 1062647 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781730091.854770 1510904 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmp7bdwi4s0/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
+at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmpte62ms6k/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
+
+The MLIR operation involved:
+  %160 = "tpu.memref_slice"(%arg12, %6, %6) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<2x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>, i32, i32) -> memref<1x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781730091.854772 1510904 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Slice sizes along tiled dimensions must be aligned to tiles. Failed to verify that the size at dimension 0 is divisible by the tile dimension 2. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_rms_norm_bwd.<locals>._fori_body_0.<locals>._db_bootstrap"("/tmp/tmpte62ms6k/vv/cvvdbbrdf7azgidj4cdium2poooklnvbrqdszeuogrnja7s3nnnj.py":50:12 to :30))))
 
 The MLIR operation involved:
   %160 = "tpu.memref_slice"(%arg12, %6, %6) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<2x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>, i32, i32) -> memref<1x2048xbf16, #tpu.tiled<(2,128)(2,1),[16,1]>, #tpu.memory_space<vmem>>
@@ -527,12 +527,6 @@ E   AssertionError: Tensor-likes are not close!
     Greatest absolute difference: 3.349654549377988e+38 at index (0, 4, 2, 79) (up to 1e-05 allowed)
     Greatest relative difference: inf at index (0, 0, 0, 0) (up to 0.016 allowed)
 /home/ymu_google_com/helion/test/test_pallas.py:4563: AssertionError: Tensor-likes are not close!
-E   AssertionError: Tensor-likes are not close!
-    
-    Mismatched elements: 4089 / 4096 (99.8%)
-    Greatest absolute difference: 48.181396484375 at index (0, 6, 31) (up to 0.001 allowed)
-    Greatest relative difference: 754.836669921875 at index (1, 2, 27) (up to 0.001 allowed)
-/home/ymu_google_com/helion/test/test_pallas.py:3831: AssertionError: Tensor-likes are not close!
 E   RuntimeError: 0 active drivers ([]). There should only be one.
 /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/triton/runtime/driver.py:20: RuntimeError: 0 active drivers ([]). There should only be one.
 E   RuntimeError: 0 active drivers ([]). There should only be one.
@@ -608,12 +602,12 @@ test/test_pallas.py::TestPallas::test_attention_emit_pipeline_correctness_head_d
 test/test_pallas.py::TestPallas::test_attention_emit_pipeline_non_divisible
 test/test_pallas.py::TestPallas::test_attention_fori_loop_correctness
 test/test_pallas.py::TestPallas::test_attention_fori_loop_correctness_head_dim_256
-  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u2) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x78247683ea20>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u2) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x754c0600c680>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
     return self.create_node(
 
 test/test_pallas.py::TestPallas::test_get_reduced_block_ids_carried_acc_collapses_loop_bid
 test/test_pallas.py::TestPallas::test_store_is_post_reduction_via_loop_getitem
-  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u0) passed as argument to Graph.create_node(op='call_function', target=<function _for_loop at 0x78247683d1c0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (u0) passed as argument to Graph.create_node(op='call_function', target=<function _for_loop at 0x754c06336de0>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
     return self.create_node(
 
 test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op
@@ -621,31 +615,31 @@ test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op
     return self.run(*args, **kwds)
 
 test/test_pallas.py::TestPallas::test_pre_broadcast_dynamic_shapes
-  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (256) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x78247683ea20>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
+  /home/ymu_google_com/pytorch/torch/fx/graph.py:1910: UserWarning: Raw SymInt value (256) passed as argument to Graph.create_node(op='call_function', target=<function _pre_broadcast_tile at 0x754c0600c680>). Use create_*_node() helpers for tensor metadata queries or materialize_symints() for general symbolic expressions.
     return self.create_node(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ============================= slowest 20 durations =============================
-23.58s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
-13.11s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
-12.18s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
-11.87s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
-11.82s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
-8.49s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
-6.87s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
-6.07s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
-5.88s call     test/test_examples.py::TestExamples::test_jagged_amax
-5.51s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
-5.07s call     test/test_examples.py::TestExamples::test_low_mem_dropout
-4.94s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
-4.48s call     test/test_examples.py::TestExamples::test_jagged_softmax
-4.46s call     test/test_random.py::TestRandom::test_hl_randint_static_shapes
-4.37s call     test/test_random.py::TestRandom::test_hl_rand_static_shapes
-4.28s call     test/test_rng.py::TestRNG::test_rand_3d_tensor
-4.18s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
-3.89s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
-3.70s call     test/test_examples.py::TestExamples::test_jsd
-3.66s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_unpickleable_worker_exception_is_serialized
+23.78s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d
+14.05s call     test/test_rng.py::TestRNG::test_multiple_rng_ops
+13.51s call     test/test_examples.py::TestExamples::test_moe_matmul_ogs
+11.93s call     test/test_pallas.py::TestPallas::test_scalar_access_hl_grid_2d_nested
+11.91s call     test/test_pallas.py::TestPallas::test_scalar_access_2D_constexpr
+8.42s call     test/test_pallas.py::TestPallas::test_pallas_paired_device_micros_bench_finite_on_large_compute_bound_shape
+6.77s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_sticky_error_kills_worker
+6.33s call     test/test_examples.py::TestExamples::test_jagged_amax
+6.08s call     test/test_random.py::TestRandom::test_hl_rand_uniqueness_distribution
+5.15s call     test/test_examples.py::TestExamples::test_jagged_layer_norm
+5.12s call     test/test_examples.py::TestExamples::test_low_mem_dropout
+4.74s call     test/test_examples.py::TestExamples::test_jagged_softmax
+4.73s call     test/test_random.py::TestRandom::test_hl_rand_block_size_determinism
+4.35s call     test/test_random.py::TestRandom::test_hl_rand_specialize
+4.34s call     test/test_random.py::TestRandom::test_hl_randint_specialize
+4.30s call     test/test_rng.py::TestRNG::test_randn_normal_distribution
+4.12s call     test/test_benchmark_worker.py::TestBenchmarkWorkerFailureModes::test_timeout_kills_worker
+3.83s call     test/test_random.py::TestRandom::test_hl_rand_offsets_independence
+3.78s call     test/test_random.py::TestRandom::test_hl_rand_mixed_argument_order
+3.77s call     test/test_examples.py::TestExamples::test_jsd
 =========================== short test summary info ============================
 SKIPPED [1] test/test_breakpoint.py:16: unittest.case.SkipTest: triton not available
 SKIPPED [1] test/test_cute_backend.py:27: could not import 'cutlass': No module named 'cutlass'
@@ -2430,14 +2424,13 @@ FAILED test/test_examples.py::TestExamples::test_epilogue_subtiling_residual_gel
 FAILED test/test_examples.py::TestExamples::test_rms_norm_bwd_bfloat16 - Runt...
 FAILED test/test_loops.py::TestLoops::test_range_num_stages_preserved_without_aliasing
 FAILED test/test_pallas.py::TestPallas::test_boundary_mask_with_squeezed_leading_dims
-FAILED test/test_pallas.py::TestPallas::test_dma_buffer_offset_nested_tile - ...
 FAILED test/test_random.py::TestRandom::test_hl_rand4x_dropout_pattern - Runt...
 FAILED test/test_random.py::TestRandom::test_hl_rand_offsets_independence - R...
 FAILED test/test_random.py::TestRandom::test_hl_rand_with_explicit_offsets - ...
-= 16 failed, 646 passed, 1931 skipped, 67 xfailed, 408 warnings in 330.35s (0:05:30) =
-I0000 00:00:1781673673.122253 1061860 compilation_cache.cc:344] Compilation cache evicted.
-I0000 00:00:1781673673.122303 1061860 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=14136
-num_cache_hits=9998 {70.7%}
+= 15 failed, 647 passed, 1931 skipped, 67 xfailed, 408 warnings in 334.89s (0:05:34) =
+I0000 00:00:1781730317.822584 1510118 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781730317.822646 1510118 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=14125
+num_cache_hits=9993 {70.7%}
 peak_compilation_memory_bytes=unknown
 
 
