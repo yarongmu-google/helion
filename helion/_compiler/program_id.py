@@ -25,6 +25,7 @@ from .cute.tcgen05_constants import TCGEN05_SCHED_CONSUMER_WAIT_MODE_WARP_LEADER
 from .cute.tcgen05_constants import TCGEN05_SCHED_STAGE_COUNT_CONFIG_KEY
 from .cute.tcgen05_constants import TCGEN05_TWO_CTA_MAX_K_TILES
 from .device_function import DeviceFunction
+from .device_function import PallasMemorySpace
 from .device_function import TensorArg
 from .host_function import HostFunction
 from .host_function import NoCurrentFunction
@@ -584,6 +585,15 @@ class JaggedProgramIDs(FlatProgramIDs):
         pid = self.pid_info[0]
         num_items = pid.num_pids_expr(is_device=True)
         fn_name = device_function.new_var("_kernel_body")
+        # D: gate per-row work with ``@pl.when(offsets[pid+1] > offsets[pid])``.
+        # The offsets SMEM read + scalar subtract evaluates on the SPU before
+        # any VPU work would begin, mirroring ragged_paged_attention v3's
+        # per-sequence guard. Empty rows skip the entire body; output stays
+        # at its user-init value (the same result reference impls produce for
+        # empty rows).
+        body_stmts = self._maybe_wrap_with_jagged_skip(
+            device_function, pid.pid_var, body_stmts
+        )
         fn_def = statement_from_string(f"def {fn_name}({pid.pid_var}, _): pass")
         assert isinstance(fn_def, ast.FunctionDef)
         fn_def.body = cast("list[ast.stmt]", body_stmts) or [ast.Pass()]
@@ -591,6 +601,43 @@ class JaggedProgramIDs(FlatProgramIDs):
             f"jax.lax.fori_loop(0, {num_items}, {fn_name}, None)"
         )
         return [fn_def, fori_call]
+
+    @staticmethod
+    def _maybe_wrap_with_jagged_skip(
+        device_function: DeviceFunction,
+        pid_var: str,
+        body_stmts: list[ast.AST],
+    ) -> list[ast.AST]:
+        """Wrap ``body_stmts`` in ``@pl.when(offsets[pid+1] > offsets[pid])``
+        when a SMEM-resident offsets table is identifiable.  The first
+        SMEM-marked ``TensorArg`` (by argument order) is taken as the
+        offsets table; in current jagged kernels this is ``x_offsets``.
+        Returns the wrapped list (length 1) or the original ``body_stmts``
+        unchanged if no SMEM offsets table is present.
+        """
+        env = CompileEnvironment.current()
+        if not env.jagged_tile_parent_ids:
+            return body_stmts
+        mem_space = device_function.pallas_memory_space
+        offsets_arg = next(
+            (
+                arg
+                for arg in device_function.arguments
+                if isinstance(arg, TensorArg)
+                and mem_space.get(id(arg.fake_value)) == PallasMemorySpace.SMEM
+            ),
+            None,
+        )
+        if offsets_arg is None:
+            return body_stmts
+        predicate = f"{offsets_arg.name}[{pid_var} + 1] > {offsets_arg.name}[{pid_var}]"
+        gate_fn_name = device_function.new_var("_d_active")
+        gate_def = statement_from_string(
+            f"@pl.when({predicate})\ndef {gate_fn_name}():\n    pass"
+        )
+        assert isinstance(gate_def, ast.FunctionDef)
+        gate_def.body = cast("list[ast.stmt]", body_stmts) or [ast.Pass()]
+        return [gate_def]
 
 
 @dataclasses.dataclass

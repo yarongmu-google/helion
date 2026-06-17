@@ -2212,6 +2212,40 @@ class TestExamples(RefEagerTestBase, TestCase):
             block_sizes=[4, 8, 8, 8, 8, 8, 8],
         )
 
+    @skipIfRefEager("hl.jagged_tile does not support ref mode yet")
+    def test_jagged_layer_norm_with_empty_rows(self):
+        # Several rows have ``nnz == 0``.  On Pallas this exercises the
+        # ``@pl.when(offsets[pid+1] > offsets[pid])`` row-skip gate emitted
+        # by ``JaggedProgramIDs.wrap_kernel_body``; on other backends the
+        # inner fori naturally iterates zero times.  Either way the empty
+        # rows contribute no output rows (output shape is ``[total_nnz, M]``)
+        # and the result must match the reference exactly.
+        M = 8
+        lengths = torch.tensor(
+            [3, 0, 5, 0, 2, 7, 0, 4], dtype=torch.int32, device=DEVICE
+        )
+        x_offsets = torch.cat(
+            [
+                torch.zeros(1, dtype=LONG_INT_TYPE, device=DEVICE),
+                torch.cumsum(lengths, dim=0).to(LONG_INT_TYPE),
+            ]
+        )
+        nnz = int(x_offsets[-1])
+        x_data = torch.randn(nnz, M, dtype=torch.float32, device=DEVICE)
+        eps = 1e-6
+        args = (x_data, x_offsets, eps)
+
+        mod = import_path(EXAMPLES_DIR / "jagged_layer_norm.py")
+        expected = mod.reference_jagged_layer_norm_pytorch(x_data, x_offsets, eps)
+
+        check_example(
+            "jagged_layer_norm",
+            args,
+            expected,
+            fn_name="jagged_layer_norm_kernel",
+            block_sizes=[4, 8, 8, 8, 8, 8, 8],
+        )
+
     def test_exp_fwd(self):
         x = torch.randn([1024], device=DEVICE, dtype=torch.bfloat16)
         args = (x,)
