@@ -2263,11 +2263,181 @@ def _classify_pipelined_tensors(
     return all_tensor_info, vmem_shapes, pipelined_ids
 
 
+def _emit_db_dma_body(
+    state: CodegenState,
+    loop_var: str,
+    trip_count_expr: str,
+    loaded_tensors: dict[int, tuple[torch.Tensor, torch.fx.Node, list[object]]],
+    stored_tensors: dict[int, tuple[torch.Tensor, torch.fx.Node, list[object]]],
+    tensor_to_dma_scratch: dict[str, str],
+    tensor_to_sem: dict[str, str],
+    tensor_to_underlying_scratch: dict[str, str],
+    tensor_to_underlying_sem: dict[str, str],
+    build_hbm_dma_slice: Callable[..., str],
+    run_body: Callable[[], list[object]],
+    write_back_loop_carried: Callable[[list[object]], None] | None,
+) -> None:
+    """Emit the single-dim fori-body in double-buffer shape.
+
+    Pattern follows ``ragged_paged_attention`` v3:
+
+    * Per-tensor alias at top of body: ``vmem_name = underlying.at[_j % 2]``;
+      the body's downstream loads keep using ``vmem_name`` unchanged.
+    * ``@pl.when(_j == 0)`` bootstrap: start iter-0 copy into slot 0.
+    * ``@pl.when(_j + 1 < trip_count)`` trailing prefetch: start iter
+      ``_j + 1`` copy into the alternate slot.
+    * Wait current iter on the aliased descriptor.
+    * Compute body (unchanged from single-buffer emit).
+    * ``@pl.when(_j == trip_count - 1)`` epilogue: store-out from the
+      current slot's alias.
+    """
+    slot_curr = f"({loop_var}) % 2"
+    slot_next = f"(({loop_var}) + 1) % 2"
+    bootstrap_pred = f"{loop_var} == 0"
+    prefetch_pred = f"({loop_var}) + 1 < ({trip_count_expr})"
+
+    # 1. Alias per-iter slot for every DMA-eligible tensor (load + store).
+    # Stored-only tensors need the alias too because the compute body
+    # writes to ``vmem_name[...]`` and the epilogue reads it back.
+    for hbm_name, vmem_name in tensor_to_dma_scratch.items():
+        sem_name = tensor_to_sem[hbm_name]
+        underlying_scratch = tensor_to_underlying_scratch[hbm_name]
+        underlying_sem = tensor_to_underlying_sem[hbm_name]
+        state.codegen.add_statement(
+            statement_from_string(f"{vmem_name} = {underlying_scratch}.at[{slot_curr}]")
+        )
+        state.codegen.add_statement(
+            statement_from_string(f"{sem_name} = {underlying_sem}.at[{slot_curr}]")
+        )
+
+    # 2. Bootstrap: @pl.when(_j == 0): start iter-0 copy into slot 0.
+    bootstrap_stmts: list[ast.AST] = []
+    for fake, _tensor_node, sub_meta in loaded_tensors.values():
+        hbm_name = state.device_function.tensor_arg(fake).name
+        if hbm_name not in tensor_to_dma_scratch:
+            continue
+        underlying_scratch = tensor_to_underlying_scratch[hbm_name]
+        underlying_sem = tensor_to_underlying_sem[hbm_name]
+        init_slice = build_hbm_dma_slice(
+            fake, hbm_name, sub_meta, dim_idx_overrides=["0"]
+        )
+        copy_var = state.device_function.new_var("_cp_init")
+        bootstrap_stmts.extend(
+            [
+                statement_from_string(
+                    f"{copy_var} = pltpu.make_async_copy("
+                    f"{init_slice}, {underlying_scratch}.at[0], {underlying_sem}.at[0])"
+                ),
+                statement_from_string(f"{copy_var}.start()"),
+            ]
+        )
+    if bootstrap_stmts:
+        _emit_pl_when_block(state, bootstrap_pred, "_db_bootstrap", bootstrap_stmts)
+
+    # 3. Trailing prefetch: @pl.when(_j + 1 < trip_count): start next iter.
+    prefetch_stmts: list[ast.AST] = []
+    next_overrides = [f"({loop_var}) + 1"]
+    for fake, _tensor_node, sub_meta in loaded_tensors.values():
+        hbm_name = state.device_function.tensor_arg(fake).name
+        if hbm_name not in tensor_to_dma_scratch:
+            continue
+        underlying_scratch = tensor_to_underlying_scratch[hbm_name]
+        underlying_sem = tensor_to_underlying_sem[hbm_name]
+        next_slice = build_hbm_dma_slice(
+            fake, hbm_name, sub_meta, dim_idx_overrides=next_overrides
+        )
+        copy_var = state.device_function.new_var("_cp_next")
+        prefetch_stmts.extend(
+            [
+                statement_from_string(
+                    f"{copy_var} = pltpu.make_async_copy("
+                    f"{next_slice}, {underlying_scratch}.at[{slot_next}],"
+                    f" {underlying_sem}.at[{slot_next}])"
+                ),
+                statement_from_string(f"{copy_var}.start()"),
+            ]
+        )
+    if prefetch_stmts:
+        _emit_pl_when_block(state, prefetch_pred, "_db_prefetch_next", prefetch_stmts)
+
+    # 4. Wait current iter — reconstruct descriptor with the slot-indexed
+    # underlying refs (matching what bootstrap / prefetch_next used).
+    # Using the Python-level alias here would create a different ref
+    # object that Mosaic's interpret-mode bookkeeping may treat as a
+    # separate descriptor.
+    for fake, _tensor_node, sub_meta in loaded_tensors.values():
+        hbm_name = state.device_function.tensor_arg(fake).name
+        if hbm_name not in tensor_to_dma_scratch:
+            continue
+        underlying_scratch = tensor_to_underlying_scratch[hbm_name]
+        underlying_sem = tensor_to_underlying_sem[hbm_name]
+        curr_slice = build_hbm_dma_slice(fake, hbm_name, sub_meta)
+        copy_var = state.device_function.new_var("_cp_curr")
+        state.codegen.add_statement(
+            statement_from_string(
+                f"{copy_var} = pltpu.make_async_copy("
+                f"{curr_slice}, {underlying_scratch}.at[{slot_curr}],"
+                f" {underlying_sem}.at[{slot_curr}])"
+            )
+        )
+        state.codegen.add_statement(statement_from_string(f"{copy_var}.wait()"))
+
+    # 5. Compute body.
+    graph_results = run_body()
+    if write_back_loop_carried is not None:
+        write_back_loop_carried(graph_results)
+
+    # 6. Stores fire every iter (per-iter store pattern), matching the
+    # single-buffer emit's semantics.  C-gating ``@pl.when(_j == N-1)``
+    # is wrong here because jagged kernels like ``jagged_layer_norm``
+    # store a fresh slice on every tile_k iter, not just the last.  Real
+    # reduction-style "last-iter only" stores happen at an outer scope
+    # (e.g. ``out[tile_b, tile_m] = row_sums`` lives in tile_m's body,
+    # not in tile_k), so they don't need gating here.
+    for fake, _tensor_node, sub_meta in stored_tensors.values():
+        hbm_name = state.device_function.tensor_arg(fake).name
+        if hbm_name not in tensor_to_dma_scratch:
+            continue
+        underlying_scratch = tensor_to_underlying_scratch[hbm_name]
+        underlying_sem = tensor_to_underlying_sem[hbm_name]
+        dst_slice = build_hbm_dma_slice(fake, hbm_name, sub_meta)
+        copy_var = state.device_function.new_var("_cp_out")
+        state.codegen.add_statement(
+            statement_from_string(
+                f"{copy_var} = pltpu.make_async_copy("
+                f"{underlying_scratch}.at[{slot_curr}], {dst_slice},"
+                f" {underlying_sem}.at[{slot_curr}])"
+            )
+        )
+        state.codegen.add_statement(statement_from_string(f"{copy_var}.start()"))
+        state.codegen.add_statement(statement_from_string(f"{copy_var}.wait()"))
+
+
+def _emit_pl_when_block(
+    state: CodegenState,
+    predicate: str,
+    name_hint: str,
+    body_stmts: list[ast.AST],
+) -> None:
+    """Emit ``@pl.when(predicate) def _name(): body_stmts`` into the
+    current codegen scope.  Mosaic resolves the predicate at compile
+    time, so the decorator is a zero-runtime-cost compile-time gate.
+    """
+    fn_name = state.device_function.new_var(name_hint)
+    fn_def = statement_from_string(f"@pl.when({predicate})\ndef {fn_name}():\n    pass")
+    assert isinstance(fn_def, ast.FunctionDef)
+    fn_def.body = list(body_stmts)
+    state.codegen.add_statement(fn_def)
+
+
 def _codegen_fori_loop(state: CodegenState) -> object:
     """Emit inner device loops using jax.lax.fori_loop.
 
-    When inner block shapes satisfy TPU DMA alignment, uses
-    ``pltpu.make_async_copy`` for double-buffered DMA pipelining.
+    Loaded and stored DMAs use ``pltpu.make_async_copy`` with a 2-slot
+    ring scratch + per-iter slot alias, wrapped in ``@pl.when`` gates to
+    emit a real double-buffered pipeline (bootstrap on iter 0, trailing
+    prefetch on iter ``_j+1`` while iter ``_j`` compute runs, store-out
+    on the last iter).  See ``_emit_db_dma_body`` for the emitted shape.
     Otherwise, falls back to direct ``pl.ds`` slicing on HBM refs
     (no DMA, no alignment requirement).
     """
@@ -2342,8 +2512,18 @@ def _codegen_fori_loop(state: CodegenState) -> object:
 
     from .._compiler.device_function import PallasMemorySpace
 
+    # Double-buffered DMA on the fori_loop path.  Allocate every per-tensor
+    # VMEM scratch with a leading ``2`` ring dim and every DMA semaphore as
+    # a 2-element array; at the top of each fori-body emit an alias to the
+    # current slot ``_j % 2`` so downstream load reads see the existing
+    # ``vmem_name`` Python name unchanged.  Only applied for single-dim
+    # fori_loops (``len(block_ids) == 1``, equivalently single ``loop_var``);
+    # multi-dim falls back to single-buffer below.
+    use_double_buffer = len(block_ids) == 1
     tensor_to_dma_scratch: dict[str, str] = {}
     tensor_to_sem: dict[str, str] = {}
+    tensor_to_underlying_scratch: dict[str, str] = {}
+    tensor_to_underlying_sem: dict[str, str] = {}
     for (fake, _sub_meta, _direction), vmem_shape in zip(
         all_tensor_info, vmem_shapes, strict=True
     ):
@@ -2351,14 +2531,35 @@ def _codegen_fori_loop(state: CodegenState) -> object:
             continue
         state.device_function.pallas_memory_space[id(fake)] = PallasMemorySpace.HBM
         hbm_name = state.device_function.tensor_arg(fake).name
-        vmem_name = state.device_function.register_scratch(
-            vmem_shape,
-            fake.dtype,
-            name_hint=hbm_name.replace("_hbm", "") + "_buf",
-        )
-        sem_name = state.device_function.register_dma_semaphore(
-            name_hint=hbm_name.replace("_hbm", "") + "_sem",
-        )
+        if use_double_buffer:
+            underlying_scratch_name = state.device_function.register_scratch(
+                (2, *vmem_shape),
+                fake.dtype,
+                name_hint=hbm_name.replace("_hbm", "") + "_buf_x2",
+            )
+            underlying_sem_name = state.device_function.register_scratch(
+                (2,),
+                None,
+                name_hint=hbm_name.replace("_hbm", "") + "_sem_x2",
+                scratch_type="dma_semaphore",
+            )
+            vmem_name = state.device_function.new_var(
+                hbm_name.replace("_hbm", "") + "_buf"
+            )
+            sem_name = state.device_function.new_var(
+                hbm_name.replace("_hbm", "") + "_sem"
+            )
+            tensor_to_underlying_scratch[hbm_name] = underlying_scratch_name
+            tensor_to_underlying_sem[hbm_name] = underlying_sem_name
+        else:
+            vmem_name = state.device_function.register_scratch(
+                vmem_shape,
+                fake.dtype,
+                name_hint=hbm_name.replace("_hbm", "") + "_buf",
+            )
+            sem_name = state.device_function.register_dma_semaphore(
+                name_hint=hbm_name.replace("_hbm", "") + "_sem",
+            )
         tensor_to_dma_scratch[hbm_name] = vmem_name
         tensor_to_sem[hbm_name] = sem_name
 
@@ -2636,46 +2837,78 @@ def _codegen_fori_loop(state: CodegenState) -> object:
                     )
                 )
 
-        for fake, _tensor_node, sub_meta in loaded_tensors.values():
-            hbm_name = state.device_function.tensor_arg(fake).name
-            if hbm_name not in tensor_to_dma_scratch:
-                continue
-            vmem_name = tensor_to_dma_scratch[hbm_name]
-            sem_name = tensor_to_sem[hbm_name]
-            src_slice = _build_hbm_dma_slice(fake, hbm_name, sub_meta)
-            copy_var = state.device_function.new_var("_copy")
-            state.codegen.add_statement(
-                statement_from_string(
-                    f"{copy_var} = pltpu.make_async_copy({src_slice}, {vmem_name}, {sem_name})"
+        if use_double_buffer and (loaded_tensors or stored_tensors):
+            # Single-dim fori with at least one DMA tensor: emit the
+            # double-buffer pattern modelled on ``ragged_paged_attention``
+            # v3 — gated init prefetch, gated trailing prefetch, wait
+            # current, gated last-iter store.
+            _emit_db_dma_body(
+                state,
+                loop_vars[0],
+                grid_parts[0],
+                loaded_tensors,
+                stored_tensors,
+                tensor_to_dma_scratch,
+                tensor_to_sem,
+                tensor_to_underlying_scratch,
+                tensor_to_underlying_sem,
+                _build_hbm_dma_slice,
+                run_body=lambda: codegen_call_with_graph(
+                    state.codegen, graph_info.graph, body_args
+                ),
+                write_back_loop_carried=(
+                    lambda results: _write_back_loop_carried(
+                        state, scratch_names, carried, results
+                    )
                 )
+                if has_loop_state
+                else None,
             )
-            state.codegen.add_statement(statement_from_string(f"{copy_var}.start()"))
-            state.codegen.add_statement(statement_from_string(f"{copy_var}.wait()"))
-
-        graph_results = codegen_call_with_graph(
-            state.codegen, graph_info.graph, body_args
-        )
-
-        if has_loop_state:
-            _write_back_loop_carried(state, scratch_names, carried, graph_results)
-
-        for fake, _tensor_node, sub_meta in stored_tensors.values():
-            hbm_name = state.device_function.tensor_arg(fake).name
-            if hbm_name not in tensor_to_dma_scratch:
-                continue
-            vmem_name = tensor_to_dma_scratch[hbm_name]
-            sem_name = tensor_to_sem[hbm_name]
-            dst_slice = _build_hbm_dma_slice(fake, hbm_name, sub_meta)
-            copy_out_var = state.device_function.new_var("_copy_out")
-            state.codegen.add_statement(
-                statement_from_string(
-                    f"{copy_out_var} = pltpu.make_async_copy({vmem_name}, {dst_slice}, {sem_name})"
+        else:
+            for fake, _tensor_node, sub_meta in loaded_tensors.values():
+                hbm_name = state.device_function.tensor_arg(fake).name
+                if hbm_name not in tensor_to_dma_scratch:
+                    continue
+                vmem_name = tensor_to_dma_scratch[hbm_name]
+                sem_name = tensor_to_sem[hbm_name]
+                src_slice = _build_hbm_dma_slice(fake, hbm_name, sub_meta)
+                copy_var = state.device_function.new_var("_copy")
+                state.codegen.add_statement(
+                    statement_from_string(
+                        f"{copy_var} = pltpu.make_async_copy({src_slice}, {vmem_name}, {sem_name})"
+                    )
                 )
+                state.codegen.add_statement(
+                    statement_from_string(f"{copy_var}.start()")
+                )
+                state.codegen.add_statement(statement_from_string(f"{copy_var}.wait()"))
+
+            graph_results = codegen_call_with_graph(
+                state.codegen, graph_info.graph, body_args
             )
-            state.codegen.add_statement(
-                statement_from_string(f"{copy_out_var}.start()")
-            )
-            state.codegen.add_statement(statement_from_string(f"{copy_out_var}.wait()"))
+
+            if has_loop_state:
+                _write_back_loop_carried(state, scratch_names, carried, graph_results)
+
+            for fake, _tensor_node, sub_meta in stored_tensors.values():
+                hbm_name = state.device_function.tensor_arg(fake).name
+                if hbm_name not in tensor_to_dma_scratch:
+                    continue
+                vmem_name = tensor_to_dma_scratch[hbm_name]
+                sem_name = tensor_to_sem[hbm_name]
+                dst_slice = _build_hbm_dma_slice(fake, hbm_name, sub_meta)
+                copy_out_var = state.device_function.new_var("_copy_out")
+                state.codegen.add_statement(
+                    statement_from_string(
+                        f"{copy_out_var} = pltpu.make_async_copy({vmem_name}, {dst_slice}, {sem_name})"
+                    )
+                )
+                state.codegen.add_statement(
+                    statement_from_string(f"{copy_out_var}.start()")
+                )
+                state.codegen.add_statement(
+                    statement_from_string(f"{copy_out_var}.wait()")
+                )
 
     _emit_nonlocal_scratch_declarations(state, body_stmts)
 

@@ -692,7 +692,9 @@ class TestPallas(TestCase):
             self.assertIn("out_buf[0, 0, :, :]", code)
 
         with self.subTest(name="vmem_shape_allocation"):
-            self.assertIn("((1, 1, 32, 128), 'jnp.bfloat16', 'vmem')", code)
+            # Leading ``2`` is the double-buffer ring dim from
+            # ``_emit_db_dma_body``; the rest is the per-iter scratch shape.
+            self.assertIn("((2, 1, 1, 32, 128), 'jnp.bfloat16', 'vmem')", code)
 
         with self.subTest(name="hbm_dma_slices"):
             self.assertIn("pl.ds(symnode_0, 1), pl.ds(symnode_1, 1)", code)
@@ -2274,17 +2276,19 @@ class TestPallas(TestCase):
         )
         self.assertIn("jax.lax.fori_loop", code)
         self.assertIn("pltpu.make_async_copy", code)
-        # m_i and l_i last dim 128 is the pre-broadcast trailing dim;
-        # acc last dim 128 is head_dim; extra entries are DMA buffers/semaphores
+        # m_i / l_i / acc are loop-carried scratches (not DMA — shape
+        # unchanged).  K and V buffers + their semaphores are DMA, so
+        # they carry the double-buffer leading ``2`` ring dim + size-2
+        # semaphore array introduced by ``_emit_db_dma_body``.
         self.assertIn(
             "_scratch_shapes=["
             "((4, 128, 128), 'jnp.float32', 'vmem'), "
             "((4, 128, 128), 'jnp.float32', 'vmem'), "
             "((4, 128, 128), 'jnp.float32', 'vmem'), "
-            "((4, 128, 128), 'jnp.float32', 'vmem'), "
-            "((), None, 'dma_semaphore'), "
-            "((4, 128, 128), 'jnp.float32', 'vmem'), "
-            "((), None, 'dma_semaphore')]",
+            "((2, 4, 128, 128), 'jnp.float32', 'vmem'), "
+            "((2,), None, 'dma_semaphore'), "
+            "((2, 4, 128, 128), 'jnp.float32', 'vmem'), "
+            "((2,), None, 'dma_semaphore')]",
             code,
         )
         ref = torch.nn.functional.scaled_dot_product_attention(
@@ -2333,17 +2337,18 @@ class TestPallas(TestCase):
             pallas_pre_broadcast=True,
         )
         self.assertIn("jax.lax.fori_loop", code)
-        # m_i and l_i scratches get pre-broadcast trailing dim 128;
-        # acc scratch keeps head_dim=256; extra entries are DMA buffers/semaphores
+        # m_i / l_i are pre-broadcast (trailing dim 128) loop-carried
+        # scratches; acc keeps head_dim=256.  K and V DMA buffers + sems
+        # carry the leading ``2`` DB ring dim + size-2 sem array.
         self.assertIn(
             "_scratch_shapes=["
             "((4, 128, 128), 'jnp.float32', 'vmem'), "
             "((4, 128, 128), 'jnp.float32', 'vmem'), "
             "((4, 128, 256), 'jnp.float32', 'vmem'), "
-            "((4, 128, 256), 'jnp.float32', 'vmem'), "
-            "((), None, 'dma_semaphore'), "
-            "((4, 128, 256), 'jnp.float32', 'vmem'), "
-            "((), None, 'dma_semaphore')]",
+            "((2, 4, 128, 256), 'jnp.float32', 'vmem'), "
+            "((2,), None, 'dma_semaphore'), "
+            "((2, 4, 128, 256), 'jnp.float32', 'vmem'), "
+            "((2,), None, 'dma_semaphore')]",
             code,
         )
         self.assertIn("jnp.tile(", code)
@@ -3362,12 +3367,16 @@ class TestPallas(TestCase):
             pallas_pre_broadcast=True,
         )
         self.assertIn("jax.lax.fori_loop", code)
+        # First two ``(2, 128, 128)`` are loop-carried ``running`` / ``acc``
+        # accumulators (not DMA — shape unchanged).  The third entry is
+        # the ``a`` DMA buffer + its DMA semaphore, both carrying the
+        # double-buffer ring dim / size-2 from ``_emit_db_dma_body``.
         self.assertIn(
             "_scratch_shapes=["
             "((2, 128, 128), 'jnp.float32', 'vmem'), "
             "((2, 128, 128), 'jnp.float32', 'vmem'), "
-            "((2, 128, 128), 'jnp.float32', 'vmem'), "
-            "((), None, 'dma_semaphore')]",
+            "((2, 2, 128, 128), 'jnp.float32', 'vmem'), "
+            "((2,), None, 'dma_semaphore')]",
             code,
         )
         ref = _cumsum_broadcast_ref(a, b, block_k=128)
@@ -3511,12 +3520,15 @@ class TestPallas(TestCase):
             pallas_loop_type="fori_loop",
             pallas_pre_broadcast=True,
         )
+        # First two ``(2, 128, 128)`` are loop-carried ``m_i`` / ``acc``
+        # accumulators; the third is the ``a`` DMA buffer with DB ring
+        # dim + size-2 semaphore.
         self.assertIn(
             "_scratch_shapes=["
             "((2, 128, 128), 'jnp.float32', 'vmem'), "
             "((2, 128, 128), 'jnp.float32', 'vmem'), "
-            "((2, 128, 128), 'jnp.float32', 'vmem'), "
-            "((), None, 'dma_semaphore')]",
+            "((2, 2, 128, 128), 'jnp.float32', 'vmem'), "
+            "((2,), None, 'dma_semaphore')]",
             code,
         )
         ref = _scaled_bmm_ref(a, b, block_k=128)
