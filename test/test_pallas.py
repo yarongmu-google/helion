@@ -4172,9 +4172,16 @@ class TestPallas(TestCase):
                     out[tile_b, tile_m] = row_sums * 2.0
             return out
 
+        # TEMPORARY (do not commit): bf16 + M=16 instead of fp32 + M=8 so
+        # each row is 16 * 2 = 32B = one HBM granule.  Same offsets as
+        # cota's repro ([0, 3, 8, 10, 14]) so starts[1]=3 and starts[3]=10
+        # are unchanged -- only the per-row byte width changes.  Used to
+        # verify whether the bf16 jagged-flat failure is granule-coupled
+        # (row width < 32B) or strictly Mosaic-tile-coupled (would still
+        # fail even at row width >= 32B).
         torch.manual_seed(0)
         x_offsets = torch.tensor([0, 3, 8, 10, 14], dtype=torch.int32, device=DEVICE)
-        x_data = torch.randn(14, 8, dtype=torch.float32, device=DEVICE)
+        x_data = torch.randn(14, 16, dtype=torch.bfloat16, device=DEVICE)
         result = k(x_data, x_offsets)
 
         expected = torch.zeros_like(result)
@@ -4183,7 +4190,8 @@ class TestPallas(TestCase):
             e = int(x_offsets[i + 1])
             if e > s:
                 expected[i, :] = x_data[s:e, :].sum(dim=0) * 2.0
-        torch.testing.assert_close(result, expected, atol=1e-4, rtol=1e-4)
+        # Looser tolerance for bf16.
+        torch.testing.assert_close(result, expected, atol=1e-2, rtol=1e-2)
 
     def test_parse_flat_jagged_subscript_canonical(self) -> None:
         """``_parse_flat_jagged_subscript`` recovers
