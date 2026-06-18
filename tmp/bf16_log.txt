@@ -1,0 +1,317 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0 -- /home/ymu_google_com/miniconda3/envs/tpu/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /home/ymu_google_com/helion
+configfile: pyproject.toml
+plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
+collecting ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781816432.908845 1779212 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781816433.493845 1779212 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+collected 182 items / 177 deselected / 5 selected
+
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op PASSED
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_bf16_narrow_xfail I0000 00:00:1781816434.854614 1779212 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781816437.231934 1779212 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781816437.231970 1779212 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781816437.263345 1780000 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781816437.263367 1780000 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+[0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3699974309
+E0000 00:00:1781816437.856457 1780001 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmppcd7w_r5/ia/cia4hpgmlorq7q7l7xsunokh6nfbdauqfxuo2g6fhcnq5yj3gcca.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x8xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x8xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+[0s] Generated Triton code for @helion.kernel(config=helion.Config(block_sizes=[1, 8, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True):
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(8)
+_BLOCK_SIZE_2 = int(16)
+
+def _helion_k(x_offsets, out, x_flat, out_buf, out_sem, scratch_2, x_flat_buf, x_flat_sem):
+
+    def _kernel_body(pid_0, _):
+        # src[test_pallas.py:4247]: for tile_b in hl.tile(num_rows):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[test_pallas.py:4248]: starts = x_offsets[tile_b]
+        starts = jnp.array([x_offsets[offset_0]])
+        # src[test_pallas.py:4249]: ends = x_offsets[tile_b.index + 1]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        ends = jnp.array([x_offsets[offset_0 + 1]])
+        # src[test_pallas.py:4250]: nnz = ends - starts
+        v_2 = ends - starts
+
+        def _fori_body_1(_j, _):
+            nonlocal out_buf, scratch_2, x_flat_buf
+            # src[test_pallas.py:4251]: for tile_m in hl.tile(M):
+            # src[test_pallas.py:4252]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[test_pallas.py:4253]:     for tile_k in hl.jagged_tile(nnz):
+            # src[test_pallas.py:4251-4257]: ...
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            v_2_copy = v_2
+            starts_copy = starts
+            v_2_copy_0 = v_2_copy
+            starts_copy_0 = starts_copy
+            # src[test_pallas.py:4252]: row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            row_sums = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.bfloat16)
+            # src[test_pallas.py:4253]: for tile_k in hl.jagged_tile(nnz):
+            # src[test_pallas.py:4254]:     base = starts[:, None] + tile_k.index[None, :]
+            # src[test_pallas.py:4255]:     flat = base[:, :, None] * M + tile_m.index[None, None, :]
+            # src[test_pallas.py:4253-4256]: ...
+            view = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+            scratch_2[...] = row_sums[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal out_buf, scratch_2, x_flat_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_5 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_5[None, :] < v_2_copy_0[:, None]
+                _copy = pltpu.make_async_copy(x_flat.at[pl.ds(starts_copy_0[0] + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), pl.ds(offset_1, _BLOCK_SIZE_1)], x_flat_buf, x_flat_sem)
+                _copy.start()
+                _copy.wait()
+                starts_copy_0_copy = starts_copy_0
+                v_3 = scratch_2[...]
+                starts_copy_0_copy_0 = starts_copy_0_copy
+                v_3_0 = v_3
+                # src[test_pallas.py:4254]: base = starts[:, None] + tile_k.index[None, :]
+                subscript = starts_copy_0_copy_0[:, None]
+                subscript_1 = indices_2[None, :]
+                v_4 = subscript + subscript_1
+                # src[test_pallas.py:4255]: flat = base[:, :, None] * M + tile_m.index[None, None, :]
+                subscript_2 = v_4[:, :, None]
+                v_5 = jnp.array(8, dtype=jnp.int32)
+                v_6 = subscript_2 * v_5
+                subscript_3 = indices_1[None, None, :]
+                v_7 = v_6 + subscript_3
+                # src[test_pallas.py:4256]: row_sums = row_sums + hl.load(x_flat, [flat]).sum(dim=1)
+                load = jnp.expand_dims(x_flat_buf[:], axis=0)
+                _mask_to = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), load, jnp.full([], 0, jnp.bfloat16))
+                sum_1 = lax.convert_element_type(jnp.sum(_mask_to, axis=1), jnp.bfloat16)
+                v_8 = v_3_0 + sum_1
+                # src[test_pallas.py:4253]: for tile_k in hl.jagged_tile(nnz):
+                # src[test_pallas.py:4254]:     base = starts[:, None] + tile_k.index[None, :]
+                # src[test_pallas.py:4255]:     flat = base[:, :, None] * M + tile_m.index[None, None, :]
+                # src[test_pallas.py:4253-4256]: ...
+                scratch_2[...] = v_8[...]
+            jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            row_sums = scratch_2[...]
+            # src[test_pallas.py:4257]: out[tile_b, tile_m] = row_sums * 2.0
+            v_9 = jnp.array(2.0, dtype=jnp.bfloat16)
+            v_10 = row_sums * v_9
+            out_buf[:, :] = v_10
+            # src[test_pallas.py:4251]: for tile_m in hl.tile(M):
+            # src[test_pallas.py:4252]:     row_sums = hl.zeros([tile_b, tile_m], dtype=x_data.dtype)
+            # src[test_pallas.py:4253]:     for tile_k in hl.jagged_tile(nnz):
+            # src[test_pallas.py:4251-4257]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j * _BLOCK_SIZE_1, _BLOCK_SIZE_1)], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (8 - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[test_pallas.py:4247]: for tile_b in hl.tile(num_rows):
+    # src[test_pallas.py:4248]:     starts = x_offsets[tile_b]
+    # src[test_pallas.py:4249]:     ends = x_offsets[tile_b.index + 1]
+    # src[test_pallas.py:4247-4257]: ...
+    jax.lax.fori_loop(0, 4, _kernel_body, None)
+
+def k(x_data: torch.Tensor, x_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    # src[test_pallas.py:4243]: M = x_data.size(1)
+    M = x_data.size(1)
+    # src[test_pallas.py:4244]: num_rows = x_offsets.size(0) - 1
+    num_rows = x_offsets.size(0) - 1
+    # src[test_pallas.py:4245]: out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    # src[test_pallas.py:4246]: x_flat = x_data.view(-1)
+    x_flat = x_data.view(-1)
+    # src[test_pallas.py:4247]: for tile_b in hl.tile(num_rows):
+    # src[test_pallas.py:4248]:     starts = x_offsets[tile_b]
+    # src[test_pallas.py:4249]:     ends = x_offsets[tile_b.index + 1]
+    # src[test_pallas.py:4247-4257]: ...
+    _launcher(_helion_k, (1,), x_offsets, out, x_flat, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(1, 1, 8, 0), (2, 0, 16, 15), (2, 1, 8, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 8), 'jnp.bfloat16', 'vmem'), ((), None, 'dma_semaphore'), ((1, 8), 'jnp.bfloat16', 'vmem'), ((16, 8), 'jnp.bfloat16', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(2, 8)])
+    # src[test_pallas.py:4258]: return out
+    return out
+XFAIL
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_bf16_wide PASSED
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_fp8_narrow_xfail [0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3699977352
+[0s] Generated Triton code for @helion.kernel(config=helion.Config(block_sizes=[1, 8, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True):
+from __future__ import annotations
+
+import torch
+import jax
+import jax.numpy as jnp
+from jax.experimental import pallas as pl
+import jax.lax as lax
+from jax.experimental.pallas import tpu as pltpu
+from helion.runtime import default_pallas_fori_launcher as _default_pallas_fori_launcher
+
+_BLOCK_SIZE_0 = int(1)
+_BLOCK_SIZE_1 = int(8)
+_BLOCK_SIZE_2 = int(16)
+
+def _helion_k(x_offsets, out, x_flat, out_buf, out_sem, scratch_2, x_flat_buf, x_flat_sem):
+
+    def _kernel_body(pid_0, _):
+        # src[test_pallas.py:4337]: for tile_b in hl.tile(num_rows):
+        offset_0 = pid_0
+        indices_0 = offset_0 + jnp.arange(0, 1, dtype=jnp.int32)
+        # src[test_pallas.py:4338]: starts = x_offsets[tile_b]
+        starts = jnp.array([x_offsets[offset_0]])
+        # src[test_pallas.py:4339]: ends = x_offsets[tile_b.index + 1]
+        v_0 = jnp.array(1, dtype=jnp.int32)
+        v_1 = indices_0 + v_0
+        ends = jnp.array([x_offsets[offset_0 + 1]])
+        # src[test_pallas.py:4340]: nnz = ends - starts
+        v_2 = ends - starts
+
+        def _fori_body_1(_j, _):
+            nonlocal out_buf, scratch_2, x_flat_buf
+            # src[test_pallas.py:4341]: for tile_m in hl.tile(M):
+            # src[test_pallas.py:4342]:     row_sums = hl.zeros([tile_b, tile_m], dtype=torch.float32)
+            # src[test_pallas.py:4343]:     for tile_k in hl.jagged_tile(nnz):
+            # src[test_pallas.py:4341-4348]: ...
+            offset_1 = 0 + _j * _BLOCK_SIZE_1
+            indices_1 = offset_1 + jnp.arange(0, _BLOCK_SIZE_1, dtype=jnp.int32)
+            v_2_copy = v_2
+            starts_copy = starts
+            v_2_copy_0 = v_2_copy
+            starts_copy_0 = starts_copy
+            # src[test_pallas.py:4342]: row_sums = hl.zeros([tile_b, tile_m], dtype=torch.float32)
+            row_sums = jnp.full([_BLOCK_SIZE_0, _BLOCK_SIZE_1], 0.0, jnp.float32)
+            # src[test_pallas.py:4343]: for tile_k in hl.jagged_tile(nnz):
+            # src[test_pallas.py:4344]:     base = starts[:, None] + tile_k.index[None, :]
+            # src[test_pallas.py:4345]:     flat = base[:, :, None] * M + tile_m.index[None, None, :]
+            # src[test_pallas.py:4343-4347]: ...
+            view = jnp.reshape(v_2_copy_0, [_BLOCK_SIZE_0])
+            amax = lax.convert_element_type(jnp.max(view, axis=0), jnp.int32)
+            scratch_2[...] = row_sums[...]
+
+            def _fori_body_0(_j_1, _):
+                nonlocal out_buf, scratch_2, x_flat_buf
+                offset_2 = 0 + _j_1 * _BLOCK_SIZE_2
+                indices_2 = offset_2 + jnp.arange(0, _BLOCK_SIZE_2, dtype=jnp.int32)
+                offset_5 = _j_1 * _BLOCK_SIZE_2 + jnp.arange(_BLOCK_SIZE_2)
+                mask_2 = offset_5[None, :] < v_2_copy_0[:, None]
+                _copy = pltpu.make_async_copy(x_flat.at[pl.ds(starts_copy_0[0] + (0 + _j_1 * _BLOCK_SIZE_2), _BLOCK_SIZE_2), pl.ds(offset_1, _BLOCK_SIZE_1)], x_flat_buf, x_flat_sem)
+                _copy.start()
+                _copy.wait()
+                starts_copy_0_copy = starts_copy_0
+                v_3 = scratch_2[...]
+                starts_copy_0_copy_0 = starts_copy_0_copy
+                v_3_0 = v_3
+                # src[test_pallas.py:4344]: base = starts[:, None] + tile_k.index[None, :]
+                subscript = starts_copy_0_copy_0[:, None]
+                subscript_1 = indices_2[None, :]
+                v_4 = subscript + subscript_1
+                # src[test_pallas.py:4345]: flat = base[:, :, None] * M + tile_m.index[None, None, :]
+                subscript_2 = v_4[:, :, None]
+                v_5 = jnp.array(8, dtype=jnp.int32)
+                v_6 = subscript_2 * v_5
+                subscript_3 = indices_1[None, None, :]
+                v_7 = v_6 + subscript_3
+                # src[test_pallas.py:4346]: x_slice = hl.load(x_flat, [flat]).to(torch.float32)
+                load = jnp.expand_dims(x_flat_buf[:], axis=0)
+                v_8 = lax.convert_element_type(load, jnp.float32)
+                # src[test_pallas.py:4347]: row_sums = row_sums + x_slice.sum(dim=1)
+                _mask_to = jnp.where(jnp.broadcast_to(mask_2.astype(jnp.float32)[:, :, None], [_BLOCK_SIZE_0, _BLOCK_SIZE_2, _BLOCK_SIZE_1]), v_8, jnp.full([], 0, jnp.float32))
+                sum_1 = lax.convert_element_type(jnp.sum(_mask_to, axis=1), jnp.float32)
+                v_9 = v_3_0 + sum_1
+                # src[test_pallas.py:4343]: for tile_k in hl.jagged_tile(nnz):
+                # src[test_pallas.py:4344]:     base = starts[:, None] + tile_k.index[None, :]
+                # src[test_pallas.py:4345]:     flat = base[:, :, None] * M + tile_m.index[None, None, :]
+                # src[test_pallas.py:4343-4347]: ...
+                scratch_2[...] = v_9[...]
+            jax.lax.fori_loop(0, (amax - 0 + _BLOCK_SIZE_2 - 1) // _BLOCK_SIZE_2, _fori_body_0, None)
+            row_sums = scratch_2[...]
+            # src[test_pallas.py:4348]: out[tile_b, tile_m] = (row_sums * 2.0).to(x_data.dtype)
+            v_10 = jnp.array(2.0, dtype=jnp.float32)
+            v_11 = row_sums * v_10
+            v_12 = lax.convert_element_type(v_11, jnp.float8_e4m3fn)
+            out_buf[:, :] = v_12
+            # src[test_pallas.py:4341]: for tile_m in hl.tile(M):
+            # src[test_pallas.py:4342]:     row_sums = hl.zeros([tile_b, tile_m], dtype=torch.float32)
+            # src[test_pallas.py:4343]:     for tile_k in hl.jagged_tile(nnz):
+            # src[test_pallas.py:4341-4348]: ...
+            _copy_out = pltpu.make_async_copy(out_buf, out.at[pl.ds(offset_0, _BLOCK_SIZE_0), pl.ds(0 + _j * _BLOCK_SIZE_1, _BLOCK_SIZE_1)], out_sem)
+            _copy_out.start()
+            _copy_out.wait()
+        jax.lax.fori_loop(0, (8 - 0 + _BLOCK_SIZE_1 - 1) // _BLOCK_SIZE_1, _fori_body_1, None)
+    # src[test_pallas.py:4337]: for tile_b in hl.tile(num_rows):
+    # src[test_pallas.py:4338]:     starts = x_offsets[tile_b]
+    # src[test_pallas.py:4339]:     ends = x_offsets[tile_b.index + 1]
+    # src[test_pallas.py:4337-4348]: ...
+    jax.lax.fori_loop(0, 4, _kernel_body, None)
+
+def k(x_data: torch.Tensor, x_offsets: torch.Tensor, *, _launcher=_default_pallas_fori_launcher):
+    # src[test_pallas.py:4333]: M = x_data.size(1)
+    M = x_data.size(1)
+    # src[test_pallas.py:4334]: num_rows = x_offsets.size(0) - 1
+    num_rows = x_offsets.size(0) - 1
+    # src[test_pallas.py:4335]: out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    out = torch.zeros([num_rows, M], dtype=x_data.dtype, device=x_data.device)
+    # src[test_pallas.py:4336]: x_flat = x_data.view(-1)
+    x_flat = x_data.view(-1)
+    # src[test_pallas.py:4337]: for tile_b in hl.tile(num_rows):
+    # src[test_pallas.py:4338]:     starts = x_offsets[tile_b]
+    # src[test_pallas.py:4339]:     ends = x_offsets[tile_b.index + 1]
+    # src[test_pallas.py:4337-4348]: ...
+    _launcher(_helion_k, (1,), x_offsets, out, x_flat, _output_indices=[1], _inplace_indices=[1], _block_spec_info=[((None,), (None,)), ((None, None), (None, None)), ((None,), (None,))], _ds_pad_dims=[(1, 1, 8, 0), (2, 0, 16, 15), (2, 1, 8, 0)], _smem_arg_indices=[0], _scratch_shapes=[((1, 8), 'jnp.float8_e4m3fn', 'vmem'), ((), None, 'dma_semaphore'), ((1, 8), 'jnp.float32', 'vmem'), ((16, 8), 'jnp.float8_e4m3fn', 'vmem'), ((), None, 'dma_semaphore')], _pipeline_arg_indices=[1, 2], _reshape_2d_arg_indices=[(2, 8)])
+    # src[test_pallas.py:4349]: return out
+    return out
+XFAIL
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_fp8_wide PASSED
+
+=============================== warnings summary ===============================
+../pytorch/torch/jit/_script.py:365: 14 warnings
+  /home/ymu_google_com/pytorch/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op
+  /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:690: DeprecationWarning: It is deprecated to return a value that is not None from a test case (<bound method skipIfFn.<locals>.decorator of <test.test_pallas.TestPallas testMethod=test_jagged_sum_with_post_reduction_op>>)
+    return self.run(*args, **kwds)
+
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_bf16_narrow_xfail
+  /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+    warn_once(
+
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_bf16_narrow_xfail
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_fp8_narrow_xfail
+  /home/ymu_google_com/helion/helion/runtime/__init__.py:685: DeprecationWarning: input_output_aliases is deprecated and will be removed soon. Please use donate_argnums instead.
+    super().__init__(*args, **kwargs)  # type: ignore[misc]
+
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_bf16_wide
+  /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:690: DeprecationWarning: It is deprecated to return a value that is not None from a test case (<bound method skipIfFn.<locals>.decorator of <test.test_pallas.TestPallas testMethod=test_jagged_sum_with_post_reduction_op_bf16_wide>>)
+    return self.run(*args, **kwds)
+
+test/test_pallas.py::TestPallas::test_jagged_sum_with_post_reduction_op_fp8_wide
+  /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/unittest/case.py:690: DeprecationWarning: It is deprecated to return a value that is not None from a test case (<bound method skipIfFn.<locals>.decorator of <test.test_pallas.TestPallas testMethod=test_jagged_sum_with_post_reduction_op_fp8_wide>>)
+    return self.run(*args, **kwds)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========== 3 passed, 177 deselected, 2 xfailed, 20 warnings in 6.99s ===========
+I0000 00:00:1781816439.844870 1779212 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781816439.844896 1779212 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=75
+num_cache_hits=51 {68.0%}
+peak_compilation_memory_bytes=unknown
+
