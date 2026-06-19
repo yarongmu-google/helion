@@ -1,0 +1,2133 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.6.0 -- /home/ymu_google_com/miniconda3/envs/tpu/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /home/ymu_google_com/helion
+configfile: pyproject.toml
+plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
+collecting ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781832405.342815 1945169 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781832405.936349 1945169 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
+Registered Python module for 'tpu'.
+Device type: tpu, Device index: default
+Initializing TPU distributed runtime
+collected 193 items / 187 deselected / 6 selected
+
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_2 I0000 00:00:1781832407.396389 1945169 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781832409.736727 1945169 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781832409.736764 1945169 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781832409.771082 1945956 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781832409.771104 1945956 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+[0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3715946851
+E0000 00:00:1781832410.355961 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.772155 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.773352 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.773562 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.773983 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.777329 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.777337 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832410.783652 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+FAILED
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_4 [0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3715950249
+E0000 00:00:1781832411.124756 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303438 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303607 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303703 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303755 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303810 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303852 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.303895 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+FAILED
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_8 [0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3715950767
+E0000 00:00:1781832411.633988 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787431 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787596 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787684 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787733 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787790 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787827 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+E0000 00:00:1781832411.787867 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+
+The MLIR operation involved:
+  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+FAILED
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_32 [0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3715951250
+FAILED
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_4 [0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3715952066
+FAILED
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_8 [0s] Starting autotuning process, this may take a while...
+[0s] Autotune random seed: 3715953001
+FAILED
+
+=================================== FAILURES ===================================
+___________ TestPallas.test_jagged_sum_alignment_bf16_starts_align_2 ___________
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7048ab76ff80>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+>               synchronize_device(baseline_output)
+
+helion/autotuner/benchmark_provider.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/autotuner/benchmarking.py:129: in synchronize_device
+    tpu_sync(tpu_tensors, wait=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x703f13f1ab70>]
+wait = True
+
+    def synchronize(
+        tensors: torch.Tensor | list[torch.Tensor] | None = None, wait: bool = False
+    ) -> None:
+      """Forces a materialization of one or more TPU tensors.
+    
+      Args:
+        tensors: what to synchronize. If None, synchronizes the entire graph of
+          deferred operations. Otherwise, synchronizes only the specified tensor or
+          list of tensors.
+        wait: Whether to wait for the tensor(s) to be ready. If wait is False, the
+          function will compiled a graph to compute the tensors and enqueue it for
+          execution, but will not wait for the results. If wait is True, the
+          function will also wait for the results to be ready.
+      """
+      if tensors is None:
+        _tpu_torch_sync._synchronize_all(wait)  # pylint: disable=protected-access
+      elif isinstance(tensors, list):
+>       _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
+            [_maybe_unwrap(t) for t in tensors], wait
+        )
+E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E       
+E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+E       
+E       The MLIR operation involved:
+E         %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+E       
+E       Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/sync/sync.py:51: RuntimeError
+
+The above exception was the direct cause of the following exception:
+
+self = <test.test_pallas.TestPallas testMethod=test_jagged_sum_alignment_bf16_starts_align_2>
+
+    def test_jagged_sum_alignment_bf16_starts_align_2(self) -> None:
+        """bf16 + starts aligned to 2 (the packing factor in
+        ``tiled<(8,128)(2,1)>``).  Per user's note this should pass after
+        the (1,128) tile patch."""
+>       self._run_alignment_variant(torch.bfloat16, M=16, align=2)
+
+test/test_pallas.py:4562: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test/test_pallas.py:4548: in _run_alignment_variant
+    result = k(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:482: in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:1144: in __call__
+    self.ensure_config_exists(args)
+helion/runtime/kernel.py:1112: in ensure_config_exists
+    self.autotune(args, force=False)
+helion/runtime/kernel.py:915: in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/backend.py:929: in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:313: in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:400: in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_search.py:473: in autotune
+    self._prepare()
+helion/autotuner/base_search.py:288: in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+helion/autotuner/benchmark_provider.py:330: in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7048ab76ff80>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                decorator = self.kernel.format_kernel_decorator(
+                    baseline_config, self.settings
+                )
+                log_generated_triton_code_debug(
+                    self.log,
+                    self.kernel,
+                    baseline_config,
+                    prefix=f"Generated Triton code for {decorator}:",
+                )
+                self.kernel.maybe_log_repro(self.log.error, new_args, baseline_config)
+>               raise exc.InvalidConfig(
+                    "Default config failed while computing baseline.\n"
+                    f"Default config: {decorator}\n"
+                    f"{SUPPRESSED_TRITON_CODE_MSG}\n"
+                    "To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` "
+                    "to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel)."
+                ) from e
+E               helion.exc.InvalidConfig: Default config failed while computing baseline.
+E               Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+E               Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+E               To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+
+helion/autotuner/benchmark_provider.py:391: InvalidConfig
+___________ TestPallas.test_jagged_sum_alignment_bf16_starts_align_4 ___________
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d96a9c0>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+>               synchronize_device(baseline_output)
+
+helion/autotuner/benchmark_provider.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/autotuner/benchmarking.py:129: in synchronize_device
+    tpu_sync(tpu_tensors, wait=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x703f13f1a990>]
+wait = True
+
+    def synchronize(
+        tensors: torch.Tensor | list[torch.Tensor] | None = None, wait: bool = False
+    ) -> None:
+      """Forces a materialization of one or more TPU tensors.
+    
+      Args:
+        tensors: what to synchronize. If None, synchronizes the entire graph of
+          deferred operations. Otherwise, synchronizes only the specified tensor or
+          list of tensors.
+        wait: Whether to wait for the tensor(s) to be ready. If wait is False, the
+          function will compiled a graph to compute the tensors and enqueue it for
+          execution, but will not wait for the results. If wait is True, the
+          function will also wait for the results to be ready.
+      """
+      if tensors is None:
+        _tpu_torch_sync._synchronize_all(wait)  # pylint: disable=protected-access
+      elif isinstance(tensors, list):
+>       _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
+            [_maybe_unwrap(t) for t in tensors], wait
+        )
+E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E       
+E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+E       
+E       The MLIR operation involved:
+E         %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+E       
+E       Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/sync/sync.py:51: RuntimeError
+
+The above exception was the direct cause of the following exception:
+
+self = <test.test_pallas.TestPallas testMethod=test_jagged_sum_alignment_bf16_starts_align_4>
+
+    def test_jagged_sum_alignment_bf16_starts_align_4(self) -> None:
+        """bf16 + starts aligned to 4.  If the patch is at packing=2, 4 is
+        also aligned and should pass."""
+>       self._run_alignment_variant(torch.bfloat16, M=16, align=4)
+
+test/test_pallas.py:4567: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test/test_pallas.py:4548: in _run_alignment_variant
+    result = k(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:482: in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:1144: in __call__
+    self.ensure_config_exists(args)
+helion/runtime/kernel.py:1112: in ensure_config_exists
+    self.autotune(args, force=False)
+helion/runtime/kernel.py:915: in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/backend.py:929: in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:313: in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:400: in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_search.py:473: in autotune
+    self._prepare()
+helion/autotuner/base_search.py:288: in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+helion/autotuner/benchmark_provider.py:330: in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d96a9c0>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                decorator = self.kernel.format_kernel_decorator(
+                    baseline_config, self.settings
+                )
+                log_generated_triton_code_debug(
+                    self.log,
+                    self.kernel,
+                    baseline_config,
+                    prefix=f"Generated Triton code for {decorator}:",
+                )
+                self.kernel.maybe_log_repro(self.log.error, new_args, baseline_config)
+>               raise exc.InvalidConfig(
+                    "Default config failed while computing baseline.\n"
+                    f"Default config: {decorator}\n"
+                    f"{SUPPRESSED_TRITON_CODE_MSG}\n"
+                    "To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` "
+                    "to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel)."
+                ) from e
+E               helion.exc.InvalidConfig: Default config failed while computing baseline.
+E               Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+E               Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+E               To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+
+helion/autotuner/benchmark_provider.py:391: InvalidConfig
+___________ TestPallas.test_jagged_sum_alignment_bf16_starts_align_8 ___________
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d25fb90>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+>               synchronize_device(baseline_output)
+
+helion/autotuner/benchmark_provider.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/autotuner/benchmarking.py:129: in synchronize_device
+    tpu_sync(tpu_tensors, wait=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x703e2da22580>]
+wait = True
+
+    def synchronize(
+        tensors: torch.Tensor | list[torch.Tensor] | None = None, wait: bool = False
+    ) -> None:
+      """Forces a materialization of one or more TPU tensors.
+    
+      Args:
+        tensors: what to synchronize. If None, synchronizes the entire graph of
+          deferred operations. Otherwise, synchronizes only the specified tensor or
+          list of tensors.
+        wait: Whether to wait for the tensor(s) to be ready. If wait is False, the
+          function will compiled a graph to compute the tensors and enqueue it for
+          execution, but will not wait for the results. If wait is True, the
+          function will also wait for the results to be ready.
+      """
+      if tensors is None:
+        _tpu_torch_sync._synchronize_all(wait)  # pylint: disable=protected-access
+      elif isinstance(tensors, list):
+>       _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
+            [_maybe_unwrap(t) for t in tensors], wait
+        )
+E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E       
+E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+E       
+E       The MLIR operation involved:
+E         %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+E       
+E       Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+../miniconda3/envs/tpu/lib/python3.12/site-packages/torch_tpu/_internal/sync/sync.py:51: RuntimeError
+
+The above exception was the direct cause of the following exception:
+
+self = <test.test_pallas.TestPallas testMethod=test_jagged_sum_alignment_bf16_starts_align_8>
+
+    def test_jagged_sum_alignment_bf16_starts_align_8(self) -> None:
+        """bf16 + starts aligned to 8 (the tile outer dim).  My reading of
+        ``tpu_ops.cc:275`` says this is the only safe alignment if the
+        patch is not active."""
+>       self._run_alignment_variant(torch.bfloat16, M=16, align=8)
+
+test/test_pallas.py:4573: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test/test_pallas.py:4548: in _run_alignment_variant
+    result = k(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:482: in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:1144: in __call__
+    self.ensure_config_exists(args)
+helion/runtime/kernel.py:1112: in ensure_config_exists
+    self.autotune(args, force=False)
+helion/runtime/kernel.py:915: in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/backend.py:929: in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:313: in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:400: in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_search.py:473: in autotune
+    self._prepare()
+helion/autotuner/base_search.py:288: in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+helion/autotuner/benchmark_provider.py:330: in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d25fb90>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                decorator = self.kernel.format_kernel_decorator(
+                    baseline_config, self.settings
+                )
+                log_generated_triton_code_debug(
+                    self.log,
+                    self.kernel,
+                    baseline_config,
+                    prefix=f"Generated Triton code for {decorator}:",
+                )
+                self.kernel.maybe_log_repro(self.log.error, new_args, baseline_config)
+>               raise exc.InvalidConfig(
+                    "Default config failed while computing baseline.\n"
+                    f"Default config: {decorator}\n"
+                    f"{SUPPRESSED_TRITON_CODE_MSG}\n"
+                    "To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` "
+                    "to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel)."
+                ) from e
+E               helion.exc.InvalidConfig: Default config failed while computing baseline.
+E               Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 16, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+E               Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+E               To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+
+helion/autotuner/benchmark_provider.py:391: InvalidConfig
+___________ TestPallas.test_jagged_sum_alignment_fp8_starts_align_32 ___________
+
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2cfe47d0>
+n = mul
+
+    def run_node(self, n: Node) -> object:
+        if n.op == "call_function":
+            with (
+                self.cg.statement_owner_node(n),
+                self._set_current_node(n),
+                n.meta["location"],
+                V.set_current_node(n),
+            ):
+                try:
+                    lowering: Lowering = n.meta["lowering"]
+>                   result = lowering.codegen(self, n)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+helion/_compiler/inductor_lowering.py:1422: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/_compiler/inductor_lowering.py:488: in codegen
+    output_name = _unpack_opsvalue(self.buffer.data.inner_fn(indices))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/lowering.py:786: in inner_fn
+    out = load(index)
+          ^^^^^^^^^^^
+../pytorch/torch/_inductor/ir.py:3297: in loader
+    return inner(reindex(idx))
+           ^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/ir.py:4183: in loader
+    return ops.constant(self.value, self.dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/virtualized.py:337: in _default
+    return OpsWrapper._wrap(getattr(_ops, name)(*new_args, **new_kwargs))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1130: in _default
+    getattr(self.parent_handler, name)(*args, **kwargs)
+../pytorch/torch/_inductor/codegen/pallas.py:327: in constant
+    jax_dtype = torch_dtype_to_jax(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/runtime/runtime_utils.py:264: in torch_dtype_to_jax
+    jax_dtype = torch_dtype_to_jax_runtime(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+dtype = torch.float8_e4m3fn
+
+    def torch_dtype_to_jax_runtime(dtype: torch.dtype) -> Any:
+        """
+        Map PyTorch dtype to actual JAX dtype object at runtime.
+    
+        This helper is used in generated Pallas kernels at runtime to convert
+        PyTorch dtypes to JAX dtype objects (not string representations).
+    
+        Args:
+            dtype: PyTorch dtype to convert
+    
+        Returns:
+            JAX dtype object (e.g., jnp.float32 object itself)
+        """
+        import jax.numpy as jnp  # pyrefly: ignore [import-error, missing-import]
+    
+        dtype_map = {
+            torch.float32: jnp.float32,
+            torch.float64: jnp.float64,
+            torch.float16: jnp.float16,
+            torch.bfloat16: jnp.bfloat16,
+            torch.int32: jnp.int32,
+            torch.int64: jnp.int64,
+            torch.int16: jnp.int16,
+            torch.int8: jnp.int8,
+            torch.uint8: jnp.uint8,
+            torch.bool: jnp.bool_,
+            torch.complex64: jnp.complex64,
+            torch.complex128: jnp.complex128,
+        }
+        if dtype not in dtype_map:
+>           raise ValueError(f"Unsupported dtype for JAX conversion: {dtype}")
+E           ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+
+../pytorch/torch/_inductor/runtime/runtime_utils.py:247: ValueError
+
+The above exception was the direct cause of the following exception:
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cfc9c10>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+>               baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+
+helion/autotuner/benchmark_provider.py:376: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/runtime/kernel.py:807: in compile_config
+    triton_code = self.to_triton_code(
+helion/runtime/kernel.py:775: in to_triton_code
+    return self.to_code(
+helion/runtime/kernel.py:741: in to_code
+    root = generate_ast(self.host_function, config, emit_repro_caller)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/generate_ast.py:1256: in generate_ast
+    codegen.add_statement(codegen.visit(stmt))
+                          ^^^^^^^^^^^^^^^^^^^
+helion/_compiler/ast_extension.py:299: in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+helion/_compiler/generate_ast.py:966: in visit_For
+    codegen_call_with_graph(self, root, [])
+helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/fx/interpreter.py:197: in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1422: in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1015: in codegen
+    return codegen_fn(
+helion/language/_tracing_ops.py:246: in _
+    return _codegen_fori_loop(state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/language/_tracing_ops.py:2559: in _codegen_fori_loop
+    graph_results = codegen_call_with_graph(
+helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/fx/interpreter.py:197: in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2cfe47d0>
+n = mul
+
+    def run_node(self, n: Node) -> object:
+        if n.op == "call_function":
+            with (
+                self.cg.statement_owner_node(n),
+                self._set_current_node(n),
+                n.meta["location"],
+                V.set_current_node(n),
+            ):
+                try:
+                    lowering: Lowering = n.meta["lowering"]
+                    result = lowering.codegen(self, n)
+                    n.meta["codegen"] = result
+    
+                    # Generic handling for operations with multiple outputs
+                    if n.kwargs.get("_extra_args"):
+                        # Check if this node has getitem users, indicating multiple outputs
+                        getitem_users = [
+                            user for user in n.users if user.target == getitem
+                        ]
+                        if len(getitem_users) > 0:
+                            return self._collect_multi_outputs(n, result)
+    
+                    if result is None:
+                        return None
+                    if not isinstance(result, ast.AST):
+                        return result
+                    assert isinstance(result, ast.expr)
+                    if len(n.users) > 0:
+                        if not isinstance(result, (ast.Name, ast.Constant)):
+                            name = self._create_named_result(n, result)
+                            result = create(ast.Name, id=name, ctx=ast.Load())
+                        val = n.meta["val"]
+                        expr = getattr(getattr(val, "node", None), "_expr", None)
+                        if not isinstance(expr, sympy.Expr) and isinstance(
+                            val, torch.SymInt
+                        ):
+                            expr = val._sympy_()
+                        if isinstance(expr, sympy.Expr) and len(expr.free_symbols) > 0:
+                            # Keep track of what variable symints are stored in to support DeviceFunction.sympy_expr()
+                            with contextlib.suppress(Exception):
+                                expr = CompileEnvironment.current().shape_env.simplify(
+                                    expr
+                                )
+                            if isinstance(result, ast.Name):
+                                self.cg.device_function.expr_to_var_info[expr] = (
+                                    VarInfo(result.id, n)
+                                )
+                            else:
+                                assert isinstance(result, ast.Constant)
+                                self.cg.device_function.expr_to_var_info[expr] = (
+                                    VarInfo(repr(result.value), n)
+                                )
+                        return result
+                    if not isinstance(result, (ast.Name, ast.Constant)):
+                        self.cg.add_statement(create(ast.Expr, value=result))
+                    return None
+                except exc.Base:
+                    raise
+                except Exception as e:
+>                   raise InductorLoweringError(
+                        f"Error in codegen for node {n.name} ({n.target}): {e}"
+                    ) from e
+E                   helion.exc.InductorLoweringError: Error in codegen for node mul (aten.mul.Tensor): Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+E                   While processing:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+E                       out[tile_b, tile_m] = row_sums * 2.0
+E                                             ^^^^^^^^^^^^^^
+E                   
+E                   
+E                   While executing %mul : [num_users=1] = call_function[target=torch.ops.aten.mul.Tensor](args = (%_phi, 2.0), kwargs = {})
+E                   Original traceback:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+E                       out[tile_b, tile_m] = row_sums * 2.0
+E                   
+E                   Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+E                   
+E                   While executing %_for_loop : [num_users=0] = call_function[target=helion.language._tracing_ops._for_loop](args = (1, [0], [32], [%nnz, %starts]), kwargs = {})
+E                   Original traceback:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4513, in k
+E                       for tile_m in hl.tile(M):
+E                   
+E                   Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+
+helion/_compiler/inductor_lowering.py:1471: InductorLoweringError
+
+The above exception was the direct cause of the following exception:
+
+self = <test.test_pallas.TestPallas testMethod=test_jagged_sum_alignment_fp8_starts_align_32>
+
+    def test_jagged_sum_alignment_fp8_starts_align_32(self) -> None:
+        """fp8 + starts aligned to 32 (full outer tile dim for int8-class).
+        Safest fallback."""
+>       self._run_alignment_variant(
+            torch.float8_e4m3fn, M=32, align=32, atol=1.0, rtol=0.25
+        )
+
+test/test_pallas.py:4593: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test/test_pallas.py:4548: in _run_alignment_variant
+    result = k(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:482: in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:1144: in __call__
+    self.ensure_config_exists(args)
+helion/runtime/kernel.py:1112: in ensure_config_exists
+    self.autotune(args, force=False)
+helion/runtime/kernel.py:915: in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/backend.py:929: in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:313: in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:400: in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_search.py:473: in autotune
+    self._prepare()
+helion/autotuner/base_search.py:288: in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+helion/autotuner/benchmark_provider.py:330: in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cfc9c10>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                decorator = self.kernel.format_kernel_decorator(
+                    baseline_config, self.settings
+                )
+                log_generated_triton_code_debug(
+                    self.log,
+                    self.kernel,
+                    baseline_config,
+                    prefix=f"Generated Triton code for {decorator}:",
+                )
+                self.kernel.maybe_log_repro(self.log.error, new_args, baseline_config)
+>               raise exc.InvalidConfig(
+                    "Default config failed while computing baseline.\n"
+                    f"Default config: {decorator}\n"
+                    f"{SUPPRESSED_TRITON_CODE_MSG}\n"
+                    "To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` "
+                    "to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel)."
+                ) from e
+E               helion.exc.InvalidConfig: Default config failed while computing baseline.
+E               Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 32, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+E               Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+E               To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+
+helion/autotuner/benchmark_provider.py:391: InvalidConfig
+------------------------------ Captured log call -------------------------------
+WARNING  helion.runtime.kernel:kernel.py:816 Helion compiler triton codegen error for @helion.kernel(config=helion.Config(block_sizes=[1, 32, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1422, in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 488, in codegen
+    output_name = _unpack_opsvalue(self.buffer.data.inner_fn(indices))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/lowering.py", line 786, in inner_fn
+    out = load(index)
+          ^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/ir.py", line 3297, in loader
+    return inner(reindex(idx))
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/ir.py", line 4183, in loader
+    return ops.constant(self.value, self.dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 86, in constant
+  File "/home/ymu_google_com/pytorch/torch/_inductor/virtualized.py", line 337, in _default
+    return OpsWrapper._wrap(getattr(_ops, name)(*new_args, **new_kwargs))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 86, in constant
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1130, in _default
+    getattr(self.parent_handler, name)(*args, **kwargs)
+  File "/home/ymu_google_com/pytorch/torch/_inductor/codegen/pallas.py", line 327, in constant
+    jax_dtype = torch_dtype_to_jax(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/runtime/runtime_utils.py", line 264, in torch_dtype_to_jax
+    jax_dtype = torch_dtype_to_jax_runtime(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/runtime/runtime_utils.py", line 247, in torch_dtype_to_jax_runtime
+    raise ValueError(f"Unsupported dtype for JAX conversion: {dtype}")
+ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 807, in compile_config
+    triton_code = self.to_triton_code(
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 775, in to_triton_code
+    return self.to_code(
+           ^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 741, in to_code
+    root = generate_ast(self.host_function, config, emit_repro_caller)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/generate_ast.py", line 1256, in generate_ast
+    codegen.add_statement(codegen.visit(stmt))
+                          ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/ast_extension.py", line 299, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/generate_ast.py", line 966, in visit_For
+    codegen_call_with_graph(self, root, [])
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/fx/interpreter.py", line 197, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1422, in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1015, in codegen
+    return codegen_fn(
+           ^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 246, in _
+    return _codegen_fori_loop(state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2559, in _codegen_fori_loop
+    graph_results = codegen_call_with_graph(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/fx/interpreter.py", line 197, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1471, in run_node
+    raise InductorLoweringError(
+helion.exc.InductorLoweringError: Error in codegen for node mul (aten.mul.Tensor): Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+While processing:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+    out[tile_b, tile_m] = row_sums * 2.0
+                          ^^^^^^^^^^^^^^
+
+
+While executing %mul : [num_users=1] = call_function[target=torch.ops.aten.mul.Tensor](args = (%_phi, 2.0), kwargs = {})
+Original traceback:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+    out[tile_b, tile_m] = row_sums * 2.0
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+
+While executing %_for_loop : [num_users=0] = call_function[target=helion.language._tracing_ops._for_loop](args = (1, [0], [32], [%nnz, %starts]), kwargs = {})
+Original traceback:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4513, in k
+    for tile_m in hl.tile(M):
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+___________ TestPallas.test_jagged_sum_alignment_fp8_starts_align_4 ____________
+
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d5cad20>
+n = mul
+
+    def run_node(self, n: Node) -> object:
+        if n.op == "call_function":
+            with (
+                self.cg.statement_owner_node(n),
+                self._set_current_node(n),
+                n.meta["location"],
+                V.set_current_node(n),
+            ):
+                try:
+                    lowering: Lowering = n.meta["lowering"]
+>                   result = lowering.codegen(self, n)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+helion/_compiler/inductor_lowering.py:1422: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/_compiler/inductor_lowering.py:488: in codegen
+    output_name = _unpack_opsvalue(self.buffer.data.inner_fn(indices))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/lowering.py:786: in inner_fn
+    out = load(index)
+          ^^^^^^^^^^^
+../pytorch/torch/_inductor/ir.py:3297: in loader
+    return inner(reindex(idx))
+           ^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/ir.py:4183: in loader
+    return ops.constant(self.value, self.dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/virtualized.py:337: in _default
+    return OpsWrapper._wrap(getattr(_ops, name)(*new_args, **new_kwargs))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1130: in _default
+    getattr(self.parent_handler, name)(*args, **kwargs)
+../pytorch/torch/_inductor/codegen/pallas.py:327: in constant
+    jax_dtype = torch_dtype_to_jax(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/runtime/runtime_utils.py:264: in torch_dtype_to_jax
+    jax_dtype = torch_dtype_to_jax_runtime(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+dtype = torch.float8_e4m3fn
+
+    def torch_dtype_to_jax_runtime(dtype: torch.dtype) -> Any:
+        """
+        Map PyTorch dtype to actual JAX dtype object at runtime.
+    
+        This helper is used in generated Pallas kernels at runtime to convert
+        PyTorch dtypes to JAX dtype objects (not string representations).
+    
+        Args:
+            dtype: PyTorch dtype to convert
+    
+        Returns:
+            JAX dtype object (e.g., jnp.float32 object itself)
+        """
+        import jax.numpy as jnp  # pyrefly: ignore [import-error, missing-import]
+    
+        dtype_map = {
+            torch.float32: jnp.float32,
+            torch.float64: jnp.float64,
+            torch.float16: jnp.float16,
+            torch.bfloat16: jnp.bfloat16,
+            torch.int32: jnp.int32,
+            torch.int64: jnp.int64,
+            torch.int16: jnp.int16,
+            torch.int8: jnp.int8,
+            torch.uint8: jnp.uint8,
+            torch.bool: jnp.bool_,
+            torch.complex64: jnp.complex64,
+            torch.complex128: jnp.complex128,
+        }
+        if dtype not in dtype_map:
+>           raise ValueError(f"Unsupported dtype for JAX conversion: {dtype}")
+E           ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+
+../pytorch/torch/_inductor/runtime/runtime_utils.py:247: ValueError
+
+The above exception was the direct cause of the following exception:
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2c5944d0>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+>               baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+
+helion/autotuner/benchmark_provider.py:376: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/runtime/kernel.py:807: in compile_config
+    triton_code = self.to_triton_code(
+helion/runtime/kernel.py:775: in to_triton_code
+    return self.to_code(
+helion/runtime/kernel.py:741: in to_code
+    root = generate_ast(self.host_function, config, emit_repro_caller)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/generate_ast.py:1256: in generate_ast
+    codegen.add_statement(codegen.visit(stmt))
+                          ^^^^^^^^^^^^^^^^^^^
+helion/_compiler/ast_extension.py:299: in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+helion/_compiler/generate_ast.py:966: in visit_For
+    codegen_call_with_graph(self, root, [])
+helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/fx/interpreter.py:197: in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1422: in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1015: in codegen
+    return codegen_fn(
+helion/language/_tracing_ops.py:246: in _
+    return _codegen_fori_loop(state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/language/_tracing_ops.py:2559: in _codegen_fori_loop
+    graph_results = codegen_call_with_graph(
+helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/fx/interpreter.py:197: in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d5cad20>
+n = mul
+
+    def run_node(self, n: Node) -> object:
+        if n.op == "call_function":
+            with (
+                self.cg.statement_owner_node(n),
+                self._set_current_node(n),
+                n.meta["location"],
+                V.set_current_node(n),
+            ):
+                try:
+                    lowering: Lowering = n.meta["lowering"]
+                    result = lowering.codegen(self, n)
+                    n.meta["codegen"] = result
+    
+                    # Generic handling for operations with multiple outputs
+                    if n.kwargs.get("_extra_args"):
+                        # Check if this node has getitem users, indicating multiple outputs
+                        getitem_users = [
+                            user for user in n.users if user.target == getitem
+                        ]
+                        if len(getitem_users) > 0:
+                            return self._collect_multi_outputs(n, result)
+    
+                    if result is None:
+                        return None
+                    if not isinstance(result, ast.AST):
+                        return result
+                    assert isinstance(result, ast.expr)
+                    if len(n.users) > 0:
+                        if not isinstance(result, (ast.Name, ast.Constant)):
+                            name = self._create_named_result(n, result)
+                            result = create(ast.Name, id=name, ctx=ast.Load())
+                        val = n.meta["val"]
+                        expr = getattr(getattr(val, "node", None), "_expr", None)
+                        if not isinstance(expr, sympy.Expr) and isinstance(
+                            val, torch.SymInt
+                        ):
+                            expr = val._sympy_()
+                        if isinstance(expr, sympy.Expr) and len(expr.free_symbols) > 0:
+                            # Keep track of what variable symints are stored in to support DeviceFunction.sympy_expr()
+                            with contextlib.suppress(Exception):
+                                expr = CompileEnvironment.current().shape_env.simplify(
+                                    expr
+                                )
+                            if isinstance(result, ast.Name):
+                                self.cg.device_function.expr_to_var_info[expr] = (
+                                    VarInfo(result.id, n)
+                                )
+                            else:
+                                assert isinstance(result, ast.Constant)
+                                self.cg.device_function.expr_to_var_info[expr] = (
+                                    VarInfo(repr(result.value), n)
+                                )
+                        return result
+                    if not isinstance(result, (ast.Name, ast.Constant)):
+                        self.cg.add_statement(create(ast.Expr, value=result))
+                    return None
+                except exc.Base:
+                    raise
+                except Exception as e:
+>                   raise InductorLoweringError(
+                        f"Error in codegen for node {n.name} ({n.target}): {e}"
+                    ) from e
+E                   helion.exc.InductorLoweringError: Error in codegen for node mul (aten.mul.Tensor): Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+E                   While processing:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+E                       out[tile_b, tile_m] = row_sums * 2.0
+E                                             ^^^^^^^^^^^^^^
+E                   
+E                   
+E                   While executing %mul : [num_users=1] = call_function[target=torch.ops.aten.mul.Tensor](args = (%_phi, 2.0), kwargs = {})
+E                   Original traceback:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+E                       out[tile_b, tile_m] = row_sums * 2.0
+E                   
+E                   Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+E                   
+E                   While executing %_for_loop : [num_users=0] = call_function[target=helion.language._tracing_ops._for_loop](args = (1, [0], [32], [%nnz, %starts]), kwargs = {})
+E                   Original traceback:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4513, in k
+E                       for tile_m in hl.tile(M):
+E                   
+E                   Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+
+helion/_compiler/inductor_lowering.py:1471: InductorLoweringError
+
+The above exception was the direct cause of the following exception:
+
+self = <test.test_pallas.TestPallas testMethod=test_jagged_sum_alignment_fp8_starts_align_4>
+
+    def test_jagged_sum_alignment_fp8_starts_align_4(self) -> None:
+        """fp8 + starts aligned to 4 (per user's note: fp8 packing factor
+        is 4)."""
+>       self._run_alignment_variant(
+            torch.float8_e4m3fn, M=32, align=4, atol=1.0, rtol=0.25
+        )
+
+test/test_pallas.py:4579: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test/test_pallas.py:4548: in _run_alignment_variant
+    result = k(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:482: in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:1144: in __call__
+    self.ensure_config_exists(args)
+helion/runtime/kernel.py:1112: in ensure_config_exists
+    self.autotune(args, force=False)
+helion/runtime/kernel.py:915: in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/backend.py:929: in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:313: in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:400: in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_search.py:473: in autotune
+    self._prepare()
+helion/autotuner/base_search.py:288: in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+helion/autotuner/benchmark_provider.py:330: in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2c5944d0>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                decorator = self.kernel.format_kernel_decorator(
+                    baseline_config, self.settings
+                )
+                log_generated_triton_code_debug(
+                    self.log,
+                    self.kernel,
+                    baseline_config,
+                    prefix=f"Generated Triton code for {decorator}:",
+                )
+                self.kernel.maybe_log_repro(self.log.error, new_args, baseline_config)
+>               raise exc.InvalidConfig(
+                    "Default config failed while computing baseline.\n"
+                    f"Default config: {decorator}\n"
+                    f"{SUPPRESSED_TRITON_CODE_MSG}\n"
+                    "To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` "
+                    "to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel)."
+                ) from e
+E               helion.exc.InvalidConfig: Default config failed while computing baseline.
+E               Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 32, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+E               Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+E               To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+
+helion/autotuner/benchmark_provider.py:391: InvalidConfig
+------------------------------ Captured log call -------------------------------
+WARNING  helion.runtime.kernel:kernel.py:816 Helion compiler triton codegen error for @helion.kernel(config=helion.Config(block_sizes=[1, 32, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1422, in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 488, in codegen
+    output_name = _unpack_opsvalue(self.buffer.data.inner_fn(indices))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/lowering.py", line 786, in inner_fn
+    out = load(index)
+          ^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/ir.py", line 3297, in loader
+    return inner(reindex(idx))
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/ir.py", line 4183, in loader
+    return ops.constant(self.value, self.dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 86, in constant
+  File "/home/ymu_google_com/pytorch/torch/_inductor/virtualized.py", line 337, in _default
+    return OpsWrapper._wrap(getattr(_ops, name)(*new_args, **new_kwargs))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 86, in constant
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1130, in _default
+    getattr(self.parent_handler, name)(*args, **kwargs)
+  File "/home/ymu_google_com/pytorch/torch/_inductor/codegen/pallas.py", line 327, in constant
+    jax_dtype = torch_dtype_to_jax(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/runtime/runtime_utils.py", line 264, in torch_dtype_to_jax
+    jax_dtype = torch_dtype_to_jax_runtime(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/runtime/runtime_utils.py", line 247, in torch_dtype_to_jax_runtime
+    raise ValueError(f"Unsupported dtype for JAX conversion: {dtype}")
+ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 807, in compile_config
+    triton_code = self.to_triton_code(
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 775, in to_triton_code
+    return self.to_code(
+           ^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 741, in to_code
+    root = generate_ast(self.host_function, config, emit_repro_caller)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/generate_ast.py", line 1256, in generate_ast
+    codegen.add_statement(codegen.visit(stmt))
+                          ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/ast_extension.py", line 299, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/generate_ast.py", line 966, in visit_For
+    codegen_call_with_graph(self, root, [])
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/fx/interpreter.py", line 197, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1422, in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1015, in codegen
+    return codegen_fn(
+           ^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 246, in _
+    return _codegen_fori_loop(state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2559, in _codegen_fori_loop
+    graph_results = codegen_call_with_graph(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/fx/interpreter.py", line 197, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1471, in run_node
+    raise InductorLoweringError(
+helion.exc.InductorLoweringError: Error in codegen for node mul (aten.mul.Tensor): Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+While processing:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+    out[tile_b, tile_m] = row_sums * 2.0
+                          ^^^^^^^^^^^^^^
+
+
+While executing %mul : [num_users=1] = call_function[target=torch.ops.aten.mul.Tensor](args = (%_phi, 2.0), kwargs = {})
+Original traceback:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+    out[tile_b, tile_m] = row_sums * 2.0
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+
+While executing %_for_loop : [num_users=0] = call_function[target=helion.language._tracing_ops._for_loop](args = (1, [0], [32], [%nnz, %starts]), kwargs = {})
+Original traceback:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4513, in k
+    for tile_m in hl.tile(M):
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+___________ TestPallas.test_jagged_sum_alignment_fp8_starts_align_8 ____________
+
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d045430>
+n = mul
+
+    def run_node(self, n: Node) -> object:
+        if n.op == "call_function":
+            with (
+                self.cg.statement_owner_node(n),
+                self._set_current_node(n),
+                n.meta["location"],
+                V.set_current_node(n),
+            ):
+                try:
+                    lowering: Lowering = n.meta["lowering"]
+>                   result = lowering.codegen(self, n)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+helion/_compiler/inductor_lowering.py:1422: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/_compiler/inductor_lowering.py:488: in codegen
+    output_name = _unpack_opsvalue(self.buffer.data.inner_fn(indices))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/lowering.py:786: in inner_fn
+    out = load(index)
+          ^^^^^^^^^^^
+../pytorch/torch/_inductor/ir.py:3297: in loader
+    return inner(reindex(idx))
+           ^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/ir.py:4183: in loader
+    return ops.constant(self.value, self.dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/virtualized.py:337: in _default
+    return OpsWrapper._wrap(getattr(_ops, name)(*new_args, **new_kwargs))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1130: in _default
+    getattr(self.parent_handler, name)(*args, **kwargs)
+../pytorch/torch/_inductor/codegen/pallas.py:327: in constant
+    jax_dtype = torch_dtype_to_jax(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/_inductor/runtime/runtime_utils.py:264: in torch_dtype_to_jax
+    jax_dtype = torch_dtype_to_jax_runtime(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+dtype = torch.float8_e4m3fn
+
+    def torch_dtype_to_jax_runtime(dtype: torch.dtype) -> Any:
+        """
+        Map PyTorch dtype to actual JAX dtype object at runtime.
+    
+        This helper is used in generated Pallas kernels at runtime to convert
+        PyTorch dtypes to JAX dtype objects (not string representations).
+    
+        Args:
+            dtype: PyTorch dtype to convert
+    
+        Returns:
+            JAX dtype object (e.g., jnp.float32 object itself)
+        """
+        import jax.numpy as jnp  # pyrefly: ignore [import-error, missing-import]
+    
+        dtype_map = {
+            torch.float32: jnp.float32,
+            torch.float64: jnp.float64,
+            torch.float16: jnp.float16,
+            torch.bfloat16: jnp.bfloat16,
+            torch.int32: jnp.int32,
+            torch.int64: jnp.int64,
+            torch.int16: jnp.int16,
+            torch.int8: jnp.int8,
+            torch.uint8: jnp.uint8,
+            torch.bool: jnp.bool_,
+            torch.complex64: jnp.complex64,
+            torch.complex128: jnp.complex128,
+        }
+        if dtype not in dtype_map:
+>           raise ValueError(f"Unsupported dtype for JAX conversion: {dtype}")
+E           ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+
+../pytorch/torch/_inductor/runtime/runtime_utils.py:247: ValueError
+
+The above exception was the direct cause of the following exception:
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cf61700>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+>               baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+
+helion/autotuner/benchmark_provider.py:376: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+helion/runtime/kernel.py:807: in compile_config
+    triton_code = self.to_triton_code(
+helion/runtime/kernel.py:775: in to_triton_code
+    return self.to_code(
+helion/runtime/kernel.py:741: in to_code
+    root = generate_ast(self.host_function, config, emit_repro_caller)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/generate_ast.py:1256: in generate_ast
+    codegen.add_statement(codegen.visit(stmt))
+                          ^^^^^^^^^^^^^^^^^^^
+helion/_compiler/ast_extension.py:299: in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+helion/_compiler/generate_ast.py:966: in visit_For
+    codegen_call_with_graph(self, root, [])
+helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/fx/interpreter.py:197: in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1422: in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/inductor_lowering.py:1015: in codegen
+    return codegen_fn(
+helion/language/_tracing_ops.py:246: in _
+    return _codegen_fori_loop(state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/language/_tracing_ops.py:2559: in _codegen_fori_loop
+    graph_results = codegen_call_with_graph(
+helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pytorch/torch/fx/interpreter.py:197: in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d045430>
+n = mul
+
+    def run_node(self, n: Node) -> object:
+        if n.op == "call_function":
+            with (
+                self.cg.statement_owner_node(n),
+                self._set_current_node(n),
+                n.meta["location"],
+                V.set_current_node(n),
+            ):
+                try:
+                    lowering: Lowering = n.meta["lowering"]
+                    result = lowering.codegen(self, n)
+                    n.meta["codegen"] = result
+    
+                    # Generic handling for operations with multiple outputs
+                    if n.kwargs.get("_extra_args"):
+                        # Check if this node has getitem users, indicating multiple outputs
+                        getitem_users = [
+                            user for user in n.users if user.target == getitem
+                        ]
+                        if len(getitem_users) > 0:
+                            return self._collect_multi_outputs(n, result)
+    
+                    if result is None:
+                        return None
+                    if not isinstance(result, ast.AST):
+                        return result
+                    assert isinstance(result, ast.expr)
+                    if len(n.users) > 0:
+                        if not isinstance(result, (ast.Name, ast.Constant)):
+                            name = self._create_named_result(n, result)
+                            result = create(ast.Name, id=name, ctx=ast.Load())
+                        val = n.meta["val"]
+                        expr = getattr(getattr(val, "node", None), "_expr", None)
+                        if not isinstance(expr, sympy.Expr) and isinstance(
+                            val, torch.SymInt
+                        ):
+                            expr = val._sympy_()
+                        if isinstance(expr, sympy.Expr) and len(expr.free_symbols) > 0:
+                            # Keep track of what variable symints are stored in to support DeviceFunction.sympy_expr()
+                            with contextlib.suppress(Exception):
+                                expr = CompileEnvironment.current().shape_env.simplify(
+                                    expr
+                                )
+                            if isinstance(result, ast.Name):
+                                self.cg.device_function.expr_to_var_info[expr] = (
+                                    VarInfo(result.id, n)
+                                )
+                            else:
+                                assert isinstance(result, ast.Constant)
+                                self.cg.device_function.expr_to_var_info[expr] = (
+                                    VarInfo(repr(result.value), n)
+                                )
+                        return result
+                    if not isinstance(result, (ast.Name, ast.Constant)):
+                        self.cg.add_statement(create(ast.Expr, value=result))
+                    return None
+                except exc.Base:
+                    raise
+                except Exception as e:
+>                   raise InductorLoweringError(
+                        f"Error in codegen for node {n.name} ({n.target}): {e}"
+                    ) from e
+E                   helion.exc.InductorLoweringError: Error in codegen for node mul (aten.mul.Tensor): Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+E                   While processing:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+E                       out[tile_b, tile_m] = row_sums * 2.0
+E                                             ^^^^^^^^^^^^^^
+E                   
+E                   
+E                   While executing %mul : [num_users=1] = call_function[target=torch.ops.aten.mul.Tensor](args = (%_phi, 2.0), kwargs = {})
+E                   Original traceback:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+E                       out[tile_b, tile_m] = row_sums * 2.0
+E                   
+E                   Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+E                   
+E                   While executing %_for_loop : [num_users=0] = call_function[target=helion.language._tracing_ops._for_loop](args = (1, [0], [32], [%nnz, %starts]), kwargs = {})
+E                   Original traceback:
+E                     File "/home/ymu_google_com/helion/test/test_pallas.py", line 4513, in k
+E                       for tile_m in hl.tile(M):
+E                   
+E                   Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+
+helion/_compiler/inductor_lowering.py:1471: InductorLoweringError
+
+The above exception was the direct cause of the following exception:
+
+self = <test.test_pallas.TestPallas testMethod=test_jagged_sum_alignment_fp8_starts_align_8>
+
+    def test_jagged_sum_alignment_fp8_starts_align_8(self) -> None:
+        """fp8 + starts aligned to 8.  Multiple of the packing factor;
+        should also pass if 4 does."""
+>       self._run_alignment_variant(
+            torch.float8_e4m3fn, M=32, align=8, atol=1.0, rtol=0.25
+        )
+
+test/test_pallas.py:4586: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test/test_pallas.py:4548: in _run_alignment_variant
+    result = k(x_data, x_offsets)
+             ^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:482: in __call__
+    return self.bind(args)(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+helion/runtime/kernel.py:1144: in __call__
+    self.ensure_config_exists(args)
+helion/runtime/kernel.py:1112: in ensure_config_exists
+    self.autotune(args, force=False)
+helion/runtime/kernel.py:915: in autotune
+    config = self.env.backend.autotune(self, args, force=force, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/_compiler/backend.py:929: in autotune
+    ).autotune(skip_cache=force)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:313: in autotune
+    config = self._run_autotune_trials()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_cache.py:400: in _run_autotune_trials
+    return self.autotuner.autotune()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+helion/autotuner/base_search.py:473: in autotune
+    self._prepare()
+helion/autotuner/base_search.py:288: in _prepare
+    self.benchmark_provider = self._benchmark_provider_cls(
+helion/autotuner/benchmark_provider.py:330: in __init__
+    ) = self._compute_baseline()
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cf61700>
+
+    def _compute_baseline(
+        self,
+    ) -> tuple[object, Sequence[int], Sequence[object] | None]:
+        """
+        Compute baseline output for accuracy validation during autotuning.
+        Also detect if the kernel mutates any of its input arguments.
+    
+        The baseline is computed in one of two ways:
+        - If settings.autotune_baseline_fn is provided, use that custom function
+        - Otherwise, run the kernel with the default config
+        """
+        new_args = _clone_args(self.args, self.kernel.env.process_group_name)
+    
+        # Use custom baseline function if provided
+        if self.settings.autotune_baseline_fn is not None:
+            try:
+                baseline_output = self.settings.autotune_baseline_fn(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                raise exc.AutotuneError(
+                    "Custom baseline function failed while computing baseline.\n"
+                    f"Baseline function: {self.settings.autotune_baseline_fn}\n"
+                ) from e
+        else:
+            # Use default config
+            baseline_config = self.config_spec.default_config()
+            try:
+                baseline_output = self.kernel.compile_config(
+                    baseline_config, allow_print=False
+                )(*new_args)
+                synchronize_device(baseline_output)
+            except Exception as e:
+                decorator = self.kernel.format_kernel_decorator(
+                    baseline_config, self.settings
+                )
+                log_generated_triton_code_debug(
+                    self.log,
+                    self.kernel,
+                    baseline_config,
+                    prefix=f"Generated Triton code for {decorator}:",
+                )
+                self.kernel.maybe_log_repro(self.log.error, new_args, baseline_config)
+>               raise exc.InvalidConfig(
+                    "Default config failed while computing baseline.\n"
+                    f"Default config: {decorator}\n"
+                    f"{SUPPRESSED_TRITON_CODE_MSG}\n"
+                    "To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` "
+                    "to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel)."
+                ) from e
+E               helion.exc.InvalidConfig: Default config failed while computing baseline.
+E               Default config: @helion.kernel(config=helion.Config(block_sizes=[1, 32, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+E               Set HELION_AUTOTUNE_LOG_LEVEL=DEBUG to log the generated Triton code, or HELION_AUTOTUNER_TRITON_FAILURE_DUMP_DIR=<dir> to write per-failure dumps (source code + traceback) to <dir>.
+E               To work around this error, you could set `@helion.kernel(autotune_baseline_fn=...)` to provide a custom baseline function (e.g. PyTorch eager implementation of your kernel).
+
+helion/autotuner/benchmark_provider.py:391: InvalidConfig
+------------------------------ Captured log call -------------------------------
+WARNING  helion.runtime.kernel:kernel.py:816 Helion compiler triton codegen error for @helion.kernel(config=helion.Config(block_sizes=[1, 32, 16], pallas_loop_type='fori_loop', pallas_pre_broadcast=False), static_shapes=True)
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1422, in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 488, in codegen
+    output_name = _unpack_opsvalue(self.buffer.data.inner_fn(indices))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/lowering.py", line 786, in inner_fn
+    out = load(index)
+          ^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/ir.py", line 3297, in loader
+    return inner(reindex(idx))
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/ir.py", line 4183, in loader
+    return ops.constant(self.value, self.dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 86, in constant
+  File "/home/ymu_google_com/pytorch/torch/_inductor/virtualized.py", line 337, in _default
+    return OpsWrapper._wrap(getattr(_ops, name)(*new_args, **new_kwargs))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 86, in constant
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1130, in _default
+    getattr(self.parent_handler, name)(*args, **kwargs)
+  File "/home/ymu_google_com/pytorch/torch/_inductor/codegen/pallas.py", line 327, in constant
+    jax_dtype = torch_dtype_to_jax(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/runtime/runtime_utils.py", line 264, in torch_dtype_to_jax
+    jax_dtype = torch_dtype_to_jax_runtime(dtype)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/_inductor/runtime/runtime_utils.py", line 247, in torch_dtype_to_jax_runtime
+    raise ValueError(f"Unsupported dtype for JAX conversion: {dtype}")
+ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 807, in compile_config
+    triton_code = self.to_triton_code(
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 775, in to_triton_code
+    return self.to_code(
+           ^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/runtime/kernel.py", line 741, in to_code
+    root = generate_ast(self.host_function, config, emit_repro_caller)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/generate_ast.py", line 1256, in generate_ast
+    codegen.add_statement(codegen.visit(stmt))
+                          ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/ast_extension.py", line 299, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/generate_ast.py", line 966, in visit_For
+    codegen_call_with_graph(self, root, [])
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/fx/interpreter.py", line 197, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1422, in run_node
+    result = lowering.codegen(self, n)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1015, in codegen
+    return codegen_fn(
+           ^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 246, in _
+    return _codegen_fori_loop(state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2559, in _codegen_fori_loop
+    graph_results = codegen_call_with_graph(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
+    return GraphInterpreter(graph, cg).run(*new_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/pytorch/torch/fx/interpreter.py", line 197, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1471, in run_node
+    raise InductorLoweringError(
+helion.exc.InductorLoweringError: Error in codegen for node mul (aten.mul.Tensor): Unsupported dtype for JAX conversion: torch.float8_e4m3fn
+While processing:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+    out[tile_b, tile_m] = row_sums * 2.0
+                          ^^^^^^^^^^^^^^
+
+
+While executing %mul : [num_users=1] = call_function[target=torch.ops.aten.mul.Tensor](args = (%_phi, 2.0), kwargs = {})
+Original traceback:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4519, in k
+    out[tile_b, tile_m] = row_sums * 2.0
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+
+While executing %_for_loop : [num_users=0] = call_function[target=helion.language._tracing_ops._for_loop](args = (1, [0], [32], [%nnz, %starts]), kwargs = {})
+Original traceback:
+  File "/home/ymu_google_com/helion/test/test_pallas.py", line 4513, in k
+    for tile_m in hl.tile(M):
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+=============================== warnings summary ===============================
+../pytorch/torch/jit/_script.py:365: 14 warnings
+  /home/ymu_google_com/pytorch/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_2
+  /home/ymu_google_com/helion/helion/_compiler/compile_environment.py:239: UserWarning: The 'pallas' backend is experimental and may have limited functionality.
+    warn_once(
+
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_2
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_4
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_8
+  /home/ymu_google_com/helion/helion/runtime/__init__.py:685: DeprecationWarning: input_output_aliases is deprecated and will be removed soon. Please use donate_argnums instead.
+    super().__init__(*args, **kwargs)  # type: ignore[misc]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_2
+FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_4
+FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_8
+FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_32
+FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_4
+FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_8
+=============== 6 failed, 187 deselected, 18 warnings in 10.72s ================
+I0000 00:00:1781832415.897711 1945169 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781832415.897741 1945169 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=189
+num_cache_hits=145 {76.7%}
+peak_compilation_memory_bytes=unknown
+
