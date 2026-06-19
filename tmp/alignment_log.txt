@@ -6,234 +6,234 @@ rootdir: /home/ymu_google_com/helion
 configfile: pyproject.toml
 plugins: xdist-3.8.0, anyio-4.12.1, hypothesis-6.151.5, jaxtyping-0.3.2
 collecting ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1781832405.342815 1945169 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
-I0000 00:00:1781832405.936349 1945169 device_rt.cc:97] PjRt runtime initialization deferred for tpu
+I0000 00:00:1781833491.686256 1949824 pjrt_api.cc:119] GetPjrtApi was found for TPU at /home/ymu_google_com/miniconda3/envs/tpu/lib/python3.12/site-packages/libtpu/libtpu.so
+I0000 00:00:1781833492.274252 1949824 device_rt.cc:97] PjRt runtime initialization deferred for tpu
 Successfully renamed PrivateUse1 backend to 'tpu'. Device: device(type='tpu')
 Registered Python module for 'tpu'.
 Device type: tpu, Device index: default
 Initializing TPU distributed runtime
 collected 193 items / 187 deselected / 6 selected
 
-test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_2 I0000 00:00:1781832407.396389 1945169 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
-I0000 00:00:1781832409.736727 1945169 pjrt_c_api_client.cc:200] PjRtCApiClient created.
-W0000 00:00:1781832409.736764 1945169 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
-I0000 00:00:1781832409.771082 1945956 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
-I0000 00:00:1781832409.771104 1945956 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
+test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_2 I0000 00:00:1781833493.708710 1949824 pjrt_api.cc:168] The PJRT plugin has PJRT API version 0.108. The framework PJRT API version is 0.111.
+I0000 00:00:1781833496.052446 1949824 pjrt_c_api_client.cc:200] PjRtCApiClient created.
+W0000 00:00:1781833496.052483 1949824 pjrt_state.cc:233] Only using 1 device out of all the 8 addressable devices.
+I0000 00:00:1781833496.087802 1950609 tier2_compilation_cache.cc:149] Tier-2 compilation cache is disabled for world size 1.
+I0000 00:00:1781833496.087822 1950609 tier3_compilation_cache.cc:65] Backup compilation for tier-3 cache read is disabled as tier-3 cache is disabled.
 [0s] Starting autotuning process, this may take a while...
-[0s] Autotune random seed: 3715946851
-E0000 00:00:1781832410.355961 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+[0s] Autotune random seed: 3717033164
+E0000 00:00:1781833496.677214 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.772155 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.090270 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.773352 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.090301 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.773562 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.090567 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.773983 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.090919 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.777329 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.095417 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.777337 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.095426 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832410.783652 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.100436 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 FAILED
 test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_4 [0s] Starting autotuning process, this may take a while...
-[0s] Autotune random seed: 3715950249
-E0000 00:00:1781832411.124756 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+[0s] Autotune random seed: 3717036566
+E0000 00:00:1781833497.453924 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303438 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636002 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303607 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636161 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303703 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636244 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303755 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636293 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303810 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636351 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303852 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636390 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.303895 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833497.636434 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 FAILED
 test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_align_8 [0s] Starting autotuning process, this may take a while...
-[0s] Autotune random seed: 3715950767
-E0000 00:00:1781832411.633988 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+[0s] Autotune random seed: 3717037099
+E0000 00:00:1781833497.979979 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787431 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.140638 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787596 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.140851 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787684 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.140944 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787733 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.140993 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787790 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.141068 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787827 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.141104 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
-E0000 00:00:1781832411.787867 1945957 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E0000 00:00:1781833498.141146 1950610 materialize.cc:305] [MaterializationWorker] ExecutionTask failed: INTERNAL: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 
-at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 
 The MLIR operation involved:
-  %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+  %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 
 Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 FAILED
 test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_32 [0s] Starting autotuning process, this may take a while...
-[0s] Autotune random seed: 3715951250
+[0s] Autotune random seed: 3717037603
 FAILED
 test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_4 [0s] Starting autotuning process, this may take a while...
-[0s] Autotune random seed: 3715952066
+[0s] Autotune random seed: 3717038423
 FAILED
 test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_8 [0s] Starting autotuning process, this may take a while...
-[0s] Autotune random seed: 3715953001
+[0s] Autotune random seed: 3717039396
 FAILED
 
 =================================== FAILURES ===================================
 ___________ TestPallas.test_jagged_sum_alignment_bf16_starts_align_2 ___________
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7048ab76ff80>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fadf89c22a0>
 
     def _compute_baseline(
         self,
@@ -273,7 +273,7 @@ helion/autotuner/benchmarking.py:129: in synchronize_device
     tpu_sync(tpu_tensors, wait=True)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x703f13f1ab70>]
+tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x7fa460ca6c10>]
 wait = True
 
     def synchronize(
@@ -296,12 +296,12 @@ wait = True
 >       _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
             [_maybe_unwrap(t) for t in tensors], wait
         )
-E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 E       
-E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp0uh4jieb/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpb69qu1f8/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 E       
 E       The MLIR operation involved:
-E         %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+E         %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 E       
 E       Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
@@ -350,7 +350,7 @@ helion/autotuner/benchmark_provider.py:330: in __init__
         ^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7048ab76ff80>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fadf89c22a0>
 
     def _compute_baseline(
         self,
@@ -409,7 +409,7 @@ E               To work around this error, you could set `@helion.kernel(autotun
 helion/autotuner/benchmark_provider.py:391: InvalidConfig
 ___________ TestPallas.test_jagged_sum_alignment_bf16_starts_align_4 ___________
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d96a9c0>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa4a1b8daf0>
 
     def _compute_baseline(
         self,
@@ -449,7 +449,7 @@ helion/autotuner/benchmarking.py:129: in synchronize_device
     tpu_sync(tpu_tensors, wait=True)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x703f13f1a990>]
+tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x7fa460ca52c0>]
 wait = True
 
     def synchronize(
@@ -472,12 +472,12 @@ wait = True
 >       _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
             [_maybe_unwrap(t) for t in tensors], wait
         )
-E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 E       
-E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmp2ki91liz/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpi4syd4ub/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 E       
 E       The MLIR operation involved:
-E         %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<31x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+E         %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 E       
 E       Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
@@ -525,7 +525,7 @@ helion/autotuner/benchmark_provider.py:330: in __init__
         ^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d96a9c0>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa4a1b8daf0>
 
     def _compute_baseline(
         self,
@@ -584,7 +584,7 @@ E               To work around this error, you could set `@helion.kernel(autotun
 helion/autotuner/benchmark_provider.py:391: InvalidConfig
 ___________ TestPallas.test_jagged_sum_alignment_bf16_starts_align_8 ___________
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d25fb90>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa37a28f1a0>
 
     def _compute_baseline(
         self,
@@ -624,7 +624,7 @@ helion/autotuner/benchmarking.py:129: in synchronize_device
     tpu_sync(tpu_tensors, wait=True)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x703e2da22580>]
+tensors = [<[RuntimeError('transfer to \'cpu\' device failed with: mosaic failed to compile TPU kernel: Offsets along tiled dime...Ref has nonzero size, but does not have a PjRtBuffer to copy from') raised in repr()] Tensor object at 0x7fa37aa12670>]
 wait = True
 
     def synchronize(
@@ -647,12 +647,12 @@ wait = True
 >       _tpu_torch_sync._synchronize_list(  # pylint: disable=protected-access
             [_maybe_unwrap(t) for t in tensors], wait
         )
-E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+E       RuntimeError: mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 4. If it is, use tpu.assume_multiple to suppress this error.
 E       
-E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1.<locals>._fori_body_0"("/tmp/tmpu0oakfae/6k/c6kizb7o4nhtl5mpc3sz2lhzepjakqj2m433cksobw66bouuqrnf.py":59:16 to :29))))
+E       at location: loc("dma_start:"("dma_start"("_helion_k.<locals>._kernel_body.<locals>._fori_body_1"("/tmp/tmpod84z1ig/jj/cjj6yuvmeqsr6ex6rthvg4j5mr6lixsnzs7uqc5jvrtalzu27fhg.py":96:12 to :29))))
 E       
 E       The MLIR operation involved:
-E         %54 = "tpu.memref_slice"(%arg3, %53, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<47x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<16x16xbf16, #tpu.tiled<(8,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
+E         %43 = "tpu.memref_slice"(%arg4, %arg10, %10) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<4x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x16xbf16, #tpu.tiled<(4,128)(2,1),[1,1]>, #tpu.memory_space<hbm>>
 E       
 E       Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
 
@@ -701,7 +701,7 @@ helion/autotuner/benchmark_provider.py:330: in __init__
         ^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2d25fb90>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa37a28f1a0>
 
     def _compute_baseline(
         self,
@@ -760,7 +760,7 @@ E               To work around this error, you could set `@helion.kernel(autotun
 helion/autotuner/benchmark_provider.py:391: InvalidConfig
 ___________ TestPallas.test_jagged_sum_alignment_fp8_starts_align_32 ___________
 
-self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2cfe47d0>
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x7fa379f427b0>
 n = mul
 
     def run_node(self, n: Node) -> object:
@@ -842,7 +842,7 @@ E           ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3f
 
 The above exception was the direct cause of the following exception:
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cfc9c10>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa379e84500>
 
     def _compute_baseline(
         self,
@@ -903,10 +903,10 @@ helion/_compiler/inductor_lowering.py:1422: in run_node
              ^^^^^^^^^^^^^^^^^^^^^^^^^
 helion/_compiler/inductor_lowering.py:1015: in codegen
     return codegen_fn(
-helion/language/_tracing_ops.py:246: in _
+helion/language/_tracing_ops.py:268: in _
     return _codegen_fori_loop(state)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/language/_tracing_ops.py:2559: in _codegen_fori_loop
+helion/language/_tracing_ops.py:2597: in _codegen_fori_loop
     graph_results = codegen_call_with_graph(
 helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
     return GraphInterpreter(graph, cg).run(*new_args)
@@ -916,7 +916,7 @@ helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
                      ^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2cfe47d0>
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x7fa379f427b0>
 n = mul
 
     def run_node(self, n: Node) -> object:
@@ -1048,7 +1048,7 @@ helion/autotuner/benchmark_provider.py:330: in __init__
         ^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cfc9c10>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa379e84500>
 
     def _compute_baseline(
         self,
@@ -1172,10 +1172,10 @@ Traceback (most recent call last):
   File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1015, in codegen
     return codegen_fn(
            ^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 246, in _
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 268, in _
     return _codegen_fori_loop(state)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2559, in _codegen_fori_loop
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2597, in _codegen_fori_loop
     graph_results = codegen_call_with_graph(
                     ^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
@@ -1208,7 +1208,7 @@ Original traceback:
 Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
 ___________ TestPallas.test_jagged_sum_alignment_fp8_starts_align_4 ____________
 
-self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d5cad20>
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x7fa37a89b5c0>
 n = mul
 
     def run_node(self, n: Node) -> object:
@@ -1290,7 +1290,7 @@ E           ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3f
 
 The above exception was the direct cause of the following exception:
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2c5944d0>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa37a8e9730>
 
     def _compute_baseline(
         self,
@@ -1351,10 +1351,10 @@ helion/_compiler/inductor_lowering.py:1422: in run_node
              ^^^^^^^^^^^^^^^^^^^^^^^^^
 helion/_compiler/inductor_lowering.py:1015: in codegen
     return codegen_fn(
-helion/language/_tracing_ops.py:246: in _
+helion/language/_tracing_ops.py:268: in _
     return _codegen_fori_loop(state)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/language/_tracing_ops.py:2559: in _codegen_fori_loop
+helion/language/_tracing_ops.py:2597: in _codegen_fori_loop
     graph_results = codegen_call_with_graph(
 helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
     return GraphInterpreter(graph, cg).run(*new_args)
@@ -1364,7 +1364,7 @@ helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
                      ^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d5cad20>
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x7fa37a89b5c0>
 n = mul
 
     def run_node(self, n: Node) -> object:
@@ -1496,7 +1496,7 @@ helion/autotuner/benchmark_provider.py:330: in __init__
         ^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2c5944d0>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa37a8e9730>
 
     def _compute_baseline(
         self,
@@ -1620,10 +1620,10 @@ Traceback (most recent call last):
   File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1015, in codegen
     return codegen_fn(
            ^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 246, in _
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 268, in _
     return _codegen_fori_loop(state)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2559, in _codegen_fori_loop
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2597, in _codegen_fori_loop
     graph_results = codegen_call_with_graph(
                     ^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
@@ -1656,7 +1656,7 @@ Original traceback:
 Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
 ___________ TestPallas.test_jagged_sum_alignment_fp8_starts_align_8 ____________
 
-self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d045430>
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x7fa379ea5b80>
 n = mul
 
     def run_node(self, n: Node) -> object:
@@ -1738,7 +1738,7 @@ E           ValueError: Unsupported dtype for JAX conversion: torch.float8_e4m3f
 
 The above exception was the direct cause of the following exception:
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cf61700>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa37a8ea450>
 
     def _compute_baseline(
         self,
@@ -1799,10 +1799,10 @@ helion/_compiler/inductor_lowering.py:1422: in run_node
              ^^^^^^^^^^^^^^^^^^^^^^^^^
 helion/_compiler/inductor_lowering.py:1015: in codegen
     return codegen_fn(
-helion/language/_tracing_ops.py:246: in _
+helion/language/_tracing_ops.py:268: in _
     return _codegen_fori_loop(state)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-helion/language/_tracing_ops.py:2559: in _codegen_fori_loop
+helion/language/_tracing_ops.py:2597: in _codegen_fori_loop
     graph_results = codegen_call_with_graph(
 helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
     return GraphInterpreter(graph, cg).run(*new_args)
@@ -1812,7 +1812,7 @@ helion/_compiler/inductor_lowering.py:1509: in codegen_call_with_graph
                      ^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x703e2d045430>
+self = <helion._compiler.inductor_lowering.GraphInterpreter object at 0x7fa379ea5b80>
 n = mul
 
     def run_node(self, n: Node) -> object:
@@ -1944,7 +1944,7 @@ helion/autotuner/benchmark_provider.py:330: in __init__
         ^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x703e2cf61700>
+self = <helion.autotuner.benchmark_provider.LocalBenchmarkProvider object at 0x7fa37a8ea450>
 
     def _compute_baseline(
         self,
@@ -2068,10 +2068,10 @@ Traceback (most recent call last):
   File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1015, in codegen
     return codegen_fn(
            ^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 246, in _
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 268, in _
     return _codegen_fori_loop(state)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2559, in _codegen_fori_loop
+  File "/home/ymu_google_com/helion/helion/language/_tracing_ops.py", line 2597, in _codegen_fori_loop
     graph_results = codegen_call_with_graph(
                     ^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/ymu_google_com/helion/helion/_compiler/inductor_lowering.py", line 1509, in codegen_call_with_graph
@@ -2125,9 +2125,9 @@ FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_bf16_starts_al
 FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_32
 FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_4
 FAILED test/test_pallas.py::TestPallas::test_jagged_sum_alignment_fp8_starts_align_8
-=============== 6 failed, 187 deselected, 18 warnings in 10.72s ================
-I0000 00:00:1781832415.897711 1945169 compilation_cache.cc:344] Compilation cache evicted.
-I0000 00:00:1781832415.897741 1945169 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=189
+=============== 6 failed, 187 deselected, 18 warnings in 10.80s ================
+I0000 00:00:1781833502.280286 1949824 compilation_cache.cc:344] Compilation cache evicted.
+I0000 00:00:1781833502.280320 1949824 compilation_cache.cc:208] CompilationCache final stats: num_cache_reqs=189
 num_cache_hits=145 {76.7%}
 peak_compilation_memory_bytes=unknown
 
