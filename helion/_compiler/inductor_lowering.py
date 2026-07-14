@@ -52,6 +52,7 @@ from .aten_lowering import aten_lowering_dispatch
 from .compile_environment import CompileEnvironment
 from .compile_environment import FixedBlockSizeSource
 from .compile_environment import _symint_expr
+from .compile_environment import _symint_sympy_expr
 from .device_function import VarInfo
 from .device_function import contains_only_block_size_symbols
 from .node_masking import inductor_masked_value
@@ -137,6 +138,8 @@ def prepare_node_lowering(
     if isinstance(
         val := node.meta["val"], (torch.SymInt, torch.SymFloat, torch.SymBool)
     ):
+        # SymBool's `_sympy_()` is a boolean rather than the Expr the field holds.
+        # pyrefly: ignore [bad-argument-type]
         node.meta["lowering"] = SympyExprLowering(val._sympy_())
         return
 
@@ -368,7 +371,7 @@ def to_symint(x: object) -> torch.SymInt | int:
 
 def _unpack_symint(x: torch.SymInt | int) -> sympy.Expr:
     if isinstance(x, torch.SymInt):
-        return x._sympy_()
+        return _symint_sympy_expr(x)
     if isinstance(x, int):
         # type: ignore [bad-return]
         return sympy.sympify(x)
@@ -386,16 +389,15 @@ class InductorLowering(Lowering):
             if isinstance(fake_val := n.meta["val"], torch.Tensor):
                 # Don't expand scalars (0-D tensors) - let Triton handle broadcasting naturally
                 # Expanding scalars with [None, None] creates incorrect broadcast shapes
-                if (
-                    ctx.cg.device_function.tile_strategy.supports_index_rank_expansion()
-                    and fake_val.ndim < ndim
-                    and fake_val.ndim > 0
-                ):
-                    # Broadcast to force ranks to match (but only for non-scalar tensors)
-                    expand = ["None"] * (ndim - fake_val.ndim) + [":"] * fake_val.ndim
-                    ast_val = expr_from_string(
-                        "{tensor}[" + ", ".join(expand) + "]", tensor=ast_val
+                if fake_val.ndim < ndim and fake_val.ndim > 0:
+                    expand = tile_strategy.broadcast_expand_dims(
+                        tuple(fake_val.shape), output_shape
                     )
+                    if expand:
+                        ast_val = expr_from_string(
+                            "{tensor}[" + ", ".join(expand) + "]",
+                            tensor=ast_val,
+                        )
             if (
                 isinstance(ast_val, ast.Name)
                 and ast_val.id in device_function._constexpr_args
@@ -412,7 +414,11 @@ class InductorLowering(Lowering):
                 input_asts.append(ast_val)
 
         device_function: DeviceFunction = ctx.cg.device_function
-        ndim: int = max([x.ndim for x in self.input_fake_tensors(node)] or (0,))
+        tile_strategy = device_function.tile_strategy
+        output_shape: tuple[int | torch.SymInt, ...] = tuple(
+            map(to_symint, self.buffer.get_size())
+        )
+        ndim: int = len(output_shape)
         input_asts: list[ast.AST] = []
         # _extra_deps should not be included in the inductor node inputs
         map_arg((node.args, {**node.kwargs, "_extra_deps": None}), visit)

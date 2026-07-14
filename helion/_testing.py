@@ -79,6 +79,7 @@ def _strip_launcher_args(value: str) -> str:
         strip_pairs += [
             (r", waves_per_eu=\d+", ""),
             (r", matrix_instr_nonkdim=\d+", ""),
+            (r", xcd_remap=(?:True|False)", ""),
         ]
     if _get_backend() == "tileir":
         strip_pairs += [(r", num_ctas=\d+", ""), (r", occupancy=\d+", "")]
@@ -113,6 +114,12 @@ def skipIfFn(
     Works on both test methods and test classes. When applied to a class,
     wraps setUp to check the skip condition before each test runs.
     """
+
+    if not isinstance(reason, str):
+        raise TypeError(
+            f"Decorator using skipIfFn requires a reason string argument, got {type(reason).__name__}. "
+            "Make sure to call the decorator with parentheses, e.g. @decorator('reason') or @decorator()"
+        )
 
     def decorator(test_item: Callable) -> Callable:
         if isinstance(test_item, type):
@@ -343,6 +350,21 @@ def skipUnlessAMDCDNA(reason: str) -> Callable[[Callable], Callable]:
     return skipIfFn(lambda: not supports_amd_cdna_tunables(), reason)
 
 
+def skipUnlessMultiXCD(reason: str) -> Callable[[Callable], Callable]:
+    """Skip test unless running on a multi-XCD AMD CDNA GPU.
+
+    Single-XCD parts and CPX-partitioned devices (which expose one XCD) are
+    skipped, since xcd_remap is a no-op there.
+    """
+    from helion._compat import get_num_xcd
+    from helion._compat import supports_amd_cdna_tunables
+
+    # Defers check to test execution time to avoid CUDA init during pytest-xdist collection.
+    return skipIfFn(
+        lambda: not (supports_amd_cdna_tunables() and get_num_xcd() > 1), reason
+    )
+
+
 def skipUnlessMTIA(reason: str) -> Callable[[Callable], Callable]:
     """Skip test unless running on MTIA hardware."""
     from ._compat import supports_mtia_tunables
@@ -391,12 +413,14 @@ def default_cute_mma_support(
     supported_impls: tuple[str, ...] = ("universal", "warp", "tcgen05"),
     warp_f16bf16: bool = True,
     tcgen05_f16bf16: bool = True,
+    tcgen05_f8: bool = True,
 ) -> SimpleNamespace:
     """Return a ``get_cute_mma_support()`` mock with tcgen05-on defaults."""
     return SimpleNamespace(
         supported_impls=supported_impls,
         warp_f16bf16=warp_f16bf16,
         tcgen05_f16bf16=tcgen05_f16bf16,
+        tcgen05_f8=tcgen05_f8,
     )
 
 
@@ -1040,7 +1064,7 @@ def _run_bound_kernel(
         if has_device_tensor or (
             isinstance(result, torch.Tensor) and result.device.type != "cpu"
         ):
-            synchronize_device(result)
+            synchronize_device()
     except Exception as exc:
         if code is None:
             try:
@@ -1053,7 +1077,7 @@ def _run_bound_kernel(
             sys.stderr.write("Failed to run kernel.\n")
         if has_device_tensor:
             try:
-                synchronize_device(None)
+                synchronize_device()
             except Exception as sync_error:
                 raise exc from sync_error
         raise
@@ -1280,6 +1304,7 @@ def run_example(
                     )
 
                     if baseline_grad is not None:
+                        assert tensor.grad is not None
                         torch.testing.assert_close(
                             tensor.grad.to(torch.float32),
                             baseline_grad.to(torch.float32),

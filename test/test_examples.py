@@ -913,6 +913,56 @@ class TestExamples(RefEagerTestBase, TestCase):
             indexing="pointer",
         )
 
+    def test_attention_output(self):
+        args = (
+            torch.randn(1, 32, 512, 64, dtype=torch.float32, device=DEVICE),
+            torch.randn(1, 32, 512, 64, dtype=torch.float32, device=DEVICE),
+            torch.randn(1, 32, 512, 64, dtype=torch.float32, device=DEVICE),
+        )
+        check_example(
+            "attention",
+            args,
+            torch.nn.functional.scaled_dot_product_attention(*args),
+            fn_name="attention_output",
+            block_sizes=[1, 64, 32],
+        )
+
+    def test_causal_attention_output(self):
+        args = (
+            torch.randn(1, 32, 512, 64, dtype=torch.float32, device=DEVICE),
+            torch.randn(1, 32, 512, 64, dtype=torch.float32, device=DEVICE),
+            torch.randn(1, 32, 512, 64, dtype=torch.float32, device=DEVICE),
+        )
+        check_example(
+            "attention",
+            args,
+            torch.nn.functional.scaled_dot_product_attention(*args, is_causal=True),
+            fn_name="causal_attention_output",
+            block_sizes=[1, 64, 32],
+        )
+
+    def test_biased_attention_output(self):
+        args = (
+            torch.randn(1, 2, 128, 64, dtype=HALF_DTYPE, device=DEVICE),
+            torch.randn(1, 2, 128, 64, dtype=HALF_DTYPE, device=DEVICE),
+            torch.randn(1, 2, 128, 64, dtype=HALF_DTYPE, device=DEVICE),
+            torch.randn(1, 2, 128, 128, dtype=HALF_DTYPE, device=DEVICE) * 0.25,
+        )
+        check_example(
+            "attention",
+            args,
+            torch.nn.functional.scaled_dot_product_attention(
+                args[0],
+                args[1],
+                args[2],
+                attn_mask=args[3],
+            ),
+            fn_name="biased_attention_output",
+            block_sizes=[1, 128, 128],
+            atol=5e-2,
+            rtol=2e-2,
+        )
+
     @patch.object(_compat, "_supports_tensor_descriptor", lambda: False)
     @skipIfXPU("failure on XPU")
     @skipIfTileIR("TileIR does not support block_ptr indexing")
@@ -974,6 +1024,19 @@ class TestExamples(RefEagerTestBase, TestCase):
             mod.ref_xsa(*args),
             fn_name="xsa_kernel",
             block_sizes=[1, 64, 32],
+        )
+
+    @xfailIfPallas("slice-based stores not yet supported")
+    def test_concat_simple(self):
+        args = (
+            torch.randn(512, 500, device=DEVICE),
+            torch.randn(512, 512, device=DEVICE),
+        )
+        check_example(
+            "concatenate",
+            args,
+            torch.cat(args, dim=1),
+            fn_name="concat2d_dim1_simple",
         )
 
     def test_concat(self):
@@ -1610,7 +1673,7 @@ class TestExamples(RefEagerTestBase, TestCase):
             fn_name="grouped_gemm_jagged",
         )
 
-    @xfailIfPallas("CUDA-specific code paths")
+    @xfailIfPallas("Pallas scatter: multiple indirect dims are not supported")
     def test_grouped_gemm_jagged_persistent(self):
         # Build small jagged grouped GEMM inputs
         torch.manual_seed(0)

@@ -31,7 +31,7 @@ from helion.runtime.triton_helpers import triton_wait_signal
 
 @triton.jit
 def _wait_progress_at_idx(progress: tl.tensor, idx: int) -> None:
-    triton_wait_signal(progress + idx, 1, 0, "acquire", "gpu", "ld", False)
+    triton_wait_signal(progress + idx, 1, 0, "acquire", "gpu", "ld", False)  # pyrefly: ignore [bad-argument-type]
 
 
 # %%
@@ -53,7 +53,7 @@ def copy_engine_all_gather_w_progress(
     Returns:
         torch.cuda.Stream: The CUDA stream used for the operation.
     """
-    backend_stream = symm_mem._get_backend_stream(priority=-1)
+    backend_stream = symm_mem._get_backend_stream(priority=-1)  # pyrefly: ignore [bad-assignment]
     assert inp.is_contiguous()
     symm_mem_group = dist.group.WORLD
     if symm_mem_group is None:
@@ -69,7 +69,7 @@ def copy_engine_all_gather_w_progress(
     assert list(output.shape) == output_shape, (list(output.shape), output_shape)
     chunks = output.chunk(world_size * splits_per_rank)
     symm_mem_hdl.barrier()
-    backend_stream.wait_stream(torch.cuda.current_stream())
+    backend_stream.wait_stream(torch.cuda.current_stream())  # pyrefly: ignore [missing-attribute]
     with torch.cuda.stream(backend_stream):
         for step in range(world_size):
             src_rank = (rank + step + 1) % world_size
@@ -85,7 +85,7 @@ def copy_engine_all_gather_w_progress(
                     val=1,
                 )
         symm_mem_hdl.barrier()
-    return backend_stream
+    return backend_stream  # pyrefly: ignore [bad-return]
 
 
 # %%

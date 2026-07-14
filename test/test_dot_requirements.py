@@ -22,6 +22,12 @@ from helion._compiler.cute.tcgen05_constants import TCGEN05_ONE_CTA_MAX_BLOCK_M
 from helion._compiler.cute.tcgen05_constants import TCGEN05_TWO_CTA_BLOCK_M
 from helion._compiler.cute.tcgen05_constants import TCGEN05_TWO_CTA_BLOCK_N
 from helion._compiler.cute.tcgen05_constants import TCGEN05_TWO_CTA_EDGE_K_TAIL_BLOCK_K
+from helion._compiler.cute.tcgen05_constants import (
+    TCGEN05_TWO_CTA_FP8_SMALL_GRID_BLOCK_M,
+)
+from helion._compiler.cute.tcgen05_constants import (
+    TCGEN05_TWO_CTA_FP8_SMALL_GRID_BLOCK_N,
+)
 from helion._testing import DEVICE
 from helion._testing import HALF_DTYPE
 from helion._testing import RefEagerTestDisabled
@@ -552,6 +558,175 @@ class TestDotRequirements(RefEagerTestDisabled, TestCase):
         )
 
     @onlyBackends(["cute"])
+    def test_cute_tcgen05_fp8_small_grid_cluster_m2_search(self) -> None:
+        """fp8 small-grid CtaGroup.TWO family enters search at the bm=128 tile.
+
+        The bm=256 full-tile cluster_m=2 projection underfills small/wave-limited
+        fp8 GEMMs (512x2048x4096 -> 16 clusters), so the fp8-validated bm=128
+        (per-CTA 64xbn) 2-CTA family from ``_tcgen05_use_2cta_instrs`` must enter
+        the autotuner: a sampled bm<=128 candidate stays at the small-grid tile
+        (bm=128/bn=128) instead of being forced to bm=256, the cluster_m=2 seed
+        heuristic is registered, and it seeds the small-grid tile. A sampled
+        bm=256 candidate still projects to the full tile (no regression).
+        """
+
+        @helion.kernel(backend="cute")
+        def cute_fp8_matmul(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+            m, k = x.size()
+            _, n = y.size()
+            out = torch.empty([m, n], dtype=torch.bfloat16, device=x.device)
+            for tile_m, tile_n in hl.tile([m, n]):
+                acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+                for tile_k in hl.tile(k):
+                    acc = hl.dot(x[tile_m, tile_k], y[tile_k, tile_n], acc=acc)
+                out[tile_m, tile_n] = acc.to(torch.bfloat16)
+            return out
+
+        args = (
+            torch.empty([512, 4096], device=DEVICE, dtype=torch.float8_e4m3fn),
+            torch.empty([4096, 2048], device=DEVICE, dtype=torch.float8_e4m3fn),
+        )
+        with (
+            patch_cute_mma_support(),
+            patch(
+                "helion.language.matmul_ops._cuda_num_sms_or_zero",
+                return_value=148,
+            ),
+        ):
+            bound = cute_fp8_matmul.bind(args)
+        spec = bound.config_spec
+
+        # The cluster_m=2 search arm is exposed with the fp8 small-grid flag set,
+        # and the seed heuristic is registered.
+        self.assertEqual(spec._tcgen05_cluster_m_search_choices, (1, 2))
+        constraints = spec._tcgen05_cluster_m2_search_constraints
+        self.assertIsNotNone(constraints)
+        self.assertTrue(constraints.allow_fp8_small_grid)
+        self.assertIn(
+            CuteTcgen05ClusterM2Heuristic.name,
+            spec.autotuner_heuristics,
+        )
+
+        # A sampled bm<=128 cluster_m=2 candidate routes to the small-grid tile,
+        # NOT the bm=256 full tile. A sampled epilogue_subtile is dropped: the
+        # tcgen05 CtaGroup.TWO MMA path does not support a fused epilogue
+        # subtile and would otherwise fail to compile and waste autotune budget.
+        small_grid = {
+            "block_sizes": [128, 128, 128],
+            "l2_groupings": [1],
+            "pid_type": "flat",
+            "tcgen05_cluster_m": 2,
+            "epilogue_subtile": 2,
+        }
+        spec.normalize(small_grid, _fix_invalid=True)
+        self.assertEqual(small_grid["tcgen05_cluster_m"], 2)
+        self.assertEqual(small_grid["pid_type"], "persistent_interleaved")
+        self.assertIsNone(small_grid.get("epilogue_subtile"))
+        self.assertEqual(
+            small_grid["block_sizes"][:2],
+            [
+                TCGEN05_TWO_CTA_FP8_SMALL_GRID_BLOCK_M,
+                TCGEN05_TWO_CTA_FP8_SMALL_GRID_BLOCK_N,
+            ],
+        )
+
+        # The full-tile cluster_m=2 path drops epilogue_subtile for the same
+        # reason.
+        full_tile_epi = {
+            "block_sizes": [256, 256, 128],
+            "l2_groupings": [1],
+            "pid_type": "flat",
+            "tcgen05_cluster_m": 2,
+            "epilogue_subtile": 2,
+        }
+        spec.normalize(full_tile_epi, _fix_invalid=True)
+        self.assertEqual(full_tile_epi["tcgen05_cluster_m"], 2)
+        self.assertIsNone(full_tile_epi.get("epilogue_subtile"))
+
+        # A sampled bm=256 cluster_m=2 candidate still projects to the full tile.
+        full_tile = {
+            "block_sizes": [256, 256, 128],
+            "l2_groupings": [1],
+            "pid_type": "flat",
+            "tcgen05_cluster_m": 2,
+        }
+        spec.normalize(full_tile, _fix_invalid=True)
+        self.assertEqual(full_tile["tcgen05_cluster_m"], 2)
+        self.assertEqual(
+            full_tile["block_sizes"][:2],
+            [TCGEN05_TWO_CTA_BLOCK_M, TCGEN05_TWO_CTA_BLOCK_N],
+        )
+
+        # The seed heuristic seeds the small-grid tile with the deep A/B pipeline.
+        seed = CuteTcgen05ClusterM2Heuristic.get_seed_config(bound.env, None)
+        self.assertEqual(seed.config.get("tcgen05_cluster_m"), 2)
+        self.assertEqual(
+            list(seed.block_sizes[:2]),
+            [
+                TCGEN05_TWO_CTA_FP8_SMALL_GRID_BLOCK_M,
+                TCGEN05_TWO_CTA_FP8_SMALL_GRID_BLOCK_N,
+            ],
+        )
+
+    @onlyBackends(["cute"])
+    def test_cute_tcgen05_fp8_small_grid_one_wave_seed_ceiling(self) -> None:
+        """The heuristic stops *seeding* the bm=128 small-grid tile once its
+        128x128 cluster grid exceeds ~one wave (clusters > num_sms // 2), while
+        the bm=128 search candidates stay reachable.
+
+        Each 128x128 cluster spans 2 CTAs, so the small-grid tile wins as a seed
+        only while clusters*2 <= num_sms (B200 cold-L2: 1.00-1.17x at <=72
+        clusters / <=0.97 waves, dropping to 0.84-0.94x from 80 clusters / 1.08
+        waves up through 4096^3). Above that ceiling the heuristic seeds the
+        bm=256 full tile instead -- but search admission is unchanged
+        (allow_fp8_small_grid stays True), so the autotuner can still explore
+        bm=128 if it wins.
+        """
+
+        @helion.kernel(backend="cute")
+        def cute_fp8_matmul(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+            m, k = x.size()
+            _, n = y.size()
+            out = torch.empty([m, n], dtype=torch.bfloat16, device=x.device)
+            for tile_m, tile_n in hl.tile([m, n]):
+                acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+                for tile_k in hl.tile(k):
+                    acc = hl.dot(x[tile_m, tile_k], y[tile_k, tile_n], acc=acc)
+                out[tile_m, tile_n] = acc.to(torch.bfloat16)
+            return out
+
+        # 2048x2048 -> (2048/128)^2 = 256 clusters, far above 148 // 2 = 74.
+        args = (
+            torch.empty([2048, 2048], device=DEVICE, dtype=torch.float8_e4m3fn),
+            torch.empty([2048, 2048], device=DEVICE, dtype=torch.float8_e4m3fn),
+        )
+        with (
+            patch_cute_mma_support(),
+            patch(
+                "helion.language.matmul_ops._cuda_num_sms_or_zero",
+                return_value=148,
+            ),
+            patch("helion.runtime.get_num_sm", return_value=148),
+        ):
+            bound = cute_fp8_matmul.bind(args)
+            spec = bound.config_spec
+
+            # Search admission is unchanged: the small-grid arm stays enabled so
+            # bm=128 candidates remain reachable during autotuning.
+            constraints = spec._tcgen05_cluster_m2_search_constraints
+            self.assertIsNotNone(constraints)
+            self.assertTrue(constraints.allow_fp8_small_grid)
+
+            # But the heuristic seeds the bm=256 full tile, NOT bm=128, because
+            # 256 clusters is well past the one-wave seed ceiling.
+            seed = CuteTcgen05ClusterM2Heuristic.get_seed_config(bound.env, None)
+        self.assertEqual(seed.config.get("tcgen05_cluster_m"), 2)
+        self.assertEqual(
+            list(seed.block_sizes[:2]),
+            [TCGEN05_TWO_CTA_BLOCK_M, TCGEN05_TWO_CTA_BLOCK_N],
+        )
+
+    @onlyBackends(["cute"])
     def test_cute_tcgen05_cluster_m1_persistent_search_caps_m_tile(self) -> None:
         """Search-only cluster_m=1 persistent configs stay on tcgen05 M tiles."""
 
@@ -922,16 +1097,27 @@ class TestDotRequirements(RefEagerTestDisabled, TestCase):
 
     @onlyBackends(["cute"])
     def test_cute_universal_matmul_lane_loop_correctness(self) -> None:
-        """Universal-MMA SMEM-load guards stay correct under a lane loop.
+        """Universal-MMA SMEM staging stays correct under a lane loop.
 
         Binds a CuTe matmul with a lane-loop configuration
         (``elements_per_thread=2``) on either the M or the N axis and
         asserts both the launch dim (recovery must divide by ``epT``)
-        and ``allclose`` against ``x @ y`` (SMEM-load guards must use
-        the physical thread coord so every lane iteration re-populates
-        sA / sB). The fix is symmetric across M and N — see the
-        ``_local_mma_coord_expr`` → ``_physical_mma_coord_expr``
-        switch in ``cute_mma._codegen_cute_mma``.
+        and ``allclose`` against ``x @ y``. Two invariants are covered,
+        both symmetric across M and N:
+
+        1. SMEM-load guards use the *physical* thread coord so every
+           lane iteration re-populates sA / sB — the
+           ``_local_mma_coord_expr`` → ``_physical_mma_coord_expr``
+           switch in ``cute_mma._codegen_cute_mma``.
+        2. The universal-MMA K-loop emits a trailing
+           ``cute.arch.sync_threads()`` after ``cute.gemm`` so this
+           iteration's SMEM reads complete before the next iteration
+           overwrites sA / sB. Without it a thread that finishes its
+           gemm early races ahead and clobbers the tile a sibling is
+           still reading (write-after-read hazard), producing
+           nondeterministic wrong values — see ``_emit_mma_pipeline``.
+           The single-run assert below caught this only intermittently;
+           the repeat loop makes the race a hard failure.
         """
         torch.manual_seed(0)
         x = torch.randn([1024, 1024], device=DEVICE, dtype=torch.float32)
@@ -953,17 +1139,6 @@ class TestDotRequirements(RefEagerTestDisabled, TestCase):
         )
         for case_name, config in cases:
             with self.subTest(case=case_name):
-                if case_name == "n_axis_lane":
-                    # CuTe DSL 4.5.1 regressed the SMEM-load guards on the
-                    # N-axis lane-loop path: ``x @ y`` mismatches at ~0.05%
-                    # of elements with a >10 absolute diff. M-axis still
-                    # passes, so the asymmetry needs investigation in the
-                    # upstream cute release before this case can be
-                    # re-enabled.
-                    self.skipTest(
-                        "CuTe 4.5.1 regression: n_axis_lane SMEM-load guard "
-                        "produces wrong values; see _codegen_cute_mma."
-                    )
                 # Fresh bind cache: the in-memory bind cache is keyed
                 # by args and other subTest iterations populate it.
                 _cute_strategy_matmul_kernel._bound_kernels.clear()
@@ -977,8 +1152,14 @@ class TestDotRequirements(RefEagerTestDisabled, TestCase):
                 with patch_cute_mma_support():
                     bound = _cute_strategy_matmul_kernel.bind((x, y))
                 bound.set_config(config)
-                result = bound(x, y)
-                torch.testing.assert_close(result, x @ y, atol=1e-1, rtol=1e-2)
+                # Repeat: the SMEM write-after-read race is timing
+                # dependent, so a single launch passes intermittently.
+                # Several launches make a missing trailing barrier a
+                # deterministic failure.
+                expected = x @ y
+                for _ in range(8):
+                    result = bound(x, y)
+                    torch.testing.assert_close(result, expected, atol=1e-1, rtol=1e-2)
 
                 code = bound.to_triton_code(config)
                 for ln in code.splitlines():

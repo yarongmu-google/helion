@@ -1,292 +1,303 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
+import os
+from pathlib import Path
+import random
 import tempfile
-import types
 import unittest
+from unittest.mock import Mock
+from unittest.mock import patch
 
 import torch
 
 import helion
+from helion._testing import DEVICE
 from helion._testing import TestCase
+from helion._testing import onlyBackends
+from helion._testing import skipIfRefEager
+from helion.autotuner._metadata.ir_features import _has_networkx_node_link
+from helion.autotuner.base_search import _warn_dataset_without_log
+from helion.autotuner.finite_search import FiniteSearch
 from helion.autotuner.logger import AutotuneLogEntry
 from helion.autotuner.logger import AutotuneLogSink
-from helion.autotuner.metrics import AutotuneMetrics
 from helion.autotuner.metrics import KernelMetadata
 import helion.language as hl
+
+_LEAN_CSV_HEADER = [
+    "run_id",
+    "timestamp_s",
+    "config_id",
+    "generation",
+    "status",
+    "perf_ms",
+    "compile_time_s",
+    "config",
+]
+
+_SIDECAR_KEYS = {
+    "run_id",
+    "kernel_name",
+    "kernel_source",
+    "input_shapes",
+    "dtypes",
+    "hardware",
+    "settings",
+    "ir_graph",
+    "configs",
+}
+
+# Mirrors the extractor gate: missing networkx should degrade to None, not fail E2E.
+_HAS_NETWORKX = _has_networkx_node_link()
 
 
 @helion.kernel(config=helion.Config(block_sizes=[16]))
 def _add_kernel(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-    """
-    A kernel that adds two tensors.
-    """
     out = torch.empty_like(x)
     for tile in hl.tile(x.size(0)):
         out[tile] = x[tile] + y[tile]
     return out
 
 
-@helion.kernel(config=helion.Config(block_sizes=[16]))
-def _other_kernel(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-    """
-    A kernel that multiplies two tensors.
-    """
-    out = torch.empty_like(x)
-    for tile in hl.tile(x.size(0)):
-        out[tile] = x[tile] * y[tile]
-    return out
+def _metadata() -> KernelMetadata:
+    return KernelMetadata(
+        kernel_name="_add_kernel",
+        kernel_source=_add_kernel.kernel_source(),
+        input_shapes="[(64,)]",
+        dtypes="['torch.float32']",
+        hardware="TestGPU",
+        settings={"static_shapes": True, "index_dtype": None},
+    )
 
 
-def _probe_kernel(x: torch.Tensor) -> torch.Tensor:
-    """
-    A bare kernel function used to build kernels with identical source but
-    different settings.
-    """
-    out = torch.empty_like(x)
-    for tile in hl.tile(x.size(0)):
-        out[tile] = x[tile] + 1
-    return out
+class TestAutotuneLogDetailsSetting(TestCase):
+    def test_autotune_log_details_opt_in(self) -> None:
+        with patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("HELION_AUTOTUNE_LOG_DETAILS", None)
+            self.assertFalse(helion.Settings().autotune_log_details)
+        with patch.dict(os.environ, {"HELION_AUTOTUNE_LOG_DETAILS": "1"}, clear=False):
+            self.assertTrue(helion.Settings().autotune_log_details)
 
+    def test_autotune_log_details_without_log_warns(self) -> None:
+        _warn_dataset_without_log.cache_clear()
+        self.addCleanup(_warn_dataset_without_log.cache_clear)
 
-class TestKernelIdentity(TestCase):
-    def test_kernel_source_stable_and_distinct(self) -> None:
-        """
-        Check if the kernel source is stable and distinct between kernels.
-        """
-        first = _add_kernel.kernel_source()
-        second = _add_kernel.kernel_source()
-        self.assertEqual(first, second)
-        self.assertIn("def _add_kernel", first)
-        self.assertNotEqual(first, _other_kernel.kernel_source())
-
-    def test_kernel_id_is_stable_hex_hash(self) -> None:
-        """
-        kernel_id is a stable 64-character sha256 hex digest.
-        """
-        first = _add_kernel.kernel_id()
-        second = _add_kernel.kernel_id()
-        self.assertEqual(first, second)
-        self.assertEqual(len(first), 64)
-        int(first, 16)  # raises ValueError if not valid hex
-
-    def test_kernel_id_distinct_between_kernels(self) -> None:
-        """
-        Different kernel source yields a different kernel_id.
-        """
-        self.assertNotEqual(_add_kernel.kernel_id(), _other_kernel.kernel_id())
-
-    def test_kernel_id_matches_manual_hash(self) -> None:
-        """
-        kernel_id equals sha256(source + settings signature).
-        """
-        payload = _add_kernel.kernel_source() + _add_kernel._settings_signature()
-        expected = hashlib.sha256(payload.encode("utf-8")).hexdigest()
-        self.assertEqual(_add_kernel.kernel_id(), expected)
-
-    def test_kernel_id_changes_with_settings(self) -> None:
-        """
-        Identical source under different codegen settings yields different ids.
-        """
-        # Same source, different code-generation settings -> different kernel_id.
-        _probe_static = helion.kernel(
-            _probe_kernel, config=helion.Config(block_sizes=[16]), static_shapes=True
+        log = Mock()
+        _warn_dataset_without_log(log)
+        _warn_dataset_without_log(log)
+        log.warning.assert_called_once_with(
+            "HELION_AUTOTUNE_LOG_DETAILS is set but HELION_AUTOTUNE_LOG is not; no "
+            "autotune dataset will be collected. Set HELION_AUTOTUNE_LOG to a base "
+            "path to enable collection."
         )
-        _probe_dynamic = helion.kernel(
-            _probe_kernel, config=helion.Config(block_sizes=[16]), static_shapes=False
+
+        other_log = Mock()
+        _warn_dataset_without_log(other_log)
+        other_log.warning.assert_called_once()
+
+
+class TestCodegenSettings(TestCase):
+    def test_codegen_settings_pinned_and_valid(self) -> None:
+        from helion.autotuner.metrics import _CODEGEN_SETTINGS
+
+        self.assertEqual(
+            _CODEGEN_SETTINGS,
+            (
+                "allow_warp_specialize",
+                "backend",
+                "debug_dtype_asserts",
+                "dot_precision",
+                "fast_math",
+                "index_dtype",
+                "pallas_interpret",
+                "persistent_reserved_sms",
+                "static_shapes",
+                "triton_do_not_specialize",
+            ),
         )
-        self.assertEqual(_probe_static.kernel_source(), _probe_dynamic.kernel_source())
-        self.assertNotEqual(_probe_static.kernel_id(), _probe_dynamic.kernel_id())
-
-    def test_kernel_id_independent_of_config(self) -> None:
-        """
-        kernel_id must NOT depend on the (autotunable) config: the same source
-        and settings under different configs share one id, so it stays constant
-        across the configs benchmarked in a run and can group their rows.
-        """
-        k16 = helion.kernel(_probe_kernel, config=helion.Config(block_sizes=[16]))
-        k32 = helion.kernel(_probe_kernel, config=helion.Config(block_sizes=[32]))
-        self.assertEqual(k16.kernel_id(), k32.kernel_id())
-
-    def test_dynamic_source_raises_oserror(self) -> None:
-        """
-        kernel_source/kernel_id raise OSError (and nothing broader) when the
-        source cannot be located, e.g. a function defined dynamically. This is
-        the contract the narrowed ``except OSError`` in the autotuner relies on.
-        """
-        namespace: dict[str, object] = {}
-        exec(
-            compile("def _dynamic(x, y):\n    return x\n", "<dynamic>", "exec"),
-            namespace,
-        )
-        fn = namespace["_dynamic"]
-        assert isinstance(fn, types.FunctionType)
-        dynamic = helion.kernel(fn, config=helion.Config(block_sizes=[16]))
-        with self.assertRaises(OSError):
-            dynamic.kernel_source()
-        with self.assertRaises(OSError):
-            dynamic.kernel_id()
+        # run_id wire format is order-sensitive.
+        self.assertEqual(_CODEGEN_SETTINGS, tuple(sorted(_CODEGEN_SETTINGS)))
+        settings_keys = helion.Settings().to_dict()
+        for name in _CODEGEN_SETTINGS:
+            self.assertIn(name, settings_keys)
 
 
-class TestMetadataSchema(TestCase):
-    def test_autotune_metrics_to_dict_has_kernel_fields(self) -> None:
-        """
-        Check if the AutotuneMetrics.to_dict() method includes the kernel fields.
-        """
-        record = AutotuneMetrics(
-            kernel_id="abc123", kernel_name="k", kernel_source="def k(): ..."
-        ).to_dict()
-        self.assertEqual(record["kernel_id"], "abc123")
-        self.assertEqual(record["kernel_name"], "k")
-        self.assertEqual(record["kernel_source"], "def k(): ...")
-        json.dumps(record)
+class TestRunId(TestCase):
+    def test_run_id_changes_with_codegen_settings(self) -> None:
+        from helion.autotuner.metrics import _CODEGEN_SETTINGS
 
-    def test_kernel_metadata_to_dict_round_trip(self) -> None:
-        """
-        Check if the KernelMetadata.to_dict() is JSON serializable.
-        """
-        record = KernelMetadata(
-            kernel_id="abc123",
-            kernel_name="k",
-            kernel_source="def k(): ...",
-            input_shapes="[(16,)]",
-            dtypes="['torch.float32']",
-            hardware="TestGPU",
-        ).to_dict()
-        self.assertEqual(record["kernel_id"], "abc123")
-        self.assertEqual(record["kernel_source"], "def k(): ...")
-        # Must be JSON serializable for the sidecar file.
-        json.dumps(record)
+        # A new _CODEGEN_SETTINGS entry without a pair here raises KeyError.
+        pairs: dict[str, tuple[object, object]] = {
+            "allow_warp_specialize": (True, False),
+            "backend": ("triton", "cute"),
+            "debug_dtype_asserts": (False, True),
+            "dot_precision": ("tf32", "ieee"),
+            "fast_math": (False, True),
+            "index_dtype": (None, torch.int64),
+            "pallas_interpret": (False, True),
+            "persistent_reserved_sms": (0, 8),
+            "static_shapes": (True, False),
+            "triton_do_not_specialize": (False, True),
+        }
+        base_settings = {name: pairs[name][0] for name in _CODEGEN_SETTINGS}
 
-    def test_default_metadata_has_empty_identity(self) -> None:
-        """
-        Default KernelMetadata carries an empty identity and still serializes,
-        so a sidecar can be written even when the kernel is unidentifiable.
-        """
-        record = KernelMetadata().to_dict()
-        self.assertEqual(record["kernel_id"], "")
-        self.assertEqual(record["kernel_source"], "")
-        json.dumps(record)
+        def _run_id(settings: dict[str, object]) -> str:
+            return KernelMetadata(
+                kernel_name="k",
+                kernel_source="def k(): ...",
+                input_shapes="[(64,)]",
+                dtypes="['torch.float32']",
+                hardware="TestGPU",
+                settings=settings,
+            ).run_id
 
-    def test_log_entry_defaults_to_empty_sample_id(self) -> None:
-        """
-        sample_id is optional on AutotuneLogEntry and defaults to empty.
-        """
-        entry = AutotuneLogEntry(
-            generation=0,
-            status="ok",
-            perf_ms=1.0,
-            compile_time=0.1,
-            config=helion.Config(block_sizes=[16]),
-        )
-        self.assertEqual(entry.sample_id, "")
+        base_run_id = _run_id(base_settings)
+        for name in _CODEGEN_SETTINGS:
+            with self.subTest(setting=name):
+                changed = {**base_settings, name: pairs[name][1]}
+                self.assertNotEqual(base_run_id, _run_id(changed), name)
 
 
 class TestAutotuneLogSink(TestCase):
-    def _entry(self, perf_ms: float, sample_id: str = "sample-xyz") -> AutotuneLogEntry:
-        """
-        Build a minimal AutotuneLogEntry for sink tests.
-
-        Only perf_ms and sample_id vary across callers; the remaining fields
-        (generation, status, compile_time, config) are fixed placeholders.
-        """
-        return AutotuneLogEntry(
-            generation=0,
-            status="ok",
-            perf_ms=perf_ms,
-            compile_time=0.5,
-            config=helion.Config(block_sizes=[16]),
-            sample_id=sample_id,
-        )
-
-    def test_sink_writes_metadata_sidecar_and_per_config_rows(self) -> None:
-        """
-        With KernelMetadata, the sink writes both outputs over a run: a JSON
-        sidecar holding the kernel identity once, and a CSV with one row per
-        recorded config. Each CSV row is stamped with the kernel_id foreign key
-        (matching the sidecar) and carries the entry's sample_id.
-        """
-        metadata = KernelMetadata(
-            kernel_id="abc123",
-            kernel_name="_add_kernel",
-            kernel_source=_add_kernel.kernel_source(),
-            input_shapes="[(64,)]",
-            dtypes="['torch.float32']",
-            hardware="TestGPU",
-        )
+    def test_dataset_logged_when_enabled(self) -> None:
+        config = helion.Config(block_sizes=[32], num_warps=4)
         with tempfile.TemporaryDirectory() as tmp:
-            base = f"{tmp}/run"
-            with AutotuneLogSink(base, metadata) as sink:
+            with AutotuneLogSink(
+                f"{tmp}/run", _metadata(), collect_dataset=True
+            ) as sink:
                 sink.start_run()
-                sink.record(self._entry(0.1))
-                sink.record(self._entry(0.2))
-                sink.end_run()
-
-            # Sidecar holds the kernel identity (stored once).
-            sidecar = json.loads(sink.meta_path.read_text(encoding="utf-8"))
-            self.assertEqual(sidecar["kernel_id"], "abc123")
-            self.assertEqual(sidecar["kernel_name"], "_add_kernel")
-            self.assertIn("def _add_kernel", sidecar["kernel_source"])
-
-            # Per-config CSV holds one row per benchmarked config + its result.
-            with sink.csv_path.open(encoding="utf-8", newline="") as f:
-                rows = list(csv.reader(f))
-            header = rows[0]
-            self.assertEqual(header[0], "kernel_id")
-            self.assertIn("timestamp_s", header)
-            data_rows = rows[1:]
-            self.assertEqual(len(data_rows), 2)
-            # kernel_id foreign key is stamped on every row, matching the sidecar.
-            kid_col = header.index("kernel_id")
-            self.assertTrue(all(row[kid_col] == "abc123" for row in data_rows))
-            # sample_id (per-(kernel, config) key) is carried from the entry.
-            sid_col = header.index("sample_id")
-            self.assertTrue(all(row[sid_col] == "sample-xyz" for row in data_rows))
-
-    def test_sink_without_metadata_writes_no_sidecar(self) -> None:
-        """
-        When the sink is created without KernelMetadata, a full run (start,
-        record, end) writes no sidecar file, since there is no kernel identity
-        to persist.
-        """
-        with tempfile.TemporaryDirectory() as tmp:
-            base = f"{tmp}/run"
-            with AutotuneLogSink(base) as sink:
-                sink.start_run()
-                sink.record(self._entry(0.1))
-                sink.end_run()
-            self.assertFalse(sink.meta_path.exists())
-
-    def test_sink_without_metadata_rows_have_empty_kernel_id(self) -> None:
-        """
-        Without metadata the CSV still has the kernel_id column, but the
-        foreign key is empty on every row (no kernel identity to attach).
-        """
-        with tempfile.TemporaryDirectory() as tmp:
-            base = f"{tmp}/run"
-            with AutotuneLogSink(base) as sink:
-                sink.start_run()
-                sink.record(self._entry(0.1))
+                config_id = sink.register_config(config)
+                assert config_id is not None
+                sink.record(
+                    AutotuneLogEntry(
+                        generation=5,
+                        status="ok",
+                        perf_ms=1.234,
+                        compile_time=0.5,
+                        config_id=config_id,
+                        config=config,
+                    )
+                )
                 sink.end_run()
             with sink.csv_path.open(encoding="utf-8", newline="") as f:
                 rows = list(csv.reader(f))
-            header = rows[0]
-            self.assertEqual(header[0], "kernel_id")
-            kid_col = header.index("kernel_id")
-            self.assertTrue(all(row[kid_col] == "" for row in rows[1:]))
+            sidecar = json.loads(
+                sink.meta_path.read_text(encoding="utf-8").splitlines()[0]
+            )
 
-    def test_record_before_open_is_noop(self) -> None:
-        """
-        Recording on a sink that was never opened writes nothing and does not
-        create the CSV file (guards against lifecycle ordering bugs).
-        """
-        with tempfile.TemporaryDirectory() as tmp:
-            base = f"{tmp}/run"
-            sink = AutotuneLogSink(base)  # not opened
-            sink.record(self._entry(0.1))
-            self.assertFalse(sink.csv_path.exists())
+        header, data = rows[0], rows[1:]
+        self.assertEqual(header, _LEAN_CSV_HEADER)
+        self.assertEqual(len(data), 1)
+
+        def cell(name: str) -> str:
+            return data[0][header.index(name)]
+
+        self.assertTrue(cell("config"))
+        self.assertIn("32", cell("config"))
+
+        self.assertEqual(set(sidecar), _SIDECAR_KEYS)
+        self.assertIn("def _add_kernel", sidecar["kernel_source"])
+
+        stored = sidecar["configs"][cell("config_id")]
+        cfg = helion.Config.from_json(json.dumps(stored))
+        self.assertEqual(cfg.block_sizes, [32])
+        self.assertEqual(cell("run_id"), sidecar["run_id"])
+
+
+@onlyBackends(["triton"])
+class TestAutotuneDatasetE2E(TestCase):
+    @skipIfRefEager("Autotuning not supported in ref eager mode")
+    def test_autotune_writes_dataset_sidecar(self) -> None:
+        configs = [
+            helion.Config(block_sizes=[32]),
+            helion.Config(block_sizes=[64]),
+        ]
+        tmpdir = tempfile.TemporaryDirectory()
+        self.addCleanup(tmpdir.cleanup)
+        base_path = Path(tmpdir.name) / "autotune_run"
+
+        with patch.dict(
+            os.environ,
+            {
+                "HELION_AUTOTUNE_LOG": str(base_path),
+                "HELION_AUTOTUNE_LOG_DETAILS": "1",
+                "HELION_AUTOTUNE_LOG_LEVEL": "0",
+            },
+        ):
+
+            @helion.kernel()
+            def add(a, b):
+                out = torch.empty_like(a)
+                for tile in hl.tile(out.size()):
+                    out[tile] = a[tile] + b[tile]
+                return out
+
+            args = (
+                torch.randn([64], device=DEVICE),
+                torch.randn([64], device=DEVICE),
+            )
+            bound_kernel = add.bind(args)
+            random.seed(123)
+            search = FiniteSearch(bound_kernel, args, configs=configs)
+            search.autotune()
+
+        csv_path = base_path.with_suffix(".csv")
+        meta_path = base_path.with_suffix(".meta.jsonl")
+        self.assertTrue(csv_path.exists())
+        self.assertTrue(meta_path.exists())
+
+        configs_by_id: dict[str, object] = {}
+        run_ids: set[str] = set()
+        meta_lines = [
+            line for line in meta_path.read_text().splitlines() if line.strip()
+        ]
+        self.assertGreater(len(meta_lines), 0)
+        for line in meta_lines:
+            record = json.loads(line)
+            self.assertIn("kernel_source", record)
+            configs_by_id.update(record["configs"])
+            run_ids.add(record["run_id"])
+            if _HAS_NETWORKX:
+                ir = record["ir_graph"]
+                self.assertIsNotNone(ir)
+                self.assertTrue(ir["nodes"])
+                self.assertIn("edges", ir)
+                self.assertTrue(ir["directed"])
+            else:
+                self.assertIsNone(record["ir_graph"])
+        self.assertGreater(len(configs_by_id), 0)
+
+        rows = list(csv.reader(csv_path.read_text().splitlines()))
+        header, data = rows[0], rows[1:]
+        self.assertGreater(len(data), 0)
+        config_id = data[0][header.index("config_id")]
+        self.assertIn(config_id, configs_by_id)
+        self.assertIn(data[0][header.index("run_id")], run_ids)
+        decoded_config = helion.Config.from_json(json.dumps(configs_by_id[config_id]))
+        self.assertIn(decoded_config.block_sizes, ([32], [64]))
+
+
+class TestIrGraphDegradation(TestCase):
+    def test_ir_graph_none_without_device_ir(self) -> None:
+        meta = KernelMetadata(kernel_name="k", kernel_source="src")
+        record = meta.to_dict()
+        self.assertIn("ir_graph", record)
+        self.assertIsNone(record["ir_graph"])
+
+    def test_run_id_excludes_device_ir(self) -> None:
+        fields = {
+            "kernel_name": "k",
+            "kernel_source": "src",
+            "input_shapes": "[s0]",
+            "dtypes": "torch.float32",
+            "hardware": "H100",
+            "settings": {},
+        }
+        self.assertEqual(
+            KernelMetadata(**fields).run_id,
+            KernelMetadata(**fields, _device_ir=object()).run_id,
+        )
 
 
 if __name__ == "__main__":

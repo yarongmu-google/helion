@@ -27,6 +27,8 @@ from helion._testing import skipIfRefEager
 from helion._testing import skipIfTileIR
 from helion._testing import skipIfXPU
 from helion._testing import skipUnlessTensorDescriptor
+from helion._testing import xfailIfCute
+from helion._testing import xfailIfPallas
 import helion.language as hl
 
 _LARGE_BF16_SHAPE = (51200, 51200)
@@ -1429,6 +1431,52 @@ class TestIndexing(RefEagerTestBase, TestCase):
         expected = torch.sum(x, dim=1)
         torch.testing.assert_close(result, expected)
 
+    @onlyBackends(["triton"])
+    @skipUnlessTensorDescriptor("TensorDescriptor not supported")
+    @skipIfTileIR("block-size overshoot is gated to the triton backend")
+    def test_tensor_descriptor_rejects_overshoot_dynamic_dim(self):
+        # Matmul block-size overshoot lets the autotuner pick an M/N block
+        # larger than a small dimension. When that dimension is dynamic (here M
+        # is left unspecialized) the static block_size > dim_size guard cannot
+        # fire, so without the symbolic-dim hint check the overshooting block
+        # would ride onto the TMA path and build a descriptor with
+        # boxDim > tensorDim -- an invalid TMA descriptor that crashes at
+        # runtime with a misaligned-address error. The overshooting dimension
+        # must instead fall back to pointer indexing.
+        @helion.kernel(static_shapes=False)
+        def matmul(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+            m, k = a.shape
+            k2, n = b.shape
+            hl.specialize(k)
+            hl.specialize(n)
+            out = torch.empty([m, n], dtype=torch.float32, device=a.device)
+            for tile_m, tile_n in hl.tile([m, n]):
+                acc = hl.zeros([tile_m, tile_n], dtype=torch.float32)
+                for tile_k in hl.tile(k):
+                    acc = hl.dot(a[tile_m, tile_k], b[tile_k, tile_n], acc=acc)
+                out[tile_m, tile_n] = acc
+            return out
+
+        # M=16 is dynamic; block_m=64 overshoots it.
+        a = torch.randn([16, 64], dtype=HALF_DTYPE, device=DEVICE)
+        b = torch.randn([64, 64], dtype=HALF_DTYPE, device=DEVICE)
+        code, result = code_and_output(
+            matmul,
+            (a, b),
+            block_sizes=[64, 64, 32],
+            indexing="tensor_descriptor",
+        )
+        torch.testing.assert_close(result, (a @ b).float(), atol=1e-1, rtol=1e-1)
+
+        # _BLOCK_SIZE_0 is the (overshooting) M tile; it must never appear inside
+        # a tensor-descriptor box. Non-overshooting tensors (e.g. b) may still
+        # use a descriptor.
+        descriptor_lines = [
+            line for line in code.splitlines() if "make_tensor_descriptor(" in line
+        ]
+        for line in descriptor_lines:
+            self.assertNotIn("_BLOCK_SIZE_0", line)
+
     def test_2d_slice_index(self):
         """Test both setter from scalar and getter for [:,i]"""
 
@@ -1856,6 +1904,108 @@ class TestIndexing(RefEagerTestBase, TestCase):
 
         result = kernel(buf.clone(), zeros)
         expected = torch.zeros([N], device=DEVICE)
+        torch.testing.assert_close(result, expected)
+
+    @xfailIfPallas("slice-based stores not yet supported")
+    def test_partial_slice(self):
+        """Test both setter and getter for partial slices [:n] and [n:]"""
+
+        @helion.kernel(autotune_effort="none")
+        def kernel(src: torch.Tensor, dst: torch.Tensor) -> torch.Tensor:
+            for tile in hl.tile(src.size(0)):
+                dst[tile, :16] = src[tile, :16]
+                dst[tile, 16:] = src[tile, 16:]
+            return dst
+
+        N = 64
+        src = torch.randn([N, 32], device=DEVICE)
+        dst = torch.zeros([N, 32], device=DEVICE)
+        result = kernel(src, dst)
+        torch.testing.assert_close(result, src)
+
+    @xfailIfPallas("slice-based stores not yet supported")
+    def test_partial_slice_dim0(self):
+        """Test partial slices on dim 0 (the tiled dimension)"""
+
+        @helion.kernel(autotune_effort="none")
+        def kernel(src: torch.Tensor, dst: torch.Tensor) -> torch.Tensor:
+            for tile in hl.tile(src.size(1)):
+                dst[:32, tile] = src[:32, tile]
+                dst[32:, tile] = src[32:, tile]
+            return dst
+
+        src = torch.randn([64, 32], device=DEVICE)
+        dst = torch.zeros([64, 32], device=DEVICE)
+        result = kernel(src, dst)
+        torch.testing.assert_close(result, src)
+
+    @xfailIfPallas("slice-based stores not yet supported")
+    def test_partial_slice_unaligned(self):
+        """Test non-power-of-2 slice boundary for load and store"""
+
+        @helion.kernel(autotune_effort="none")
+        def kernel(src: torch.Tensor, dst: torch.Tensor) -> torch.Tensor:
+            for tile in hl.tile(src.size(0)):
+                dst[tile, :13] = src[tile, :13]
+            return dst
+
+        src = torch.randn([16, 16], device=DEVICE)
+        dst = torch.zeros([16, 13], device=DEVICE)
+        result = kernel(src, dst)
+        torch.testing.assert_close(result, src[:, :13])
+
+    # NOTE: concat and unaligned_multi use multiple differently-sized
+    # partial slices in one kernel.  CuTe's thread axis assignment
+    # collides when two reduction blocks of different sizes map to the
+    # same axis.  Triton-only until the CuTe thread mapping is fixed.
+
+    @xfailIfCute("CuTe thread axis collision with differently-sized reduction blocks")
+    @xfailIfPallas("slice-based stores not yet supported")
+    def test_partial_slice_unaligned_multi(self):
+        """Test multiple non-power-of-2 slices in one kernel"""
+
+        @helion.kernel(autotune_effort="none")
+        def kernel(
+            src: torch.Tensor, dst: torch.Tensor, out: torch.Tensor
+        ) -> tuple[torch.Tensor, torch.Tensor]:
+            for tile in hl.tile(src.size(0)):
+                dst[tile, :13] = 1.0
+                dst[tile, 13:] = 2.0
+                out[tile, :] = src[tile, :13]
+            return dst, out
+
+        src = torch.randn([16, 16], device=DEVICE)
+        dst = torch.zeros([16, 16], device=DEVICE)
+        out = torch.zeros([16, 13], device=DEVICE)
+        dst_result, out_result = kernel(src, dst, out)
+        expected_dst = torch.zeros([16, 16], device=DEVICE)
+        expected_dst[:, :13] = 1.0
+        expected_dst[:, 13:] = 2.0
+        torch.testing.assert_close(dst_result, expected_dst)
+        torch.testing.assert_close(out_result, src[:, :13])
+
+    @xfailIfCute("CuTe thread axis collision with differently-sized reduction blocks")
+    @xfailIfPallas("slice-based stores not yet supported")
+    def test_partial_slice_concat(self):
+        """Test concat via full-slice load + partial-slice store"""
+
+        @helion.kernel(autotune_effort="none")
+        def kernel(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+            out = torch.empty(
+                [x.size(0), x.size(1) + y.size(1)],
+                device=x.device,
+                dtype=x.dtype,
+            )
+            n1 = x.size(1)
+            for tile_m in hl.tile(x.size(0)):
+                out[tile_m, :n1] = x[tile_m, :]
+                out[tile_m, n1:] = y[tile_m, :]
+            return out
+
+        x = torch.randn([32, 16], device=DEVICE)
+        y = torch.randn([32, 24], device=DEVICE)
+        result = kernel(x, y)
+        expected = torch.cat([x, y], dim=1)
         torch.testing.assert_close(result, expected)
 
     def test_broadcast(self):
