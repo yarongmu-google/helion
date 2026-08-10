@@ -13,14 +13,14 @@ from typing import TYPE_CHECKING
 import sympy
 import torch
 
+from ... import exc
+
 if TYPE_CHECKING:
     from ...runtime.config import Config
     from ..compile_environment import CompileEnvironment
     from ..device_ir import GraphInfo
     from ..host_function import SymbolOrigin
     from ..tile_dispatch import TileStrategyDispatch
-    from .gather import GatherPlan
-    from .gather import ScatterPlan
 
 
 @dataclass
@@ -69,20 +69,6 @@ class NonePattern(IndexingPattern):
 @dataclass
 class TensorIndexPattern(IndexingPattern):
     """Tensor-valued index - no tiling. Resolved for indirect load/store codegen."""
-
-
-@dataclass
-class IndirectGatherPattern(IndexingPattern):
-    """Indirect gather load ``table[idx, ...]`` - no tiling on this dim."""
-
-    plan: GatherPlan
-
-
-@dataclass
-class IndirectScatterPattern(IndexingPattern):
-    """Indirect scatter store ``table[idx, ...]`` - no tiling on this dim."""
-
-    plan: ScatterPlan
 
 
 @dataclass
@@ -140,8 +126,11 @@ def _analyze_indexing(node: torch.fx.Node, config: Config) -> None:
     indexing_patterns = _analyze_subscript_patterns(
         tensor_val, list(subscript), dim_tilings, node, config
     )
-    _resolve_tensor_index_patterns(
-        node, tensor_val, list(subscript), indexing_patterns, config
+    from .memory_access import MEMORY_ACCESS_META
+    from .memory_access import build_memory_access
+
+    node.meta[MEMORY_ACCESS_META] = build_memory_access(
+        node, tensor_val, list(subscript), indexing_patterns
     )
     node.meta["indexing_patterns"] = indexing_patterns
 
@@ -214,6 +203,21 @@ def _analyze_subscript_patterns(
     return patterns
 
 
+def _is_supported_slice(idx: slice) -> bool:
+    """Contiguous slices with static (int/SymInt) or open bounds."""
+    if idx.step is not None and idx.step != 1:
+        return False
+    for bound in (idx.start, idx.stop):
+        if bound is None:
+            continue
+        if isinstance(bound, int) and bound >= 0:
+            continue
+        if isinstance(bound, torch.SymInt):
+            continue
+        return False
+    return True
+
+
 def _detect_indexing_pattern(
     idx: object,
     tensor: torch.Tensor,
@@ -261,10 +265,8 @@ def _detect_indexing_pattern(
         return ArbitraryIndexPattern(idx)
 
     if isinstance(idx, slice):
-        if idx != slice(None):
-            raise AssertionError(
-                f"Arbitrary slice expr {slice} not supported in Pallas backend yet"
-            )
+        if not _is_supported_slice(idx):
+            raise exc.BackendUnsupported("pallas", f"slice expr {idx!r}")
         return ArbitrarySlicePattern(idx)
 
     if isinstance(idx, (int, torch.SymInt)):
@@ -314,7 +316,7 @@ def _update_tiling_decision(
 
     elif isinstance(pattern, ArbitrarySlicePattern):
         if pattern.slice != slice(None):
-            # fow now we only support the `[:]` slice pattern
+            # bounded slice: fixed subrange of the dim, must stay untiled
             _disallow_tiling()
 
     elif isinstance(pattern, (ArbitraryIndexPattern, TensorIndexPattern)):
@@ -386,42 +388,6 @@ def resident_block_elements(
         # Advance only on patterns that consume a tensor dim; NonePattern doesn't.
         tdim += 1
     return elements
-
-
-def _resolve_tensor_index_patterns(
-    node: torch.fx.Node,
-    tensor: torch.Tensor,
-    subscript: list[object],
-    patterns: list[IndexingPattern],
-    config: Config,
-) -> None:
-    """Replace TensorIndexPattern with Pallas indirect load/store patterns."""
-    positions = [i for i, p in enumerate(patterns) if isinstance(p, TensorIndexPattern)]
-    if not positions:
-        return
-
-    from ...language import memory_ops
-
-    if node.target is memory_ops.load:
-        from .gather import build_gather_plan
-
-        plan = build_gather_plan(tensor, subscript, positions, patterns, config)
-        for i in positions:
-            patterns[i] = IndirectGatherPattern(plan=plan)
-        return
-
-    if node.target is memory_ops.store:
-        from .gather import build_scatter_plan
-
-        plan = build_scatter_plan(tensor, subscript, positions)
-        for i in positions:
-            patterns[i] = IndirectScatterPattern(plan=plan)
-        return
-
-    op_name = getattr(node.target, "__name__", str(node.target))
-    raise NotImplementedError(
-        f"Pallas: tensor-indexed memory op is not supported for op={op_name}."
-    )
 
 
 # Helper functions moved from memory_ops.py

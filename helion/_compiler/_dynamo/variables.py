@@ -379,7 +379,7 @@ class HelionKernelVariable(VariableTracker):
         hop_kwargs = {
             "kernel_idx": self._kernel_idx,
             "constant_args": constant_args,
-            "tensor_args": ConstDictVariable(tensor_args, dict).as_proxy(),
+            "tensor_args": ConstDictVariable(tensor_args).as_proxy(),
             "output_spec": output_spec,
         }
 
@@ -405,7 +405,7 @@ class HelionKernelVariable(VariableTracker):
             else None,
         )
         result = _call_function_and_unflatten_output(
-            tx,
+            cast("Any", tx),
             helion_kernel_wrapper_mutation,
             (),
             hop_kwargs,

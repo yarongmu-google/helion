@@ -825,6 +825,39 @@ def _kl_div_shapes(
     return out
 
 
+def _xsa_shapes(
+    num_shapes: int | None = None,
+) -> list[tuple[str, tuple[Any, ...]]]:
+    # (B, H, T, D). head_dim=256 matches production TPU attention workloads
+    # (matches `flash_attention` in the sweep) and sidesteps a Mosaic
+    # "Invalid vector type for load" bug that the autotune-baseline path
+    # hit at head_dim=64.
+    configs = [(2, 32, 1024, 256), (4, 32, 2048, 256)]
+    if num_shapes is not None:
+        configs = configs[:num_shapes]
+    out: list[tuple[str, tuple[Any, ...]]] = []
+    for b, h, t, d in configs:
+        # bfloat16, not float16: TPU Mosaic hits an "Invalid vector type for
+        # load" codegen error on fp16 attention shapes (the vector<8x128x2xf16>
+        # layout fp16 forces). bfloat16 sidesteps this; it's also the dtype
+        # test_examples.test_xsa uses (via HALF_DTYPE on TPU) and the sweep
+        # convention for every other kernel here.
+        q = torch.randn(b, h, t, d, device=DEVICE, dtype=torch.bfloat16)
+        k = torch.randn(b, h, t, d, device=DEVICE, dtype=torch.bfloat16)
+        v = torch.randn(b, h, t, d, device=DEVICE, dtype=torch.bfloat16)
+        out.append((f"[{b},{h},{t},{d}]", (q, k, v)))
+    return out
+
+
+def _xsa_baseline(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
+    # Lazy import so collection works without torch_tpu present at module
+    # load. ref_xsa is the manual matmul+softmax+epilogue reference; matches
+    # what test_examples checks against.
+    from examples.xsa import ref_xsa
+
+    return ref_xsa(q, k, v)
+
+
 # Kernel mappings for TPU/Pallas benchmarks.
 # Format: kernel_name -> (module_file, kernel_fn_name, baseline_fn, shapes_fn,
 #                         max_mismatch_pct)
@@ -1047,6 +1080,13 @@ KERNEL_MAPPINGS: dict[str, KernelMapping] = {
         "matmul_bias_residual_gelu_cast",
         _epilogue_subtiling_residual_gelu_baseline,
         _epilogue_subtiling_shapes,
+        None,
+    ),
+    "xsa": (
+        "xsa",
+        "xsa_kernel",
+        _xsa_baseline,
+        _xsa_shapes,
         None,
     ),
 }
