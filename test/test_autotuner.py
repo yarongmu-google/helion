@@ -4197,7 +4197,7 @@ class TestCuteAutotuner(TestCase):
         )
         self.assertEqual(
             set(flash_fragments[FLASH_STAT_TRANSPORT_KEY].choices),
-            {"ring2", "single"},
+            {"ring2", "single", "single_final"},
         )
         self.assertEqual(
             set(flash_fragments[FLASH_MMA_INTERLEAVE_KEY].choices), {False, True}
@@ -4206,7 +4206,12 @@ class TestCuteAutotuner(TestCase):
             flash_fragments[FLASH_MMA_INTERLEAVE_KEY].search_choices, (True,)
         )
         self.assertEqual(
-            flash_fragments[FLASH_STAT_TRANSPORT_KEY].search_choices, ("single",)
+            flash_fragments[FLASH_STAT_TRANSPORT_KEY].search_choices,
+            ("single", "ring2", "single_final"),
+        )
+        self.assertIn(
+            "ring2",
+            flash_fragments[FLASH_STAT_TRANSPORT_KEY].pattern_neighbors("single"),
         )
         self.assertEqual(
             set(flash_fragments[FLASH_EXP2_PACKET_KEY].search_choices or ()),
@@ -4735,6 +4740,7 @@ class TestCuteAutotuner(TestCase):
             ("stage",),
         )
         common_very_long_dense_search_choices = {
+            FLASH_PERSISTENT_KEY: (True, False),
             FLASH_PERSISTENT_CTAS_PER_SM_KEY: (1,),
             FLASH_CORR_TILE_SIZE_KEY: (8, 16),
             FLASH_SOFTMAX_DISC_KEY: (False,),
@@ -4915,7 +4921,8 @@ class TestCuteAutotuner(TestCase):
             long_dense_fragments[FLASH_SOFTMAX_DISC_KEY].search_choices, (True, False)
         )
         self.assertEqual(
-            long_dense_fragments[FLASH_PERSISTENT_KEY].search_choices, (True,)
+            long_dense_fragments[FLASH_PERSISTENT_KEY].search_choices,
+            (True, False),
         )
         self.assertEqual(
             long_dense_fragments[FLASH_P_STORE_REP_KEY].search_choices, (16, 32)
@@ -5300,7 +5307,10 @@ class TestCuteAutotuner(TestCase):
                 random_long[FLASH_EXP2_PACKET_KEY],
                 {"1x1", "4x1", "4x2", "8x1", "8x2"},
             )
-            self.assertIn(random_long[FLASH_STAT_TRANSPORT_KEY], {"ring2", "single"})
+            self.assertIn(
+                random_long[FLASH_STAT_TRANSPORT_KEY],
+                {"ring2", "single", "single_final"},
+            )
             self.assertIn(random_long[FLASH_MMA_INTERLEAVE_KEY], {False, True})
             self.assertEqual(
                 random_long[FLASH_Q_TILE_COUNT_KEY],
@@ -5310,7 +5320,7 @@ class TestCuteAutotuner(TestCase):
             self.assertIn(random_long[FLASH_RESCALE_CHUNK_COLS_KEY], {16, 32})
             self.assertEqual(random_long[FLASH_S_STAGE_KEY], 2)
             self.assertIn(random_long[FLASH_KV_STAGE_KEY], {2, 3, 4, 6, 8})
-            self.assertTrue(random_long[FLASH_PERSISTENT_KEY])
+            self.assertIn(random_long[FLASH_PERSISTENT_KEY], {False, True})
             self.assertIn(random_long[FLASH_PERSISTENT_CTAS_PER_SM_KEY], {1, 2, 3, 4})
             self.assertIn(random_long[FLASH_P_STORE_REP_KEY], {16, 32})
             self.assertIn(random_long[FLASH_S_LOAD_REP_KEY], {16, 32})
@@ -5328,7 +5338,12 @@ class TestCuteAutotuner(TestCase):
             )
             self.assertTrue(random_long[FLASH_PACKED_REDUCE_KEY])
             effective_values = flash_effective_config_values(
-                flash_config_from_config(random_long, 64, 64)
+                flash_config_from_config(
+                    random_long,
+                    64,
+                    64,
+                    standard_dense_output=True,
+                )
             )
             for key, value in effective_values.items():
                 self.assertEqual(random_long[key], value, key)
@@ -6166,6 +6181,35 @@ class TestConfigFilter(TestCase):
             torch.randn([128], device=DEVICE),
         )
         return add, args
+
+    def test_finite_search_accepts_benchmark_provider_factory(self) -> None:
+        class CustomBenchmarkProvider(LocalBenchmarkProvider):
+            def __init__(
+                self, *args: object, context: object, **kwargs: object
+            ) -> None:
+                self.context = context
+                super().__init__(*args, **kwargs)  # pyrefly: ignore[bad-argument-type]
+
+        configs = [
+            helion.Config(block_sizes=[16], num_warps=4),
+            helion.Config(block_sizes=[32], num_warps=4),
+        ]
+        add, args = self._make_kernel_and_args()
+        context = object()
+        provider_factory = functools.partial(
+            CustomBenchmarkProvider,
+            context=context,
+        )
+        search = FiniteSearch(
+            add.bind(args),
+            args,
+            configs=configs,
+            benchmark_provider_cls=provider_factory,
+        )
+        search._prepare()
+
+        self.assertIsInstance(search.benchmark_provider, CustomBenchmarkProvider)
+        self.assertIs(search.benchmark_provider.context, context)
 
     def test_autotune_config_filter_skips_filtered_configs(self) -> None:
         """Filtered configs produce status='filtered' and perf=inf."""

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import abc
-import ast
+import collections
 import dataclasses
 import functools
 import logging
@@ -120,6 +120,37 @@ def dedupe_preserve_order(items: list[str]) -> list[str]:
     return out
 
 
+def _validate_subscript_indices(index: list[object]) -> int:
+    """Validate supported kernel-tensor indices and count narrowing entries."""
+    narrowed = 0
+    for value in index:
+        if value is None or (
+            isinstance(value, slice)
+            and (value.start, value.stop, value.step) == (None, None, None)
+        ):
+            continue
+        if isinstance(value, int):
+            valid = value >= 0
+        elif isinstance(value, slice):
+            valid = (
+                value.step in (None, 1)
+                and isinstance(value.start, int)
+                and isinstance(value.stop, int)
+                and value.start >= 0
+                and value.stop > value.start
+            )
+        else:
+            valid = isinstance(value, torch.SymInt) or (
+                isinstance(value, torch.Tensor) and value.ndim == 1
+            )
+        if not valid:
+            raise exc.InvalidIndexingType(repr(value))
+        narrowed += 1
+    if narrowed > 1:
+        raise exc.InvalidIndexingType(repr(index))
+    return narrowed
+
+
 class Backend(abc.ABC):
     """Abstract base class for Helion code generation backends.
 
@@ -139,6 +170,17 @@ class Backend(abc.ABC):
     def experimental(self) -> bool:
         """Whether this backend is experimental and should emit a warning."""
         return True
+
+    @property
+    def supports_eager_prepared_call(self) -> bool:
+        """Whether eager calls may reuse a resolved ``BoundKernel`` directly.
+
+        The prepared call still enters the backend's generated host wrapper; it
+        only bypasses Helion's repeated binding and specialization lookup.  The
+        default is conservative because some backends own call-time behavior in
+        :meth:`Kernel.__call__` before the wrapper is reached.
+        """
+        return False
 
     @property
     def max_tensor_numel(self) -> int | None:
@@ -370,6 +412,10 @@ class Backend(abc.ABC):
         """Whether tile strategies must emit explicit masks for all tiles."""
         return False
 
+    def launches_surplus_tile_threads(self) -> bool:
+        """Whether an axis may be launched wider than the tile it indexes."""
+        return False
+
     def supports_config_key(self, key: str) -> bool:
         from ..autotuner.config_spec import BACKEND_SPECIFIC_KEYS
 
@@ -385,6 +431,34 @@ class Backend(abc.ABC):
     ) -> None:
         """Called during `type_propagation` when processing a `load` memory op on fake tensors"""
         return
+
+    def fake_subscript_shape(
+        self,
+        tensor: torch.Tensor,
+        index: list[object],
+    ) -> list[int | torch.SymInt]:
+        """Validate a kernel-tensor subscript and return its fake output shape.
+
+        All backends support shape-only ``None`` and full-slice indexing.
+        Backends that implement narrowing override this method so unsupported
+        indexing cannot reach backend codegen that assumes shape-only views.
+        """
+        if _validate_subscript_indices(index):
+            raise exc.BackendUnsupported(
+                self.name, "narrowing kernel-tensor subscripts"
+            )
+
+        input_size = collections.deque(tensor.size())
+        output_size: list[int | torch.SymInt] = []
+        for value in index:
+            if value is None:
+                output_size.append(1)
+            elif isinstance(value, slice) and repr(value) == "slice(None, None, None)":
+                output_size.append(input_size.popleft())
+            else:
+                raise exc.InvalidIndexingType(repr(value))
+        assert len(input_size) == 0
+        return output_size
 
     def adjust_block_size_constraints(
         self,
@@ -2947,6 +3021,7 @@ def _grouped_rank3_specialized_mma_plan(
 def _analyzed_specialized_mma_plan(
     node: torch.fx.Node,
     *,
+    fn: DeviceFunction,
     k_block_id: int,
     bk: int,
     config: Config,
@@ -2955,6 +3030,7 @@ def _analyzed_specialized_mma_plan(
     from .cute.cute_mma import _choose_mma_impl
     from .cute.cute_mma import _mma_tiles_are_static_full
     from .cute.cute_mma import analyze_cute_mma_node
+    from .cute.cute_mma import ensure_tcgen05_pair_epilogue_plan
 
     candidate = analyze_cute_mma_node(node)
     if (
@@ -2984,6 +3060,16 @@ def _analyzed_specialized_mma_plan(
         input_device=lhs_val.device,
     )
     if mma_impl == "universal":
+        return None
+    if mma_impl == "tcgen05" and not ensure_tcgen05_pair_epilogue_plan(
+        fn,
+        node,
+        candidate,
+        bm=bm,
+        bn=bn,
+        bk=bk,
+        config=config,
+    ):
         return None
     return _SpecializedMmaPlan(mma_impl, *root_mn_block_ids)
 
@@ -3018,6 +3104,7 @@ def _kernel_specialized_mma_plan(
         for node in graph_info.graph.nodes:
             plan = _analyzed_specialized_mma_plan(
                 node,
+                fn=fn,
                 k_block_id=block_ids[0],
                 bk=bk,
                 config=config,

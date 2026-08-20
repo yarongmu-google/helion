@@ -595,11 +595,13 @@ class _Settings:
         )
     )
     autotune_config_filter: Callable[[Config], Config | None] | None = None
+    pallas_collective_id: int | None = None
     pallas_interpret: bool = dataclasses.field(
         default_factory=functools.partial(
             _env_get_bool, "HELION_PALLAS_INTERPRET", False
         )
     )
+    pallas_topk_recall_target: float = 0.99
     triton_do_not_specialize: bool = dataclasses.field(
         default_factory=functools.partial(
             _env_get_bool, "HELION_TRITON_DO_NOT_SPECIALIZE", False
@@ -717,9 +719,18 @@ class Settings(_Settings):
             "based on a quantile of initial compile times (with a lower bound). Lower bound and quantile "
             "are set by the effort profile. Set HELION_AUTOTUNE_ADAPTIVE_TIMEOUT=0 to disable."
         ),
+        "pallas_collective_id": (
+            "Optional Pallas collective namespace override. Distributed kernels "
+            "derive a stable ID automatically; set this only when otherwise "
+            "identical kernels use incompatible runtime communication groups."
+        ),
         "pallas_interpret": (
             "If True, run Pallas kernels in interpret mode on CPU (no TPU needed). "
             "Defaults to HELION_PALLAS_INTERPRET env var."
+        ),
+        "pallas_topk_recall_target": (
+            "Recall target for the Pallas approximate top-k lowering. Must be in "
+            "(0, 1]; use 1.0 when exact top-k results are required. Default 0.99."
         ),
         "triton_do_not_specialize": (
             "If True, pass do_not_specialize for every dynamic size/stride/symbol "
