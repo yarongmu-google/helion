@@ -78,7 +78,7 @@ class TritonBackend(Backend):
         return host_str
 
     def supports_config_key(self, key: str) -> bool:
-        if key == "cross_loop_schedule":
+        if key == "cross_loop_pipeline":
             from ..._compat import is_hip
 
             return self.name == "triton" and not is_hip()
@@ -427,6 +427,7 @@ class TritonBackend(Backend):
         *,
         block_size_var: str | None = None,
         threads_in_group: int | None = None,
+        dtype: torch.dtype | None = None,
     ) -> str:
         if reduction_type in {"sum", "max", "min"}:
             return f"tl.{reduction_type}({input_name}, {dim})"
@@ -448,6 +449,7 @@ class TritonBackend(Backend):
         block_size_var: str | None = None,
         index_dtype: torch.dtype | None = None,
         threads_in_group: int | None = None,
+        dtype: torch.dtype | None = None,
     ) -> str:
         helper = "max" if reduction_type == "argmax" else "min"
         return (
@@ -463,6 +465,7 @@ class TritonBackend(Backend):
         acc_index: str,
         value: str,
         index: str,
+        dtype: torch.dtype | None = None,
     ) -> list[str]:
         helper = "maximum" if reduction_type == "argmax" else "minimum"
         return [

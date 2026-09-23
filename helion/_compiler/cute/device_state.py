@@ -20,10 +20,18 @@ if TYPE_CHECKING:
     from ..tile_strategy import DeviceLoopState
     from .attention_plan import AttentionScorePlan
     from .aux_tensor import Tcgen05AuxTensorDescriptor
+    from .chunk_prepare import CuteChunkPreparePlan
+    from .chunk_recurrence import CuteChunkRecurrencePlan
     from .cute_epilogue import Tcgen05GroupedTailEpilogueMatch
+    from .cute_flash_bwd import AttentionBwdMatch
     from .cute_mma import _Tcgen05AuxPipelinePlan
     from .cute_mma import _Tcgen05SchedPipelinePlan
+    from .direct_affine_candidate import DirectAffineCandidate
+    from .direct_affine_plan import DirectAffinePlan
+    from .fixed_token_rank1_recurrence import CuteFixedTokenRank1Plan
     from .fragment_epilogue import Tcgen05FragmentEpiloguePlan
+    from .single_token_rank1_recurrence import CuteSingleTokenRank1Plan
+    from .split_single_token_rank1_recurrence import CuteSplitSingleTokenRank1Plan
     from .tcgen05_lifecycle import Tcgen05LifecycleContext
     from .tcgen05_pure_matmul import Tcgen05PureMatmulObjectModel
 
@@ -587,6 +595,30 @@ class CuteDeviceFunctionState:
         # masking for that axis (the serial loop already covers exactly [0, C)).
         # Empty except while re-materializing such an operand load.
         self.matmul_operand_index_override: dict[int, str] = {}
+        # Grouped two-phase lowering for structurally proven fixed-token,
+        # split-input BF16 rank-1 recurrences.
+        self.fixed_token_rank1_plan: CuteFixedTokenRank1Plan | None = None
+        # Names-agnostic affine regions awaiting late address and ownership
+        # proofs. Discovery alone never changes the ordinary lowering.
+        self.direct_affine_candidates: tuple[DirectAffineCandidate, ...] = ()
+        # Installed only after late generated-address and effect proofs succeed.
+        # Its CTA shape is authoritative because the direct lowering replaces
+        # the ordinary lane topology.
+        self.direct_affine_plan: DirectAffinePlan | None = None
+        # Packed one-warp lowering for structurally proven split-input T=1
+        # BF16 rank-1 recurrences.  It precedes the grouped fixed-token path.
+        self.split_single_token_rank1_plan: CuteSplitSingleTokenRank1Plan | None = None
+        # Whole-body packed lowering for a structurally proven single-token
+        # BF16 rank-1 state recurrence. The plan is absent by default and is
+        # additionally gated by the user-facing fast_math setting.
+        self.single_token_rank1_plan: CuteSingleTokenRank1Plan | None = None
+        # Whole-root BT16 five-factor prepare schedule.  This is installed only
+        # after the complete semantic graph and packed workspace ABI match.
+        self.chunk_prepare_plan: CuteChunkPreparePlan | None = None
+        # Whole-root BT16 KDA recurrence/output schedule. Like the
+        # prepare plan, this exists only after the complete semantic graph and
+        # packed workspace ABI have matched.
+        self.chunk_recurrence_plan: CuteChunkRecurrencePlan | None = None
         # Set by the backend's flash-attention detector when the fused
         # tcgen05 QK->softmax->PV path is active (HELION_CUTE_FLASH). Holds the
         # tile_n device-loop block ids. The dedicated flash codegen emits the
@@ -597,6 +629,10 @@ class CuteDeviceFunctionState:
         # Launch block thread count for the flash path: 128 (single-warpgroup
         # Stage-3) or 256 (Stage-4 warp-spec, double-buffered-S overlap).
         self.attention_flash_threads: int = 128
+        # Set by the backward-attention detector (cute_flash_bwd.py): the
+        # matched kernel facts and the inner Q-loop block ids.
+        self.attention_flash_bwd_match: AttentionBwdMatch | None = None
+        self.attention_flash_bwd_block_ids: list[int] | None = None
 
     def register_tcgen05_fragment_epilogue_plan(
         self, plan: Tcgen05FragmentEpiloguePlan

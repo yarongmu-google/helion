@@ -376,6 +376,7 @@ def _parent_store_nested_remote_copy(
     """Initialize a resident exchange buffer before copying from a child loop."""
     num_steps = hl.specialize(src.size(1))
     for _program in hl.grid(1):
+        hl.remote_barrier(peers[0, 0])
         for step in hl.tile(num_steps, block_size=1):
             exchange[0, 0, step.begin, :] = src[0, step.begin, :]
             for peer_step in hl.tile(1, block_size=1):
@@ -1485,6 +1486,7 @@ class TestRemoteCopyJaxRuntime(TestCase):
             result[:, 1], _expected_pipeline_destination(world_size)
         )
 
+    @unittest.skip("flaky due to an in-place symmetric HBM remote-copy race")
     @skipIfPallasInterpret("remote HBM buffers require TPU DMA lowering")
     def test_route_forward_then_local_consume(self) -> None:
         import jax

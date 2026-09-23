@@ -3048,14 +3048,14 @@ class TestCuteBackend(TestCase):
                 fallback_code = resident_bound.to_triton_code(resident_config)
             self.assertNotIn("resident_softmax_value_graph", fallback_code)
 
-        nonpolicy_config = helion.Config(
+        off_seed_config = helion.Config(
             **{**resident_config.config, "cute_flash_e2e_offset": 4}
         )
         with patch.object(
             resident_bound.env.config_spec, "target_device_capability", (10, 3)
         ):
-            nonpolicy_code = resident_bound.to_triton_code(nonpolicy_config)
-        self.assertNotIn("resident_softmax_value_graph", nonpolicy_code)
+            off_seed_code = resident_bound.to_triton_code(off_seed_config)
+        self.assertIn("resident_softmax_value_graph", off_seed_code)
 
         q, k, v = (
             torch.empty(1, 1, 262144, 64, dtype=torch.float16, device=DEVICE)
@@ -6974,6 +6974,7 @@ class TestCuteBackend(TestCase):
             args,
             block_sizes=[1],
             reduction_loop=8192,
+            cute_reduction_reloads=["register"],
         )
         (x,) = args
         expected = x / x.sum(-1, keepdim=True)
@@ -6994,6 +6995,7 @@ class TestCuteBackend(TestCase):
             block_sizes=[1],
             reduction_loop=8192,
             cute_vector_widths=[4],
+            cute_reduction_reloads=["register"],
         )
         (x,) = args
         expected = (x.float() / x.float().sum(-1, keepdim=True)).to(x.dtype)
@@ -9495,6 +9497,9 @@ class TestCuteBackend(TestCase):
             patch(
                 "helion.runtime.cute.launcher._record_cute_owned_launch_tensors"
             ) as record_owned,
+            patch(
+                "helion.runtime.cute.launcher._retain_cute_capture_owned_launch_tensors"
+            ) as retain_owned,
         ):
             first = default_cute_launcher(cute_kernel, (1,), 7, block=(32, 1, 1))
             second = default_cute_launcher(cute_kernel, (1,), 7, block=(32, 1, 1))
@@ -9503,6 +9508,7 @@ class TestCuteBackend(TestCase):
         # Build (and thus the cached args) happens once; the stream is appended
         # fresh on each of the three launches.
         self.assertEqual(build_calls, [(7,)])
+        self.assertEqual(retain_owned.call_count, 3)
         self.assertEqual(record_owned.call_count, 3)
         record_owned.assert_called_with(owned_tensors)
         self.assertEqual(

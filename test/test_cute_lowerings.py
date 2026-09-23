@@ -14327,6 +14327,10 @@ class TestCuteLowerings(unittest.TestCase):
             ],
         )
         grid.add_lane_loop(0, "synthetic_lane_0", 4)
+        self.assertEqual(
+            grid.lane_loop_block_ids,
+            {"synthetic_lane_0": frozenset({0})},
+        )
         body = grid.wrap_body([statement_from_string("out = 1")])
 
         code = ast.unparse(ast.Module(body=body, type_ignores=[]))
@@ -14383,6 +14387,7 @@ class TestCuteLowerings(unittest.TestCase):
             ],
             config_spec=SimpleNamespace(
                 cute_attention_generic_fallback_enabled=False,
+                cute_flash_bwd_search_enabled=False,
                 num_threads=SimpleNamespace(config_get=lambda *args: 0),
                 loop_orders=SimpleNamespace(config_get=lambda *args: None),
                 l2_groupings=SimpleNamespace(config_get=lambda *args: 1),
@@ -14886,6 +14891,7 @@ class TestCuteLowerings(unittest.TestCase):
             _thread_count=256,
             _synthetic_cute_lane_var="synthetic_lane_0",
             _synthetic_cute_lane_extent=4,
+            _cute_reduction_vec_width=1,
             block_size_var=lambda block_idx: "_RDIM_SIZE_0",
             index_var=lambda block_idx: "indices_0",
             _get_thread_axis=lambda: 0,

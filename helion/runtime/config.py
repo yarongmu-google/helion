@@ -16,12 +16,19 @@ PidTypeLiteral = Literal[
     "persistent_blocked",
     "persistent_interleaved",
 ]
-CrossLoopScheduleLiteral = Literal["barrier", "static_pipeline"]
+CrossLoopPipelineLiteral = Literal["barrier", "static", "dynamic"]
 EvictionPolicyLiteral = Literal["", "first", "last"]
 LoadCacheModifierLiteral = Literal["", ".cg"]
 StoreCacheModifierLiteral = Literal["", ".cs", ".wt"]
-NumSmMultiplierLiteral = Literal[1, 2, 4, 8]
-MaxnregLiteral = Literal[32, 64, 128, 256] | None
+CuteAsyncLoadCacheLiteral = Literal["cg", "ca"]
+CuteAsyncStorePolicyLiteral = Literal["default", "l2_evict_last"]
+CuteAffineScanScheduleLiteral = Literal[
+    "ordinary",
+    "direct_m16n8_v1",
+    "direct_m16n16_v1",
+]
+NumSmMultiplierLiteral = int
+MaxnregLiteral = int | None
 
 
 class Config(Mapping[str, object]):
@@ -49,12 +56,20 @@ class Config(Mapping[str, object]):
         ) = None,
         load_cache_modifiers: list[LoadCacheModifierLiteral] | None = None,
         store_cache_modifiers: list[StoreCacheModifierLiteral] | None = None,
+        cute_async_load_stages: int | None = None,
+        cute_async_load_lookahead: int | None = None,
+        cute_async_load_group_rows: int | None = None,
+        cute_async_load_cache: CuteAsyncLoadCacheLiteral | None = None,
+        cute_async_store_policy: CuteAsyncStorePolicyLiteral | None = None,
+        cute_bf16x2_recurrence: bool | None = None,
+        cute_proven_bounds: bool | None = None,
+        cute_affine_scan_schedule: CuteAffineScanScheduleLiteral | None = None,
         num_warps: int | None = None,
         num_stages: int | None = None,
         pid_type: PidTypeLiteral | None = None,
-        cross_loop_schedule: CrossLoopScheduleLiteral | None = None,
+        cross_loop_pipeline: CrossLoopPipelineLiteral | None = None,
         num_sm_multiplier: NumSmMultiplierLiteral | None = None,
-        maxnreg: MaxnregLiteral | None = None,
+        maxnreg: MaxnregLiteral = None,
         indexing: IndexingLiteral | list[IndexingLiteral] | None = None,
         atomic_indexing: IndexingLiteral | list[IndexingLiteral] | None = None,
         advanced_controls_file: str | None = None,
@@ -86,19 +101,40 @@ class Config(Mapping[str, object]):
                 Valid values are "", "first", and "last".
             load_cache_modifiers: Cache modifiers for load operations ("", ".cg").
             store_cache_modifiers: Cache modifiers for store operations ("", ".cs", ".wt").
+            cute_async_load_stages: Shared-memory ring stages for eligible CuTe
+                in-place 16-byte state loads. Zero disables the transformation.
+            cute_async_load_lookahead: Async-copy groups kept ahead of compute.
+            cute_async_load_group_rows: Per-thread row iterations in each group.
+            cute_async_load_cache: PTX cp.async cache policy ("cg" or "ca").
+            cute_async_store_policy: Cache policy for the matching in-place
+                16-byte state store ("default" or "l2_evict_last").
+            cute_bf16x2_recurrence: Pack a structurally proven BF16 rank-one
+                recurrence into native BF16x2 operations.
+            cute_proven_bounds: Remove CuTe index guards only when exact launch
+                dimensions and cache-specialized tensor sizes prove them true.
+            cute_affine_scan_schedule: Physical schedule for a compatible affine
+                scan. ``"ordinary"`` disables the direct lowering;
+                ``"direct_m16n8_v1"`` and ``"direct_m16n16_v1"`` select the
+                measured direct schedule profiles.
             num_warps: Number of warps per block.
             num_stages: Number of stages for software pipelining.
             pid_type: Program ID type strategy ("flat", "xyz", "persistent_blocked", "persistent_interleaved").
-            cross_loop_schedule: Synchronization strategy for kernels with
+            cross_loop_pipeline: Execution strategy for kernels with
                 compiler-inferred cross-loop dependencies. ``"barrier"`` uses
-                grid synchronization; ``"static_pipeline"`` uses the static
-                dependency schedule. Unsupported kernels reject this field.
-            num_sm_multiplier: Multiplier for the number of SMs in persistent
-                kernels (1, 2, 4, 8).
+                grid synchronization. ``"static"`` and ``"dynamic"`` execute
+                the same compiler-derived dependency schedule with fixed worker
+                ownership or one-shot packet dispatch, respectively.
+                Unsupported kernels reject this field.
+            num_sm_multiplier: Positive integer multiplier for the number of SMs
+                in persistent kernels. The autotuner searches powers of two, but
+                explicit configurations may use intermediate values.
                 Controls multi-occupancy by launching N * num_sms thread blocks instead of just num_sms.
-            maxnreg: Maximum number of registers per thread (None, 32, 64, 128, 256).
-                Lower values allow higher occupancy but may hurt performance. Used with persistent kernels
-                to ensure multi-occupancy can be achieved.
+            maxnreg: None or a positive integer maximum number of registers per
+                thread (1--256). The autotuner searches None, 32, 64, 128, and
+                256, but explicit configurations may use intermediate values.
+                Lower values allow higher occupancy but may hurt performance.
+                Used with persistent kernels to ensure multi-occupancy can be
+                achieved.
             indexing: Indexing strategy for load and store operations. Can be:
                 - A single strategy string (all loads/stores use this strategy):
                   indexing="block_ptr"  # backward compatible
@@ -136,12 +172,20 @@ class Config(Mapping[str, object]):
             "load_eviction_policies": load_eviction_policies,
             "load_cache_modifiers": load_cache_modifiers,
             "store_cache_modifiers": store_cache_modifiers,
+            "cute_async_load_stages": cute_async_load_stages,
+            "cute_async_load_lookahead": cute_async_load_lookahead,
+            "cute_async_load_group_rows": cute_async_load_group_rows,
+            "cute_async_load_cache": cute_async_load_cache,
+            "cute_async_store_policy": cute_async_store_policy,
+            "cute_bf16x2_recurrence": cute_bf16x2_recurrence,
+            "cute_proven_bounds": cute_proven_bounds,
+            "cute_affine_scan_schedule": cute_affine_scan_schedule,
             "num_warps": num_warps,
             "num_stages": num_stages,
             "indexing": indexing,
             "atomic_indexing": atomic_indexing,
             "pid_type": pid_type,
-            "cross_loop_schedule": cross_loop_schedule,
+            "cross_loop_pipeline": cross_loop_pipeline,
             "num_sm_multiplier": num_sm_multiplier,
             "maxnreg": maxnreg,
             "advanced_controls_file": advanced_controls_file,
@@ -290,10 +334,10 @@ class Config(Mapping[str, object]):
         return cast("PidTypeLiteral", self.config.get("pid_type", "flat"))
 
     @property
-    def cross_loop_schedule(self) -> CrossLoopScheduleLiteral:
+    def cross_loop_pipeline(self) -> CrossLoopPipelineLiteral:
         return cast(
-            "CrossLoopScheduleLiteral",
-            self.config.get("cross_loop_schedule", "barrier"),
+            "CrossLoopPipelineLiteral",
+            self.config.get("cross_loop_pipeline", "barrier"),
         )
 
     @property
@@ -367,6 +411,47 @@ class Config(Mapping[str, object]):
         return cast(
             "list[StoreCacheModifierLiteral]",
             self.config.get("store_cache_modifiers", []),
+        )
+
+    @property
+    def cute_async_load_stages(self) -> int:
+        return cast("int", self.config.get("cute_async_load_stages", 0))
+
+    @property
+    def cute_async_load_lookahead(self) -> int:
+        return cast("int", self.config.get("cute_async_load_lookahead", 4))
+
+    @property
+    def cute_async_load_group_rows(self) -> int:
+        return cast("int", self.config.get("cute_async_load_group_rows", 2))
+
+    @property
+    def cute_async_load_cache(self) -> CuteAsyncLoadCacheLiteral:
+        return cast(
+            "CuteAsyncLoadCacheLiteral",
+            self.config.get("cute_async_load_cache", "cg"),
+        )
+
+    @property
+    def cute_async_store_policy(self) -> CuteAsyncStorePolicyLiteral:
+        return cast(
+            "CuteAsyncStorePolicyLiteral",
+            self.config.get("cute_async_store_policy", "default"),
+        )
+
+    @property
+    def cute_bf16x2_recurrence(self) -> bool:
+        return cast("bool", self.config.get("cute_bf16x2_recurrence", False))
+
+    @property
+    def cute_proven_bounds(self) -> bool:
+        return cast("bool", self.config.get("cute_proven_bounds", False))
+
+    @property
+    def cute_affine_scan_schedule(self) -> CuteAffineScanScheduleLiteral:
+        return cast(
+            "CuteAffineScanScheduleLiteral",
+            self.config.get("cute_affine_scan_schedule", "ordinary"),
         )
 
     @property

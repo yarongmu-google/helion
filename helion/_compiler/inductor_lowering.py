@@ -394,7 +394,13 @@ class InductorLowering(Lowering):
             if isinstance(fake_val := n.meta["val"], torch.Tensor):
                 # Don't expand scalars (0-D tensors) - let Triton handle broadcasting naturally
                 # Expanding scalars with [None, None] creates incorrect broadcast shapes
-                if fake_val.ndim < ndim and fake_val.ndim > 0:
+                # The expands_broadcast_dims() check lets FlyDSL skip the
+                # Triton-style [None, :] expand its per-thread vectors don't need.
+                if (
+                    fake_val.ndim < ndim
+                    and fake_val.ndim > 0
+                    and CompileEnvironment.current().backend.expands_broadcast_dims()
+                ):
                     expand = tile_strategy.broadcast_expand_dims(
                         tuple(fake_val.shape), output_shape
                     )
@@ -946,6 +952,7 @@ class ReductionLowering(InductorLowering):
 
             strategy = BlockReductionStrategy(state, self.block_index)
 
+        env.backend.validate_reduction_input(strategy.block_index, repr_input)
         result_ast = strategy.codegen_reduction(
             state,
             output_name,
@@ -1099,6 +1106,13 @@ class GenerateASTFromInductor(DefaultHandler):
         backend = CompileEnvironment.current().backend
         return backend.cast_ast(x, target_dtype)
 
+    def _cast_scalar_ast(self, x: ast.AST, target_dtype: torch.dtype) -> ast.AST:
+        # Cast a bare scalar (e.g. lifted from an index expr). Backends whose
+        # cast syntax needs a runtime object override cast_scalar_ast; the base
+        # default uses cast_ast.
+        backend = CompileEnvironment.current().backend
+        return backend.cast_scalar_ast(x, target_dtype)
+
     def _to_ast(self, x: object) -> ast.AST:
         if isinstance(x, ast.AST):
             return x
@@ -1206,11 +1220,11 @@ class GenerateASTFromInductor(DefaultHandler):
     def rsqrt(self, x: object) -> str:  # type: ignore[override]
         backend_name = CompileEnvironment.current().backend_name
         if backend_name == "cute":
-            from torch._inductor.codegen.cutedsl.cutedsl_op_overrides import (
-                _CUTEDSL_FAST_MATH,
+            suffix = (
+                ", fastmath=True"
+                if CompileEnvironment.current().settings.fast_math
+                else ""
             )
-
-            suffix = ", fastmath=True" if _CUTEDSL_FAST_MATH.get() else ""
             return self._lift(
                 expr_from_string(f"cute.math.rsqrt({{x}}{suffix})", x=self._to_ast(x))
             )
@@ -1307,7 +1321,7 @@ class GenerateASTFromInductor(DefaultHandler):
         if name in self.cg.device_function._constexpr_args:
             return name
 
-        return self._lift(self._create_cast_expr(expr_from_string(name), dtype))
+        return self._lift(self._cast_scalar_ast(expr_from_string(name), dtype))
 
 
 def _unpack_opsvalue(value: object) -> str:
@@ -1478,6 +1492,14 @@ class GraphInterpreter(LoweringContext, Interpreter):
 
         return tuple(final_outputs)
 
+    def _record_final_codegen_result(self, node: Node, result: object) -> None:
+        """Expose normalized results to late CuTe rewrites without changing FX metadata."""
+
+        from .generate_ast import GenerateAST
+
+        if isinstance(self.cg, GenerateAST) and self.cg._track_statement_owners:
+            self.cg.record_codegen_result(node, result)
+
     def run_node(self, n: Node) -> object:
         if n.op == "call_function":
             with (
@@ -1517,11 +1539,15 @@ class GraphInterpreter(LoweringContext, Interpreter):
                             user for user in n.users if user.target == getitem
                         ]
                         if len(getitem_users) > 0:
-                            return self._collect_multi_outputs(n, result)
+                            result = self._collect_multi_outputs(n, result)
+                            self._record_final_codegen_result(n, result)
+                            return result
 
                     if result is None:
+                        self._record_final_codegen_result(n, None)
                         return None
                     if not isinstance(result, ast.AST):
+                        self._record_final_codegen_result(n, result)
                         return result
                     assert isinstance(result, ast.expr)
                     if len(n.users) > 0:
@@ -1549,9 +1575,11 @@ class GraphInterpreter(LoweringContext, Interpreter):
                                 self.cg.device_function.expr_to_var_info[expr] = (
                                     VarInfo(repr(result.value), n)
                                 )
+                        self._record_final_codegen_result(n, result)
                         return result
                     if not isinstance(result, (ast.Name, ast.Constant)):
                         self.cg.add_statement(create(ast.Expr, value=result))
+                    self._record_final_codegen_result(n, None)
                     return None
                 except exc.Base:
                     raise

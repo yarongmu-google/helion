@@ -18,7 +18,6 @@ import random
 import re
 import sys
 import time
-import types
 from typing import TYPE_CHECKING
 from typing import Callable
 from typing import Literal
@@ -29,7 +28,6 @@ from unittest.mock import patch
 import torch
 import torch.distributed as dist
 from torch.utils._pytree import tree_flatten
-from torch.utils._pytree import tree_map_only
 
 from .. import exc
 from .._compat import extract_device
@@ -190,18 +188,6 @@ class _AutotunableKernel(Protocol):
 _CODE_OBJECT_RE = re.compile(r"<code object .+?, line \d+>")
 
 
-class _CodeSentinel:
-    """Stable stand-in for types.CodeType so spec key comparison is repr-independent."""
-
-    __slots__ = ()
-
-    def __repr__(self) -> str:
-        return "<code>"
-
-
-_CODE_SENTINEL = _CodeSentinel()
-
-
 def normalize_autotune_seed_configs(settings: Settings) -> tuple[Config, ...]:
     """Return user-provided autotune seed configs from settings as concrete Configs."""
     from ..runtime.config import Config
@@ -309,14 +295,11 @@ def _autotune_search_acf_cache_policy(paths: Sequence[str]) -> tuple[object, ...
     return tuple({"path": path, "sha256": _file_sha256(path)} for path in paths)
 
 
-def _normalize_spec_key(key: object) -> object:
-    """Replace types.CodeType with a stable sentinel in a spec key tree."""
-    return tree_map_only(types.CodeType, lambda _: _CODE_SENTINEL, key)
-
-
 def _normalize_spec_key_str(s: str) -> str:
     """Normalize a specialization_key string for cache comparison.
 
+    Applied to both the ``str()`` that put() stores and the ``str()`` of the
+    live key, so the two sides can only differ where this function differs.
     Replaces code object repr strings with a stable '<code>' sentinel,
     allowing FROM_BEST_AVAILABLE to match function arguments based
     on their closure values only, ignoring code object identity.
@@ -993,7 +976,10 @@ class BaseSearch(BaseAutotuner):
         ):
             return hardware, None
         spec_key = inner_kernel._base_specialization_key(self.args)
-        specialization_key = str(_normalize_spec_key(spec_key))
+        # Compare in the exact form put() stores: str() of the raw key.
+        # Normalizing the key as an object tree is not equivalent: pytree
+        # rebuilds torch.Size as a plain tuple, which reprs differently.
+        specialization_key = _normalize_spec_key_str(str(spec_key))
 
         return hardware, specialization_key
 
@@ -1275,7 +1261,10 @@ class PopulationBasedSearch(BaseSearch):
             "enabled": True,
             # 2: the non-isolated finalist shootout uses paired interleaved
             # timing instead of sequential steady windows.
-            "timing_version": 2,
+            # 3: an in-process fallback for a mutated-argument kernel gives
+            # every finalist private storage, preventing cross-config L2
+            # eviction-priority leakage.
+            "timing_version": 3,
             "top_k": self._final_rebenchmark_top_k(),
             "target_ms": self._final_rebenchmark_target_ms(),
             "isolated": self._final_rebenchmark_use_isolated(),
@@ -2038,6 +2027,7 @@ class PopulationBasedSearch(BaseSearch):
             use_isolated=use_isolated,
             confirm_suspicious=use_isolated,
             use_interleaved=not use_isolated,
+            candidate_private_args=use_isolated,
         )
         live_finalists = [member for member in finalists if math.isfinite(member.perf)]
         if not live_finalists:
@@ -2096,6 +2086,7 @@ class PopulationBasedSearch(BaseSearch):
         use_isolated: bool = True,
         confirm_suspicious: bool = True,
         use_interleaved: bool = True,
+        candidate_private_args: bool = False,
     ) -> None:
         """
         Re-benchmark a list of population members to avoid outliers.
@@ -2103,6 +2094,8 @@ class PopulationBasedSearch(BaseSearch):
         Args:
             members: The list of population members to rebenchmark.
             desc: Description for the progress bar.
+            candidate_private_args: When an isolated worker is unavailable,
+                keep mutated argument storage private to each candidate.
         """
         if len(members) < 2:
             return
@@ -2124,6 +2117,7 @@ class PopulationBasedSearch(BaseSearch):
             repeat = min(repeat, int(capstr))
         repeat = max(1, repeat)
 
+        in_process_isolation = False
         if use_isolated and self.settings.autotune_benchmark_fn is None:
             isolated_results = self.benchmark_provider.benchmark_isolated(
                 [m.fn for m in members],
@@ -2149,18 +2143,54 @@ class PopulationBasedSearch(BaseSearch):
                     failure_statuses=failure_statuses,
                 )
                 return
+            if candidate_private_args and dist.is_initialized():
+                self.log.warning(
+                    "Candidate-private mutated-argument isolation is unavailable "
+                    "for distributed in-process rebenchmarking."
+                )
+            in_process_isolation = candidate_private_args and not dist.is_initialized()
 
         if len(self.benchmark_provider.mutated_arg_indices) > 0:
-            benchmark_args = _clone_args(
-                self.args,
-                self.kernel.env.process_group_name,
-                idx_to_clone=self.benchmark_provider.mutated_arg_indices,
-            )
+            if in_process_isolation:
+                # A single recycled clone lets a later candidate inherit L2
+                # eviction priority from an earlier candidate that touched the
+                # same addresses (for example, an ``l2_last`` store). Keep a
+                # sacrificial clone alive to absorb the allocator's recycled
+                # addresses, then give every finalist private live tensor
+                # storage, including inputs that the kernel only reads.
+                isolated_args: list[Sequence[object]] = []
+                try:
+                    isolated_args = [
+                        _clone_args(
+                            self.args,
+                            self.kernel.env.process_group_name,
+                            idx_to_clone=None,
+                        )
+                        for _ in range(len(members) + 1)
+                    ]
+                    benchmark_args_by_member = isolated_args[1:]
+                except torch.OutOfMemoryError as error:
+                    isolated_args.clear()
+                    raise exc.AutotuneError(
+                        "Unable to allocate candidate-private mutated arguments "
+                        "for in-process finalist isolation. Reduce "
+                        f"{_FINAL_REBENCHMARK_TOP_K_ENV} and retry."
+                    ) from error
+            else:
+                benchmark_args = _clone_args(
+                    self.args,
+                    self.kernel.env.process_group_name,
+                    idx_to_clone=self.benchmark_provider.mutated_arg_indices,
+                )
+                benchmark_args_by_member = [benchmark_args] * len(members)
         else:
-            benchmark_args = self.args
+            benchmark_args_by_member = [self.args] * len(members)
 
         def make_rebenchmark_callable(
-            member: PopulationMember, *, clear_each_call: bool
+            member: PopulationMember,
+            benchmark_args: Sequence[object],
+            *,
+            clear_each_call: bool,
         ) -> Callable[[], object]:
             run_member = functools.partial(member.fn, *benchmark_args)
 
@@ -2179,7 +2209,14 @@ class PopulationBasedSearch(BaseSearch):
         try:
             if use_interleaved or self.settings.autotune_benchmark_fn is not None:
                 iterator = [
-                    make_rebenchmark_callable(m, clear_each_call=True) for m in members
+                    make_rebenchmark_callable(
+                        member,
+                        benchmark_args,
+                        clear_each_call=True,
+                    )
+                    for member, benchmark_args in zip(
+                        members, benchmark_args_by_member, strict=True
+                    )
                 ]
                 benchmark_function: Callable[..., list[float]]
                 if self.settings.autotune_benchmark_fn is not None:
@@ -2204,7 +2241,14 @@ class PopulationBasedSearch(BaseSearch):
                     new_timings = benchmark_function(iterator, repeat=repeat)
             else:
                 iterator = [
-                    make_rebenchmark_callable(m, clear_each_call=False) for m in members
+                    make_rebenchmark_callable(
+                        member,
+                        benchmark_args,
+                        clear_each_call=False,
+                    )
+                    for member, benchmark_args in zip(
+                        members, benchmark_args_by_member, strict=True
+                    )
                 ]
                 steady_bench = (
                     _backend.get_do_bench() if _backend is not None else None
